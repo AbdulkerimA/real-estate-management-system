@@ -1,11 +1,34 @@
 @import 'tailwindcss';
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+/* @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* @source '..*.blade.php'; */
+/* @source '..*.js'; */
 
-@theme {
+/* @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}  */
+
+ /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
+body { font-family: 'Inter', sans-serif; }
+.hero-bg {
+    background: linear-gradient(rgba(28, 37, 46, 0.8), rgba(18, 24, 31, 0.9)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23334155" width="1200" height="600"/><rect fill="%23475569" x="100" y="150" width="200" height="300" rx="8"/><rect fill="%2364748b" x="350" y="100" width="180" height="350" rx="8"/><rect fill="%23475569" x="580" y="120" width="220" height="330" rx="8"/><rect fill="%2394a3b8" x="850" y="80" width="160" height="370" rx="8"/><circle fill="%2300ff88" cx="1100" cy="100" r="30" opacity="0.3"/><circle fill="%2300ff88" cx="50" cy="500" r="20" opacity="0.2"/></svg>');
+    background-size: cover;
+    background-position: center;
+}
+.property-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.property-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+}
+.stat-counter {
+    animation: countUp 2s ease-out;
+}
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
