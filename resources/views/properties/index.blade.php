@@ -12,28 +12,10 @@
     </style>
 </head>
 <body class="bg-[#12181f] text-white">
-    <!-- Navigation (simplified) -->
-    {{-- <nav class="bg-[#1c252e] border-b border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="text-2xl font-bold text-[#00ff88]">PropertyHub</div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#" class="text-gray-300 hover:text-[#00ff88] transition-colors">Home</a>
-                    <a href="#" class="text-[#00ff88] font-semibold">Properties</a>
-                    <a href="#" class="text-gray-300 hover:text-[#00ff88] transition-colors">Agents</a>
-                    <a href="#" class="text-gray-300 hover:text-[#00ff88] transition-colors">Contact</a>
-                </div>
-                <button class="md:hidden text-gray-300" id="mobile-menu-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </nav> --}}
+
     <x-nav.nav-layout />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Page Header -->
         <div class="text-center mb-12 mt-12">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Available Properties</h1>
@@ -405,6 +387,9 @@
             <x-pagination></x-pagination>
         </div>
     </div>
-    <x-footer />
+
+    <div class="w-full">
+        <x-footer />
+    </div>
 </body>
 </html>

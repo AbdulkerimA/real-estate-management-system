@@ -1,0 +1,109 @@
+ @import 'tailwindcss';
+ 
+ body { font-family: 'Inter', sans-serif; }
+        
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(28, 37, 46, 0.9) 0%, rgba(18, 24, 31, 0.8) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23667eea" width="1200" height="600"/><g fill="%23764ba2" opacity="0.3"><rect x="0" y="400" width="200" height="200"/><rect x="300" y="350" width="150" height="250"/><rect x="500" y="300" width="180" height="300"/><rect x="750" y="250" width="160" height="350"/><rect x="950" y="200" width="140" height="400"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .feature-card {
+            backdrop-filter: blur(10px);
+            background: rgba(28, 37, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.15);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+        
+        .mission-card {
+            backdrop-filter: blur(10px);
+            background: rgba(28, 37, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .team-card {
+            backdrop-filter: blur(10px);
+            background: rgba(28, 37, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.1);
+        }
+        
+        .stats-card {
+            backdrop-filter: blur(10px);
+            background: rgba(28, 37, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(28, 37, 46, 0.9) 100%);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.03;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+        
+        .shape:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+        
+        .company-image {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .counter {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #00ff88;
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+        }

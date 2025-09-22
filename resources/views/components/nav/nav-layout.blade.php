@@ -8,10 +8,11 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
+                        <x-nav.link href="/">Home</x-nav.link>
                         <x-nav.link href="/properties">Properties</x-nav.link>
-                        {{-- <x-nav.link href="/inves">Invest</x-nav.link> --}}
                         <x-nav.link href="/agents">Agents</x-nav.link>
-                        <x-nav.link href="/about">About</x-nav.link>
+                        <x-nav.link href="/about">About us</x-nav.link>
+                        <x-nav.link href="/faq">FAQs</x-nav.link>
                         <x-nav.link href="/login">Login</x-nav.link>
                     </div>
                 </div>
