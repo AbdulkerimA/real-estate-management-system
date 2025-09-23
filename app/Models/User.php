@@ -45,4 +45,23 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // relation ships
+    public function properties()
+    {
+        return $this->hasMany(properties::class);
+    }
+
+    public function agents(){
+        return $this->hasOne(agents::class);
+    }
+
+    public function appointments(){
+        return $this->hasMany(appointments::class);
+    }
+
+    public function transction(){
+        return $this->hasMany(transaction::class);
+    }
+
 }
