@@ -24,9 +24,9 @@ Route::view('/dashboard','agents.dashboard');
 Route::view('/dashboard/home','agents.dashboard');
 // Route::view('/dashboard/properties','agents.properties.index');
 Route::get('/dashboard/properties',function () {
-    $properties = properties::paginate(10);
+    // $properties = properties::paginate(10);
     // dd($properties);
-    return view('agents.properties.index',['properties'=>$properties]);
+    // return view('agents.properties.index',['properties'=>$properties]);
 });
 Route::view('/dashboard/property/create','agents.properties.create');
 
