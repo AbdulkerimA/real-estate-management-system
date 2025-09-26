@@ -46,22 +46,35 @@ class User extends Authenticatable
         ];
     }
 
-    // relation ships
+    // Relationships
     public function properties()
     {
-        return $this->hasMany(properties::class);
+        return $this->hasMany(Property::class);
     }
 
-    public function agents(){
-        return $this->hasOne(agents::class);
+    public function agentProfile()
+    {
+        return $this->hasOne(Agent::class);
     }
 
-    public function appointments(){
-        return $this->hasMany(appointments::class);
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
-    public function transction(){
-        return $this->hasMany(transaction::class);
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'buyer_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'buyer_id');
+    }
+
+    public function settings()
+    {
+        return $this->hasOne(Setting::class);
     }
 
 }

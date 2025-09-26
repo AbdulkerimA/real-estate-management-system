@@ -28,7 +28,8 @@ document.getElementById('toggle-password').addEventListener('click', function() 
 });
 
 // Form submission
-document.getElementById('login-form').addEventListener('submit', function(e) {
+const loginForm = document.getElementById('login-form');
+loginForm?loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
     const email = document.getElementById('email').value;
@@ -52,7 +53,7 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
         loginBtn.textContent = originalText;
         loginBtn.disabled = false;
     }, 2000);
-});
+}):'';
 
 // Google login
 document.getElementById('google-login').addEventListener('click', function() {

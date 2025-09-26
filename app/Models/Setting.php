@@ -9,4 +9,16 @@ class Setting extends Model
 {
     /** @use HasFactory<\Database\Factories\SettingFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id','language','time_zone',
+        'email_notification','sms_notification','appointment_reminder',
+        'two_factor_authentication','allow_direct_message','deactivated'
+    ];
+    
+     // Relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
