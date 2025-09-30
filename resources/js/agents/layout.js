@@ -141,7 +141,7 @@ searchInput.addEventListener('input', function() {
 });
 
 // Initialize Chart
-const earningsChartElem = document.getElementById('earningsChart');
+const earningsChartElem = document.getElementById('dashboardChart');
 if (earningsChartElem) {
     const ctx = earningsChartElem.getContext('2d');
     new Chart(ctx, {
@@ -793,13 +793,13 @@ updateCountdowns();
 const today = new Date();
 const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-startDate.value = today.toISOString().split('T')[0];
-endDate.value = nextWeek.toISOString().split('T')[0];
+startDate ? startDate.value = today.toISOString().split('T')[0] : '';
+endDate ? endDate.value = nextWeek.toISOString().split('T')[0] : '';
 
 
 // earnings page script
 // Counter animation
-function animateCounter(element, target, duration = 2000) {
+function earningsAnimateCounter(element, target, duration = 2000) {
     const start = 0;
     const increment = target / (duration / 16);
     let current = start;
@@ -826,7 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Animate counters
     document.querySelectorAll('.counter').forEach(counter => {
         const target = parseInt(counter.getAttribute('data-target'));
-        animateCounter(counter, target);
+        earningsAnimateCounter(counter, target);
     });
 
     // Animate progress bars
@@ -837,78 +837,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Earnings Chart
-const ctx = document.getElementById('earningsChart').getContext('2d');
-const earningsChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-        datasets: [{
-            label: 'Earnings (ETB)',
-            data: [125000, 180000, 220000, 195000, 275000, 315000],
-            borderColor: '#00ff88',
-            backgroundColor: 'rgba(0, 255, 136, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: '#00ff88',
-            pointBorderColor: '#1c252e',
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                backgroundColor: 'rgba(28, 37, 46, 0.9)',
-                titleColor: '#ffffff',
-                bodyColor: '#ffffff',
-                borderColor: '#00ff88',
-                borderWidth: 1,
-                cornerRadius: 8,
-                displayColors: false,
-                callbacks: {
-                    label: function(context) {
-                        return `Earnings: ETB ${context.parsed.y.toLocaleString()}`;
-                    }
-                }
-            }
-        },
-        scales: {
-            x: {
-                grid: {
-                    color: 'rgba(255, 255, 255, 0.1)',
-                    borderColor: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                    color: '#9ca3af'
-                }
-            },
-            y: {
-                grid: {
-                    color: 'rgba(255, 255, 255, 0.1)',
-                    borderColor: 'rgba(255, 255, 255, 0.1)'
-                },
-                ticks: {
-                    color: '#9ca3af',
-                    callback: function(value) {
-                        return 'ETB ' + (value / 1000) + 'K';
-                    }
-                }
-            }
-        },
-        interaction: {
-            intersect: false,
-            mode: 'index'
-        }
-    }
-});
-
 // Date range filter
 document.querySelectorAll('.filter-button').forEach(button => {
     button.addEventListener('click', function() {
@@ -969,8 +897,8 @@ function filterTransactions() {
     });
 }
 
-transactionSearch.addEventListener('input', filterTransactions);
-earningsStatusFilter.addEventListener('change', filterTransactions);
+transactionSearch ? transactionSearch.addEventListener('input', filterTransactions) : '';
+earningsStatusFilter ? earningsStatusFilter.addEventListener('change', filterTransactions) : '';
 
 // Pagination
 document.querySelectorAll('.pagination-button').forEach(button => {
@@ -997,11 +925,11 @@ document.querySelectorAll('.pagination-button').forEach(button => {
 
 // Request payout
 const requestPayoutBtn = document.getElementById('requestPayoutBtn');
-requestPayoutBtn.addEventListener('click', function() {
+requestPayoutBtn ? requestPayoutBtn.addEventListener('click', function() {
     if (confirm('Request payout of ETB 485,000? This will be processed within 2-3 business days.')) {
         alert('Payout request submitted successfully! You will receive a confirmation email shortly.');
     }
-});
+}):'';
 
 
 // profile page script
@@ -1035,11 +963,11 @@ const photoInput = document.getElementById('photoInput');
 const profileImage = document.getElementById('profileImage');
 const profileInitials = document.getElementById('profileInitials');
 
-profilePhoto.addEventListener('click', () => {
+profilePhoto?profilePhoto.addEventListener('click', () => {
     photoInput.click();
-});
+}):'';
 
-photoInput.addEventListener('change', function(e) {
+photoInput ? photoInput.addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -1050,7 +978,7 @@ photoInput.addEventListener('change', function(e) {
         };
         reader.readAsDataURL(file);
     }
-});
+}) : '';
 
 // Form validation
 function validateEmail(email) {
@@ -1072,43 +1000,49 @@ const phoneInput = document.getElementById('phone');
 function validatePersonalForm() {
     let isValid = true;
 
-    // Full name validation
-    if (fullNameInput.value.trim().length < 2) {
-        fullNameInput.classList.add('error');
-        document.getElementById('fullNameError').classList.remove('hidden');
-        isValid = false;
-    } else {
-        fullNameInput.classList.remove('error');
-        fullNameInput.classList.add('success');
-        document.getElementById('fullNameError').classList.add('hidden');
+    if(fullNameInput){
+        // Full name validation
+        if (fullNameInput.value.trim().length < 2) {
+            fullNameInput.classList.add('error');
+            document.getElementById('fullNameError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            fullNameInput.classList.remove('error');
+            fullNameInput.classList.add('success');
+            document.getElementById('fullNameError').classList.add('hidden');
+        }
     }
 
-    // Email validation
-    if (!validateEmail(emailInput.value)) {
-        emailInput.classList.add('error');
-        document.getElementById('emailError').classList.remove('hidden');
-        isValid = false;
-    } else {
-        emailInput.classList.remove('error');
-        emailInput.classList.add('success');
-        document.getElementById('emailError').classList.add('hidden');
+    if(emailInput){
+        // Email validation
+        if (!validateEmail(emailInput.value)) {
+            emailInput.classList.add('error');
+            document.getElementById('emailError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            emailInput.classList.remove('error');
+            emailInput.classList.add('success');
+            document.getElementById('emailError').classList.add('hidden');
+        }
     }
 
-    // Phone validation
-    if (!validatePhone(phoneInput.value)) {
-        phoneInput.classList.add('error');
-        document.getElementById('phoneError').classList.remove('hidden');
-        isValid = false;
-    } else {
-        phoneInput.classList.remove('error');
-        phoneInput.classList.add('success');
-        document.getElementById('phoneError').classList.add('hidden');
+    if(phoneInput){
+        // Phone validation
+        if (!validatePhone(phoneInput.value)) {
+            phoneInput.classList.add('error');
+            document.getElementById('phoneError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            phoneInput.classList.remove('error');
+            phoneInput.classList.add('success');
+            document.getElementById('phoneError').classList.add('hidden');
+        }
     }
 
     return isValid;
 }
 
-personalForm.addEventListener('submit', function(e) {
+personalForm ? personalForm.addEventListener('submit', function(e) {
     e.preventDefault();
     if (validatePersonalForm()) {
         // Simulate saving
@@ -1125,16 +1059,16 @@ personalForm.addEventListener('submit', function(e) {
             }, 3000);
         }, 1000);
     }
-});
+}) : '';
 
 // Real-time validation
-fullNameInput.addEventListener('input', validatePersonalForm);
-emailInput.addEventListener('input', validatePersonalForm);
-phoneInput.addEventListener('input', validatePersonalForm);
+fullNameInput ? fullNameInput.addEventListener('input', validatePersonalForm):'';
+emailInput ? emailInput.addEventListener('input', validatePersonalForm):'';
+phoneInput ? phoneInput.addEventListener('input', validatePersonalForm) : '';
 
 // Professional form
 const professionalForm = document.getElementById('professionalForm');
-professionalForm.addEventListener('submit', function(e) {
+professionalForm ? professionalForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const button = this.querySelector('button[type="submit"]');
     button.disabled = true;
@@ -1148,7 +1082,7 @@ professionalForm.addEventListener('submit', function(e) {
             document.getElementById('professionalSuccess').classList.add('hidden');
         }, 3000);
     }, 1000);
-});
+}) : '';
 
 // Specialty tags
 document.querySelectorAll('.specialty-tag').forEach(tag => {
@@ -1176,7 +1110,7 @@ function updateBioCounter() {
     }
 }
 
-bioTextarea.addEventListener('input', updateBioCounter);
+bioTextarea ? bioTextarea.addEventListener('input', updateBioCounter) : '';
 
 // Password strength checker
 const newPasswordInput = document.getElementById('newPassword');
@@ -1223,16 +1157,16 @@ function validatePasswordMatch() {
     }
 }
 
-newPasswordInput.addEventListener('input', function() {
+newPasswordInput ? newPasswordInput.addEventListener('input', function() {
     checkPasswordStrength(this.value);
     validatePasswordMatch();
-});
+}) : '';
 
-confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+confirmPasswordInput ? confirmPasswordInput.addEventListener('input', validatePasswordMatch) : '';
 
 // Password form
 const passwordForm = document.getElementById('passwordForm');
-passwordForm.addEventListener('submit', function(e) {
+passwordForm ? passwordForm.addEventListener('submit', function(e) {
     e.preventDefault();
     if (validatePasswordMatch() && newPasswordInput.value.length >= 8) {
         const button = this.querySelector('button[type="submit"]');
@@ -1251,7 +1185,7 @@ passwordForm.addEventListener('submit', function(e) {
             }, 3000);
         }, 1000);
     }
-});
+}) : '';
 
 // Sidebar navigation
 document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -1310,7 +1244,7 @@ function validateAccountForm() {
     return isValid;
 }
 
-accountForm.addEventListener('submit', function(e) {
+accountForm ? accountForm.addEventListener('submit', function(e) {
     e.preventDefault();
     if (validateAccountForm()) {
         const button = this.querySelector('button[type="submit"]');
@@ -1326,15 +1260,16 @@ accountForm.addEventListener('submit', function(e) {
             }, 3000);
         }, 1000);
     }
-});
+}) : '';
 
-accountEmail.addEventListener('input', validateAccountForm);
-accountPhone.addEventListener('input', validateAccountForm);
+accountEmail ? accountEmail.addEventListener('input', validateAccountForm) : '';
+accountPhone ? accountPhone.addEventListener('input', validateAccountForm) : '';
 
 // Change password button
-document.getElementById('changePasswordBtn').addEventListener('click', function() {
-    alert('Redirecting to Profile > Security section...');
-});
+const changePasswordRedirectBtn = document.getElementById('changePasswordBtn');
+changePasswordRedirectBtn ? changePasswordRedirectBtn.addEventListener('click', function() {
+    alert('from settings page Redirecting to Profile > Security section...');
+}) : '';
 
 // Theme selection
 document.querySelectorAll('.theme-preview').forEach(preview => {
@@ -1353,7 +1288,8 @@ document.querySelectorAll('.theme-preview').forEach(preview => {
 });
 
 // Save preferences
-document.getElementById('savePreferences').addEventListener('click', function() {
+const savePreferencesBtn = document.getElementById('savePreferences');
+savePreferencesBtn ? savePreferencesBtn.addEventListener('click', function() {
     this.disabled = true;
     this.textContent = 'Saving...';
     
@@ -1365,7 +1301,7 @@ document.getElementById('savePreferences').addEventListener('click', function() 
             document.getElementById('preferencesSuccess').classList.add('hidden');
         }, 3000);
     }, 1000);
-});
+}) : '';
 
 // Auto-save notification toggles
 document.querySelectorAll('.toggle-switch input[type="checkbox"]').forEach(toggle => {
@@ -1385,7 +1321,8 @@ document.querySelectorAll('.toggle-switch input[type="checkbox"]').forEach(toggl
 });
 
 // Download data functionality
-document.getElementById('downloadDataBtn').addEventListener('click', function() {
+const downloadDataBtn = document.getElementById('donloadDataBtn');
+downloadDataBtn ? downloadDataBtn.addEventListener('click', function() {
     const modal = document.getElementById('downloadModal');
     const progress = document.getElementById('downloadProgress');
     const status = document.getElementById('downloadStatus');
@@ -1426,7 +1363,7 @@ document.getElementById('downloadDataBtn').addEventListener('click', function() 
             }, 1000);
         }
     }, 800);
-});
+}) : '';
 
 // Confirmation modal functionality
 const confirmModal = document.getElementById('confirmModal');
@@ -1446,12 +1383,13 @@ function showConfirmModal(title, message, onConfirm) {
     };
 }
 
-modalCancel.addEventListener('click', () => {
+modalCancel ? modalCancel.addEventListener('click', () => {
     confirmModal.classList.remove('active');
-});
+}) : '';
 
 // Deactivate account
-document.getElementById('deactivateBtn').addEventListener('click', function() {
+const deactivateBtn = document.getElementById('deactivateBtn');
+deactivateBtn ? deactivateBtn.addEventListener('click', function() {
     showConfirmModal(
         'Deactivate Account',
         'Your account will be temporarily disabled. You can reactivate it by logging in again. Continue?',
@@ -1459,10 +1397,11 @@ document.getElementById('deactivateBtn').addEventListener('click', function() {
             alert('Account deactivated successfully. You will be logged out.');
         }
     );
-});
+}) : '';
 
 // Delete account
-document.getElementById('deleteBtn').addEventListener('click', function() {
+const deleteAccountBtn = document.getElementById('deleteBtn');
+deleteAccountBtn ? deleteAccountBtn.addEventListener('click', function() {
     showConfirmModal(
         'Delete Account Permanently',
         'This action cannot be undone. All your data, properties, and messages will be permanently deleted. Are you absolutely sure?',
@@ -1477,26 +1416,26 @@ document.getElementById('deleteBtn').addEventListener('click', function() {
             );
         }
     );
-});
+}) : '';
 
 // Sidebar navigation
-document.querySelectorAll('.sidebar-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-        e.preventDefault();
+// document.querySelectorAll('.sidebar-item').forEach(item => {
+//     item.addEventListener('click', function(e) {
+//         e.preventDefault();
         
-        // Remove active class from all items
-        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+//         // Remove active class from all items
+//         document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
         
-        // Add active class to clicked item
-        this.classList.add('active');
+//         // Add active class to clicked item
+//         this.classList.add('active');
         
-        // Get the page name
-        const pageName = this.textContent.trim();
-        
-        if (pageName === 'Logout') {
-            alert('Logging out...');
-        } else if (pageName !== 'Settings') {
-            alert(`Navigating to: ${pageName}`);
-        }
-    });
-});
+//         // Get the page name
+//         const pageName = this.textContent.trim();
+
+//         if (pageName === 'Logout') {
+//             alert('Logging out...');
+//         } else if (pageName !== 'Settings') {
+//             alert(`Navigating to: ${pageName}`);
+//         }
+//     });
+// });

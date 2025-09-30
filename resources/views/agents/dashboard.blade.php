@@ -181,7 +181,7 @@
                             <h2 class="text-2xl font-bold">Monthly Earnings Performance</h2>
                         </div>
                         <div class="chart-container">
-                            <canvas id="earningsChart"></canvas>
+                            <canvas id="dashboardChart"></canvas>
                         </div>
                     </div>
                 </div>
