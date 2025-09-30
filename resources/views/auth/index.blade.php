@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PropertyHub</title>
+    <title>Login - AnchorHomes</title>
+     <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/auth.css','resources/js/auth.js'])
+     <style>
+        @keyframes slideDownFade {
+            0%   { transform: translateY(-100%); opacity: 0; }
+            10%  { transform: translateY(0); opacity: 1; }
+            80%  { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0; }
+        }
+
+        .animate-slideDownFade {
+            animation: slideDownFade 3s ease-in-out forwards;
+        }
+    </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 relative">
     <!-- Floating Background Shapes -->
@@ -26,6 +40,22 @@
         </div>
     </div>
 
+    {{-- error display box --}}
+    <div id="error-message" 
+        class="fixed top-0 right-0 flex justify-evenly items-center bg-red-400/10 text-red-500 text-md font-semibold px-4 py-2 m-2 border border-red-600 rounded-2xl shadow-lg z-50
+            {{ $errors ? '' : 'hidden' }}">
+        <i class="fa fa-exclamation-triangle text-xl mx-2" aria-hidden="true"></i>
+        <p class="mx-2" id="error-text">
+            {{ 
+                $errors
+            }}
+        </p>
+        <button onclick="hideError()" class="px-2 rounded bg-red-200 mx-2 text-xl">
+            <i class="fa fa-times text-red-500" aria-hidden="true"></i>
+        </button>
+    </div>
+
+
     <div class="w-full max-w-md relative z-10">
         <!-- Header with Logo -->
         <div class="text-center mb-8">
@@ -40,7 +70,8 @@
             </div>
 
             <!-- Login Form -->
-            <form class="space-y-6" id="login-form">
+            <form action="/login" method="POST" class="space-y-6" id="login-form">
+                @csrf
                 <!-- Email/Username Field -->
                 <div>
                     <x-form.lable for="email">

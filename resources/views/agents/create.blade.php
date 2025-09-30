@@ -62,7 +62,7 @@
                 <!-- Personal Information -->
                 <div class="form-card rounded-2xl p-8">
                     <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-accent-green bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-accent-green/20 rounded-xl flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
@@ -119,10 +119,10 @@
                                 </div>
                             </div>
 
-                            <div>
+                            {{-- <div>
                                 <label class="block text-gray-300 text-sm font-medium mb-2">Agency/Company Name</label>
                                 <input type="text" name="company" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Your agency or company name (optional)">
-                            </div>
+                            </div> --}}
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -145,10 +145,8 @@
                 <!-- Professional Details -->
                 <div class="form-card rounded-2xl p-8">
                     <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-blue-400 bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6m8 0H8"/>
-                            </svg>
+                        <div class="w-12 h-12 bg-blue-400/20 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-inbox text-blue-400 text-xl"></i>
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-white">Professional Details</h3>
@@ -185,7 +183,7 @@
                 <!-- Document Upload -->
                 <div class="form-card rounded-2xl p-8">
                     <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-purple-400 bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-purple-400/20 rounded-xl flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -220,7 +218,7 @@
                 <!-- Agreement & Terms -->
                 <div class="form-card rounded-2xl p-8">
                     <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-yellow-400 bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                        <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
@@ -293,7 +291,7 @@
     </div>
 
     <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
+    <div id="successModal" class="fixed inset-0 bg-black/50 items-center justify-center z-50 hidden">
         <div class="form-card rounded-2xl p-8 w-full max-w-md mx-4 text-center">
             <div class="w-16 h-16 bg-accent-green bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg class="w-8 h-8 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">

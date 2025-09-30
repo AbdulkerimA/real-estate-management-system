@@ -1,6 +1,10 @@
 <?php
 
-use App\Models\properties;
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home.index');
@@ -8,21 +12,35 @@ Route::view('/home', 'home.index');
 Route::view('/about','home.about');
 Route::view('/admin/agents', 'admin.agents.index');
 
-Route::view('/login','auth.index');
-Route::view('/signup','user.index');
+Route::controller(UserController::class)->group(function (){
+    Route::get('/signup','create');
+    Route::post('/signup','store');
+});
 
-Route::view('/agents','agents.index');
-Route::view('/agent/register','agents.create');
-Route::view('/agent/{agent}','agents.show');
+Route::controller(SessionController::class)->group(function () {
+    Route::get('/login','create');
+    Route::post('/login','store');
+});
 
-Route::view('/properties','properties.index');
-Route::view('/property/{property}','properties.show'); 
+Route::controller(AgentController::class)->group(function (){
+    Route::get('/agents','index');
+    Route::get('/agent/register','create');
+    Route::get('/agent/{agent}','show');
 
-Route::view('/schedule/{property}','schedule.create');
+    Route::post('/agent/register','store');
+});
+
+Route::controller(PropertyController::class)->group(function (){
+    Route::get('/properties','index');
+    Route::get('/property/{property}','show')->middleware('auth');
+});
+
+Route::controller(AppointmentController::class)->group(function(){
+    Route::get('/schedule/{property}','create')->middleware('auth');
+});
 
 Route::view('/dashboard','agents.dashboard');
 Route::view('/dashboard/home','agents.dashboard');
-// Route::view('/dashboard/properties','agents.properties.index');
 Route::get('/dashboard/properties',function () {
     // $properties = properties::paginate(10);
     // dd($properties);

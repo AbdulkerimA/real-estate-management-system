@@ -27,17 +27,45 @@ document.getElementById('toggle-password').addEventListener('click', function() 
             </svg>`;
 });
 
+function showError(message) {
+  const errorBox = document.getElementById("error-message");
+  const errorText = document.getElementById("error-text");
+
+  // Set the dynamic message
+  errorText.textContent = message;
+
+  // Make it visible
+  errorBox.classList.remove("hidden");
+
+  // Restart animation (important if triggered multiple times)
+  errorBox.classList.remove("animate-slideDownFade");
+  void errorBox.offsetWidth; // forces reflow to restart animation
+  errorBox.classList.add("animate-slideDownFade");
+
+  // Auto-hide after 3s
+  setTimeout(() => {
+    errorBox.classList.add("hidden");
+  }, 3000);
+}
+
+function hideError() {
+    // alert('');
+  const errorBox = document.getElementById("error-message");
+  errorBox.classList.add("hidden");
+}
+
 // Form submission
 const loginForm = document.getElementById('login-form');
 loginForm?loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    
     
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const rememberMe = document.getElementById('remember-me').checked;
     
     if (!email || !password) {
-        alert('Please fill in all required fields.');
+        e.preventDefault();
+        showError('Please fill in all required fields.');
         return;
     }
     
@@ -48,11 +76,11 @@ loginForm?loginForm.addEventListener('submit', function(e) {
     loginBtn.textContent = 'Logging in...';
     loginBtn.disabled = true;
     
-    setTimeout(() => {
-        alert(`Login successful!\nEmail: ${email}\nRemember Me: ${rememberMe ? 'Yes' : 'No'}`);
-        loginBtn.textContent = originalText;
-        loginBtn.disabled = false;
-    }, 2000);
+    // setTimeout(() => {
+    //     alert(`Login successful!\nEmail: ${email}\nRemember Me: ${rememberMe ? 'Yes' : 'No'}`);
+    //     loginBtn.textContent = originalText;
+    //     loginBtn.disabled = false;
+    // }, 2000);
 }):'';
 
 // Google login
@@ -88,10 +116,10 @@ document.getElementById('forgot-password').addEventListener('click', function(e)
 });
 
 // Sign up link
-document.getElementById('signup-link').addEventListener('click', function(e) {
-    e.preventDefault();
-    alert('Sign up page would open here.');
-});
+// document.getElementById('signup-link').addEventListener('click', function(e) {
+//     e.preventDefault();
+//     alert('Sign up page would open here.');
+// });
 
 // Input field animations
 document.querySelectorAll('.input-field').forEach(input => {

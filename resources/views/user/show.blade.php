@@ -3,10 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - PropertyHub</title>
-    @vite(['resources/css/auth.css','resources/js/auth.js'])
+    <title>Sign Up - AnchorHomes</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    @vite(['resources/css/auth.css','resources/js/register.js'])
+    <style>
+        @keyframes slideDownFade {
+            0%   { transform: translateY(-100%); opacity: 0; }
+            10%  { transform: translateY(0); opacity: 1; }
+            80%  { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0; }
+        }
+
+        .animate-slideDownFade {
+            animation: slideDownFade 3s ease-in-out forwards;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 relative">
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-scroll">
     <!-- Floating Background Shapes -->
     <div class="floating-shapes">
         <div class="shape">
@@ -31,6 +45,21 @@
         </div>
     </div>
 
+    {{-- error display box --}}
+    <div id="error-message" 
+        class="fixed top-0 right-0 flex justify-evenly items-center bg-red-400/10 text-red-500 text-md font-semibold px-4 py-2 m-2 border border-red-600 rounded-2xl shadow-lg z-50
+            {{ $errors ? '' : 'hidden' }}">
+        <i class="fa fa-exclamation-triangle text-xl mx-2" aria-hidden="true"></i>
+        <p class="mx-2" id="error-text">
+            {{ $errors }}
+        </p>
+        <button onclick="hideError()" class="px-2 rounded bg-red-200 mx-2 text-xl">
+            <i class="fa fa-times text-red-500" aria-hidden="true"></i>
+        </button>
+    </div>
+
+
+
     <div class="w-full max-w-lg relative z-10">
         <!-- Sign Up Card -->
         <div class="signup-card rounded-3xl p-8 shadow-2xl">
@@ -40,7 +69,7 @@
             </div>
 
             <!-- Sign Up Form -->
-            <form class="space-y-6" id="signup-form">
+            <form action="/signup" method="POST" class="space-y-6" id="signup-form">
                 @csrf
                 <!-- Full Name Field -->
                 <div>
@@ -54,6 +83,7 @@
                             id="fullName" 
                             name="fullName"
                             placeholder="Enter your full name"
+                            :value="old('fullName')"
                         />
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +91,6 @@
                             </svg>
                         </div>
                     </div>
-
                     <div class="text-xs text-red-400 mt-1 hidden" id="fullName-error"></div>
                 </div>
 
@@ -78,6 +107,7 @@
                             id="email" 
                             name="email"
                             placeholder="Enter your email address"
+                            :value="old('email')"
                         />
 
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
@@ -100,6 +130,7 @@
                             id="phone" 
                             name="phone"
                             placeholder="Enter your phone number"
+                            :value="old('tel')"
                         />
 
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
@@ -110,30 +141,6 @@
                     </div>
                     <div class="text-xs text-red-400 mt-1 hidden" id="phone-error"></div>
                 </div>
-
-                <!-- Role Selection -->
-                {{-- <div>
-                    <x-form.lable for="role">
-                        Select Your Role
-                    </x-form.lable>
-                    <div class="relax-form.tive">
-                        <x-form.select 
-                            id="role" 
-                            name="role"
-                        >
-                            <option value="">Choose your role</option>
-                            <option value="buyer">🏠 Buyer - Looking for properties</option>
-                            <option value="seller">💰 Seller - Selling properties</option>
-                            <option value="agent">🤝 Agent - Real estate professional</option>
-                        </x-form.select>
-
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div> --}}
 
                 <!-- Password Field -->
                 <div>
@@ -146,6 +153,7 @@
                             id="password" 
                             name="password"
                             placeholder="Create a strong password"
+
                         />
                         <button 
                             type="button" 
@@ -176,7 +184,7 @@
                         <x-form.input 
                             type="password" 
                             id="confirmPassword" 
-                            name="confirmPassword"
+                            name="password_confirmation"
                             placeholder="Confirm your password"
                         />
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
@@ -258,7 +266,7 @@
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         // Password visibility toggle
         document.getElementById('toggle-password').addEventListener('click', function() {
             const passwordField = document.getElementById('password');
@@ -467,6 +475,6 @@
                 this.parentElement.classList.remove('focused');
             });
         });
-    </script>
+    </script> --}}
 </body>
 </html>
