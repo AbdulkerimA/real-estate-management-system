@@ -57,7 +57,7 @@ class UserController extends Controller
 
         //redirct to properties page
         return redirect('/properties');
-    }
+    } 
 
     /**
      * Display the specified resource.

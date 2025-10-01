@@ -10,7 +10,7 @@ class Document extends Model
     /** @use HasFactory<\Database\Factories\DocumentFactory> */
     use HasFactory;
     
-    protected $fillable = ['owner_id','doc_type','file_path','status'];
+    protected $fillable = ['doc_type','file_path'];
 
     // Relationships
     public function properties()

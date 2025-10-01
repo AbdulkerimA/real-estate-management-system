@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id');
+            // $table->foreignId('owner_id');
             $table->string('file_path', 255);
-            $table->enum('file_type', ['image','video'])->default('image');
+            $table->enum('file_type', ['image/jpeg','image/png','application/pdf'])->default('image/jpeg');
             $table->timestamps();
         });
     }

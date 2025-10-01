@@ -12,7 +12,7 @@ class Agent extends Model
 
      protected $fillable = [
         'user_id','media_id','document_id','bio','address',
-        'is_verified','speciality','years_of_experience','deals_closed'
+        'speciality','years_of_experience'
     ];
     
      // Relationships

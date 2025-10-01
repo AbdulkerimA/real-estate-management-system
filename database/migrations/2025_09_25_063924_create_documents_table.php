@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id');
+            // $table->foreignId('owner_id');
             $table->string('doc_type', 50);
             $table->string('file_path', 255);
             $table->enum('status', ['pending','verified','rejected'])->default('pending');

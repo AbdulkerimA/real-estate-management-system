@@ -26,39 +26,27 @@
             </svg>
         </div>
     </div>
-
+    <div class="text-red-500">
+        {{ count($errors) > 0 ? dd($errors) : '' }}
+        {{-- @foreach ($errors as $item)
+            <p>
+                {{ $item }}
+            </p>
+        @endforeach --}}
+    </div>
     <!-- Main Container -->
     <div class="relative z-10 min-h-screen py-12 px-4">
         <!-- Header -->
         <div class="text-center mb-12">
-            {{-- <div class="flex items-center justify-center mb-6">
-                <div class="w-16 h-16 bg-accent-green rounded-2xl flex items-center justify-center mr-4">
-                    <svg class="w-9 h-9 text-[#12181f]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                    </svg>
-                </div>
-                <div>
-                    <span class="text-3xl font-bold text-accent-green">AnchorHomes</span>
-                </div>
-            </div> --}}
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Join as an Agent</h1>
             <p class="text-xl text-gray-300 max-w-2xl mx-auto">Register to list and manage properties with us</p>
-            
-            <!-- Progress Bar -->
-            {{-- <div class="max-w-md mx-auto mt-8">
-                <div class="flex items-center justify-between text-sm text-gray-400 mb-2">
-                    <span>Registration Progress</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-            </div> --}}
         </div>
 
         <!-- Registration Form -->
         <div class="max-w-4xl mx-auto">
-            <form id="signupForm" class="space-y-8">
+            <form action="/agent/register" method="POST" enctype="multipart/form-data" id="signupForm" class="space-y-8">
+                @csrf
+                
                 <!-- Personal Information -->
                 <div class="form-card rounded-2xl p-8">
                     <div class="flex items-center mb-6">
@@ -91,7 +79,14 @@
                                         Choose Photo
                                     </button>
                                 </div>
-                                <input type="file" id="photoInput" accept="image/*" class="hidden">
+                                <input 
+                                    type="file" 
+                                    id="photoInput" 
+                                    name='profilePic' 
+                                    accept="image/*" 
+                                    class="hidden"
+                                    {{-- value = "{{ old('profilePic') }}"   --}}
+                                    required>
                             </div>
                         </div>
 
@@ -100,22 +95,48 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Full Name *</label>
-                                    <input type="text" name="fullName" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Enter your full name" required>
+                                    <input 
+                                        type="text" 
+                                        name="fullName" 
+                                        class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                        placeholder="Enter your full name" 
+                                        value="{{ old('fullName') }}"
+                                        required
+                                        >
                                 </div>
                                 
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Email Address *</label>
-                                    <input type="email" name="email" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="your.email@example.com" required>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                        placeholder="your.email@example.com" 
+                                        value="{{ old('email') }}"
+                                        required
+                                        >
                                 </div>
 
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Phone Number *</label>
-                                    <input type="tel" name="phone" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="+251 911 123 456" required>
+                                    <input 
+                                        type="tel" 
+                                        name="phone" 
+                                        class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                        placeholder="+251 911 123 456" 
+                                        value="{{ old('phone') }}"
+                                        required>
                                 </div>
 
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Location *</label>
-                                    <input type="text" name="location" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="City, Country" required>
+                                    <input 
+                                        type="text" 
+                                        name="location" 
+                                        class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                        placeholder="City, Country" 
+                                        value="{{ old('location') }}"
+                                        required>
                                 </div>
                             </div>
 
@@ -127,14 +148,21 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Password *</label>
-                                    <input type="password" name="password" id="password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Create a strong password" required>
+                                    <input 
+                                        type="password" 
+                                        name="password"
+                                        id="password" 
+                                        class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                        placeholder="Create a strong password" 
+                                        {{-- value="{{ old('pa') }}" --}}
+                                        required>
                                     <div class="password-strength mt-2" id="passwordStrength"></div>
                                     <p class="text-gray-400 text-xs mt-1">Minimum 8 characters with letters and numbers</p>
                                 </div>
 
                                 <div>
                                     <label class="block text-gray-300 text-sm font-medium mb-2">Confirm Password *</label>
-                                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Confirm your password" required>
+                                    <input type="password" name="password_confirmation" id="confirmPassword" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Confirm your password" required>
                                     <div id="passwordMatch" class="text-xs mt-1"></div>
                                 </div>
                             </div>
@@ -157,12 +185,18 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Years of Experience *</label>
-                            <input type="number" name="experience" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="0" min="0" max="50" required>
+                            <input 
+                                type="number" 
+                                name="experience" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="0" min="0" max="50" 
+                                value="{{ old('experience') }}"
+                                required>
                         </div>
 
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Specialty *</label>
-                            <select name="specialty" class="form-input w-full px-4 py-3 rounded-lg text-white" required>
+                            <select name="speciality" class="form-input w-full px-4 py-3 rounded-lg text-white" required>
                                 <option value="">Select your specialty</option>
                                 <option value="apartments">Apartments</option>
                                 <option value="houses">Houses</option>
@@ -203,7 +237,7 @@
                             </svg>
                             <h4 class="text-white font-medium mb-2">Drop documents here or click to upload</h4>
                             <p class="text-gray-400 text-sm mb-4">Professional license, ID, certifications</p>
-                            <input type="file" id="documentInput" multiple accept=".pdf,.jpg,.jpeg,.png" class="hidden">
+                            <input type="file" id="documentInput" name="documentInput[]" multiple accept=".pdf,.jpg,.jpeg,.png" class="hidden" required>
                             <button type="button" class="primary-button px-6 py-3 rounded-lg text-[#12181f] font-medium" onclick="document.getElementById('documentInput').click()">
                                 Choose Documents
                             </button>
@@ -255,9 +289,10 @@
                     </button>
                     <p class="text-gray-400 text-sm mt-4">
                         Already have an account? 
-                        <a href="#" class="text-accent-green hover:underline font-medium">Log in here</a>
+                        <a href="/login" class="text-accent-green hover:underline font-medium">Log in here</a>
                     </p>
                 </div>
+
             </form>
 
             <!-- Social Signup -->

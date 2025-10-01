@@ -10,7 +10,7 @@ class Media extends Model
     /** @use HasFactory<\Database\Factories\MediaFactory> */
     use HasFactory;
 
-    protected $fillable = ['owner_id','file_path','file_type'];
+    protected $fillable = ['file_path','file_type'];
     
     // Relationships
     public function properties()
