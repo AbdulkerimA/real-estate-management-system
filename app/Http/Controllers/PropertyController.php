@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
 use App\Models\Property;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return view('properties.index');
+        $properties = Property::paginate(20);
+        // dd($properties);
+        return view('properties.index',['properties'=>$properties]);
     }
 
     /**
@@ -36,7 +39,12 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        return view('properties.show');
+        $relatedProperties = Property::where('type',value:$property->type);
+        $agent = Agent::where('user_id',$property->agent_id)->first();
+
+        // dd($property);
+
+        return view('properties.show',['property'=>$property, 'properties' => $relatedProperties,'agent'=>$agent]);
     }
 
     /**

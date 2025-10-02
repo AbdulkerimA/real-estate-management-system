@@ -1,7 +1,10 @@
 <x-agent-dashboard.dashboard-layout >
     <!-- Form Content -->
         <div class="p-6">
-            <form id="propertyForm" class="space-y-6">
+            <form action="/dashboard/property/create" method="POST" enctype="multipart/form-data" id="propertyForm" class="space-y-6">
+                
+                @csrf
+
                 <!-- Property Information -->
                 <div class="form-card rounded-2xl p-6">
                     <div class="flex items-center mb-6">
@@ -19,12 +22,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-gray-300 text-sm font-medium mb-2">Property Title *</label>
-                            <input type="text" name="title" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="e.g., Modern 3BR Apartment in Bole" required>
+                            <input 
+                                type="text" 
+                                name="title" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="e.g., Modern 3BR Apartment in Bole" 
+                                value="{{ old('title') }}"
+                                required>
+                                <x-form-input-error fildName="title" />
                         </div>
                         
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Property Type *</label>
-                            <select name="type" class="form-input w-full px-4 py-3 rounded-lg text-white" required>
+                            <select name="type" class="form-input w-full px-4 py-3 rounded-lg text-white" value="{{ old('type') }}" required>
                                 <option value="">Select property type</option>
                                 <option value="house">House</option>
                                 <option value="apartment">Apartment</option>
@@ -33,18 +43,35 @@
                                 <option value="villa">Villa</option>
                                 <option value="condominium">Condominium</option>
                             </select>
+                            <x-form-input-error fildName="type" />
                         </div>
 
                         <div class="currency-input">
                             <label class="block text-gray-300 text-sm font-medium mb-2">Price (ETB) *</label>
                             {{-- <span class="currency-symbol">ETB</span> --}}
-                            <input type="number" name="price" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="0" min="0" step="1000" required>
+                            <input 
+                                type="number" 
+                                name="price" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="0" 
+                                min="0" 
+                                step="1000" 
+                                value="{{ old('price') }}"
+                                required>
+                                <x-form-input-error fildName="price" />
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-gray-300 text-sm font-medium mb-2">Location *</label>
                             <div class="flex space-x-2">
-                                <input type="text" name="location" class="form-input flex-1 px-4 py-3 rounded-lg text-white" placeholder="e.g., Bole, Addis Ababa" required>
+                                <input 
+                                    type="text" 
+                                    name="location" 
+                                    class="form-input flex-1 px-4 py-3 rounded-lg text-white" 
+                                    placeholder="e.g., Bole, Addis Ababa" 
+                                    value="{{ old('location') }}"
+                                    required>
+                                    <x-form-input-error fildName="location" />
                                 <button type="button" class="secondary-button px-4 py-3 rounded-lg font-medium" onclick="openMapPicker()">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -52,21 +79,41 @@
                                     </svg>
                                 </button>
                             </div>
-                        </div>
+                        </div> 
 
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">longitude *</label>
-                             <input type="number" name="longitude" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="12.5156" min="0" required>
+                             <input 
+                                type="number" 
+                                name="longitude" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="12.5156" 
+                                value="{{ old('longitude') }}"
+                                required>
+                                <x-form-input-error fildName="longitude" />
                         </div>
 
                         <div class="currency-input">
                             <label class="block text-gray-300 text-sm font-medium mb-2">latitude</label>
-                            <input type="number" name="latitude" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="12.5156" min="0" required>
+                            <input 
+                                type="number" 
+                                name="latitude" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="12.5156" 
+                                value="{{ old('latitude') }}" 
+                                required>
+                                <x-form-input-error fildName="latitude" />
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-gray-300 text-sm font-medium mb-2">Description *</label>
-                            <textarea name="description" rows="4" class="form-input w-full px-4 py-3 rounded-lg text-white resize-none" placeholder="Describe the property features, location benefits, and unique selling points..." required></textarea>
+                            <textarea 
+                                name="description" 
+                                rows="4" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white resize-none" 
+                                placeholder="Describe the property features, location benefits, and unique selling points..."
+                                required></textarea>
+                                <x-form-input-error fildName="description" />
                         </div>
                     </div>
                 </div>
@@ -88,22 +135,49 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Bedrooms</label>
-                            <input type="number" name="bedrooms" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="0" min="0" max="20">
+                            <input 
+                                type="number" 
+                                name="bedrooms" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                placeholder="0" 
+                                min="0" 
+                                max="20"
+                                value="{{ old('bedrooms') }}"
+                                >
+                                <x-form-input-error fildName="bedrooms" />
                         </div>
 
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Bathrooms</label>
-                            <input type="number" name="bathrooms" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="0" min="0" max="20" step="0.5">
+                            <input 
+                                type="number" 
+                                name="bathrooms" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                value="{{ old('bathrooms') }}"
+                                placeholder="0" min="0" max="20" step="0.5">
+                                <x-form-input-error fildName="bathrooms" />
                         </div>
 
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Square Meters</label>
-                            <input type="number" name="area" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="0" min="0" step="0.1">
+                            <input 
+                                type="number" 
+                                name="area" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                value="{{ old('area') }}"
+                                placeholder="0" min="0" step="0.1">
+                                <x-form-input-error fildName="area" />
                         </div>
 
                         <div>
                             <label class="block text-gray-300 text-sm font-medium mb-2">Year Built</label>
-                            <input type="number" name="yearBuilt" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="2024" min="1900" max="2024">
+                            <input 
+                                type="number" 
+                                name="yearBuilt" 
+                                class="form-input w-full px-4 py-3 rounded-lg text-white" 
+                                value="{{ old('yearBuilt') }}"
+                                placeholder="2024" min="1900" max="2024">
+                                <x-form-input-error fildName="yearBuilt" />
                         </div>
                     </div>
 
@@ -111,7 +185,7 @@
                         <label class="block text-gray-300 text-sm font-medium mb-4">Amenities</label>
                         <div class="checkbox-group">
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="parking" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="parking" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -125,7 +199,7 @@
                             </label>
 
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="balcony" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="balcony" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -139,7 +213,7 @@
                             </label>
 
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="pool" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="pool" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -153,7 +227,7 @@
                             </label>
 
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="security" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="security" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -167,7 +241,7 @@
                             </label>
 
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="garden" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="garden" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -181,7 +255,7 @@
                             </label>
 
                             <label class="checkbox-item">
-                                <input type="checkbox" name="amenities" value="gym" class="sr-only">
+                                <input type="checkbox" name="amenities[]" value="gym" class="sr-only">
                                 <div class="checkbox-content flex-1">
                                     <div class="flex items-center">
                                         <div class="checkbox-icon w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center mr-3 transition-all">
@@ -217,43 +291,15 @@
                         </svg>
                         <h4 class="text-white font-medium mb-2">Drop images here or click to upload</h4>
                         <p class="text-gray-400 text-sm mb-4">Support: JPG, PNG, WebP (Max 5MB each)</p>
-                        <input type="file" id="imageInput" multiple accept="image/*" class="hidden">
+                        <input type="file" name="images[]" id="imageInput" multiple accept="image/*" class="hidden">
                         <button type="button" class="primary-button px-6 py-3 rounded-lg text-[#12181f] font-medium" onclick="document.getElementById('imageInput').click()">
                             Choose Images
                         </button>
+                        <x-form-input-error fildName="images" />
                     </div>
 
                     <div id="imagePreview" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
                         <!-- Image previews will be inserted here -->
-                    </div>
-                </div>
-
-                <!-- Availability & Status -->
-                <div class="form-card rounded-2xl p-6">
-                    <div class="flex items-center mb-6">
-                        <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Availability & Status</h3>
-                            <p class="text-gray-400 text-sm">Set property availability and special features</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="text-white font-medium">Featured Property</h4>
-                                <p class="text-gray-400 text-sm">Highlight this property in search results</p>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" name="featured">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
                     </div>
                 </div>
 

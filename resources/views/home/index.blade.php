@@ -6,9 +6,9 @@
     @endslot
 
     @slot("properties")
-        <x-property.property-card>
-
-        </x-property.property-card>
+        @foreach ($properties as $property)
+            <x-property.property-card :property="$property" />
+        @endforeach
     @endslot
 
     @slot("testimonials")

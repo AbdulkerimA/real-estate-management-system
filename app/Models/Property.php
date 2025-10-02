@@ -11,9 +11,9 @@ class Property extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','media_id','document_id',
+        'agent_id','media_id','type',
         'title','description','price','location',
-        'latitude','longitude','status','is_hignlighted'
+        'latitude','longitude'
     ];
     
     // Relationships

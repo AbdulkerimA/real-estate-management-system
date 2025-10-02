@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('owner_id');
             $table->string('file_path', 255);
-            $table->enum('file_type', ['image/jpeg','image/png','application/pdf'])->default('image/jpeg');
+            $table->string('file_type',50)->default('image/jpeg');
             $table->timestamps();
         });
     }

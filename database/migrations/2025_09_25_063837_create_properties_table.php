@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('agent_id')->constrained('agents')->onDelete('cascade');
+            $table->foreignId('agent_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('media_id')->constrained('media')->onDelete('cascade');
-            $table->foreignId('document_id')->constrained('documents')->onDelete('cascade');
+            // $table->foreignId('document_id')->constrained('documents')->onDelete('cascade');
             $table->string('title', 150);
+            $table->string('type', 150);
             $table->text('description')->nullable();
             $table->decimal('price', 15, 2);
             $table->string('location', 150);

@@ -398,21 +398,21 @@ let uploadedImages = [];
 let mainImageIndex = 0;
 
 // Form progress tracking
-function updateProgress() {
-    const form = document.getElementById('propertyForm');
-    const inputs = form?form.querySelectorAll('input[required], select[required], textarea[required]'):"";
-    let filledInputs = 0;
+// function updateProgress() {
+//     const form = document.getElementById('propertyForm');
+//     const inputs = form?form.querySelectorAll('input[required], select[required], textarea[required]'):"";
+//     let filledInputs = 0;
 
-    inputs?inputs.forEach(input => {
-        if (input.value.trim() !== '') {
-            filledInputs++;
-        }
-    }):'';
+//     inputs?inputs.forEach(input => {
+//         if (input.value.trim() !== '') {
+//             filledInputs++;
+//         }
+//     }):'';
 
-    // const progress = Math.round((filledInputs / inputs.length) * 100);
-    // // document.getElementById('progressFill').style.width = progress + '%';
-    // // document.getElementById('progressText').textContent = progress + '%';
-}
+//     // const progress = Math.round((filledInputs / inputs.length) * 100);
+//     // // document.getElementById('progressFill').style.width = progress + '%';
+//     // // document.getElementById('progressText').textContent = progress + '%';
+// }
 
 // Add event listeners to form inputs
 document.addEventListener('DOMContentLoaded', function() {
@@ -527,7 +527,7 @@ document.querySelectorAll('.checkbox-item').forEach(item => {
 // Form submission
 let propertyForm = document.getElementById('propertyForm');
 propertyForm?propertyForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     
     // Validate required fields
     const requiredFields = this.querySelectorAll('[required]');
@@ -535,6 +535,7 @@ propertyForm?propertyForm.addEventListener('submit', function(e) {
     
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
+            e.preventDefault();
             field.classList.add('error');
             isValid = false;
         } else {
@@ -543,17 +544,19 @@ propertyForm?propertyForm.addEventListener('submit', function(e) {
     });
 
     if (!isValid) {
+        e.preventDefault();
         alert('Please fill in all required fields.');
         return;
     }
 
     if (uploadedImages.length === 0) {
+        e.preventDefault();
         alert('Please upload at least one property image.');
         return;
     }
 
     // Show success modal
-    document.getElementById('successModal').classList.remove('hidden');
+    // document.getElementById('successModal').classList.remove('hidden');
 }):'';
 
 // Modal functions
