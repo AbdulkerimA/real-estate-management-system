@@ -180,14 +180,16 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="agents-grid">
                 <!-- Agent Card 1 -->
-                @for ($i = 0; $i < 12; $i++)
-                    <x-agent.agnet-card />
-                @endfor
+                @foreach ($agents as $agent)
+                    <x-agent.agnet-card :agent="$agent"/>
+                @endforeach
                 <!-- Agent Card 2 -->
             </div>
 
             <!-- Pagination -->
-            <x-pagination />
+            {{-- <x-pagination /> --}}
+            <!-- Pagination -->
+            {{ $agents->links('vendor.pagination.pagination')}}
 
         </div>
 

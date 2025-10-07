@@ -24,6 +24,10 @@
             'title' => 'My Profile',
             'subtitle' => 'Manage your account and professional details'
         ],
+        'dashboard/profile/edit' => [
+            'title' => 'Edit your Profile',
+            'subtitle' => 'Manage your account and professional details'
+        ],
         'dashboard/settings' => [
             'title' => 'Settings',
             'subtitle' => 'Manage your account and system preferences'

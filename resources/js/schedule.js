@@ -5,7 +5,7 @@
 
         // Form submission handling
         document.getElementById('viewingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
             const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
@@ -24,6 +24,7 @@
             
             // Validation
             if (!fullName || !email || !phone || !viewingDate || !viewingTime || !terms) {
+                e.preventDefault();
                 errorText.textContent = 'Please fill in all required fields and accept the terms & conditions.';
                 errorMessage.classList.remove('hidden');
                 return;
@@ -32,6 +33,7 @@
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
+                 e.preventDefault();
                 errorText.textContent = 'Please enter a valid email address.';
                 errorMessage.classList.remove('hidden');
                 return;
@@ -43,6 +45,7 @@
             currentDate.setHours(0, 0, 0, 0);
             
             if (selectedDate < currentDate) {
+                 e.preventDefault();
                 errorText.textContent = 'Please select a future date for your viewing.';
                 errorMessage.classList.remove('hidden');
                 return;
@@ -54,29 +57,29 @@
             // Scroll to success message
             successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
-            // Reset form after a delay
-            setTimeout(() => {
-                this.reset();
-                successMessage.classList.add('hidden');
-            }, 5000);
+            // // Reset form after a delay
+            // setTimeout(() => {
+            //     this.reset();
+            //     successMessage.classList.add('hidden');
+            // }, 5000);
         });
 
         // View Full Details button
-        document.querySelector('button').addEventListener('click', function() {
-            if (this.textContent.includes('View Full Details')) {
-                alert('Returning to property details page...');
-                window.location = '/property/1';
-            }
-        });
+        // document.querySelector('button').addEventListener('click', function() {
+        //     if (this.textContent.includes('View Full Details')) {
+        //         alert('Returning to property details page...');
+        //         window.location = '/property/1';
+        //     }
+        // });
 
-        // Message Agent button
-        document.querySelectorAll('button').forEach(button => {
-            if (button.textContent.includes('Message Agent')) {
-                button.addEventListener('click', function() {
-                    alert('Opening message composer for Sara Tadesse...');
-                });
-            }
-        });
+        // // Message Agent button
+        // document.querySelectorAll('button').forEach(button => {
+        //     if (button.textContent.includes('Message Agent')) {
+        //         button.addEventListener('click', function() {
+        //             alert('Opening message composer for Sara Tadesse...');
+        //         });
+        //     }
+        // });
 
         // Terms & Conditions links
         document.querySelectorAll('a[href="#"]').forEach(link => {

@@ -38,6 +38,7 @@
 
 @php
     $images = json_decode($property->media->file_path, true);
+    $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
     $i = 0;
 @endphp
 
@@ -48,7 +49,7 @@
     <div class="mb-6">
         <div id="main-gallery-image" class="hero-image rounded-2xl h-96 flex items-center justify-center cursor-pointer">
             <div class="text-center">
-                <img src="{{ asset('storage/'.$images[0]) }}" alt="">
+                <img src="{{ asset('storage/'.$firstImage) }}" alt="">
                 <p class="text-white opacity-75">{{ $mainLabel }}</p>
             </div>
         </div>

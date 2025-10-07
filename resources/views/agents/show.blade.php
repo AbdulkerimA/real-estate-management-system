@@ -40,17 +40,20 @@
                         <!-- Profile Photo -->
                         <div class="relative">
                             <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br from-pink-500 to-red-600 flex items-center justify-center text-5xl lg:text-6xl font-bold border-4 border-[#00ff88]">
-                                ST
+                                <img src="{{ asset('storage/'.$agent->media->file_path) }}" alt="" class="w-full h-full rounded-full">
                             </div>
                             <div class="absolute -top-2 -right-2 bg-[#00ff88] text-[#12181f] px-3 py-1 rounded-full text-sm font-bold">
-                                ⭐ VERIFIED
+                                ⭐ {{ $agent->user->email_verified_at != null ? 'VERIFIED' : 'VERIFIED' }}
                             </div>
                         </div>
 
                         <!-- Profile Info -->
                         <div class="flex-1 text-center lg:text-left">
-                            <h1 class="text-4xl lg:text-5xl font-bold mb-2">Sara Tadesse</h1>
-                            <p class="text-[#00ff88] text-xl font-semibold mb-4">Senior Real Estate Agent</p>
+                            <h1 class="text-4xl lg:text-5xl font-bold mb-2">{{ $agent->user->name }}</h1>
+                            <p class="text-[#00ff88] text-xl font-semibold mb-4">
+                                {{-- Senior {{ $agent->speciality }} Agent --}}
+                                {{ $agent->bio }}
+                            </p>
                             
                             <!-- Contact Info -->
                             <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-center lg:justify-start">
@@ -58,20 +61,20 @@
                                     <svg class="w-5 h-5 mr-2 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                     </svg>
-                                    <span class="text-gray-300">+251 922 345 678</span>
+                                    <span class="text-gray-300">{{ $agent->user->phone }}</span>
                                 </div>
                                 <div class="flex items-center justify-center lg:justify-start">
                                     <svg class="w-5 h-5 mr-2 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                     </svg>
-                                    <span class="text-gray-300">sara.tadesse@AnchorHomes.et</span>
+                                    <span class="text-gray-300">{{ $agent->user->email }}</span>
                                 </div>
                                 <div class="flex items-center justify-center lg:justify-start">
                                     <svg class="w-5 h-5 mr-2 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     </svg>
-                                    <span class="text-gray-300">Bole Office, Addis Ababa</span>
+                                    <span class="text-gray-300"> {{ $agent->address }} </span>
                                 </div>
                             </div>
 
@@ -95,14 +98,14 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Properties Listed -->
                 <div class="stat-card rounded-2xl p-6 text-center">
-                    <div class="text-4xl font-bold text-[#00ff88] mb-2">47</div>
+                    <div class="text-4xl font-bold text-[#00ff88] mb-2"> {{ count($properties) }} </div>
                     <div class="text-gray-300 font-semibold">Properties Listed</div>
                     <div class="text-sm text-gray-400 mt-1">Active listings</div>
                 </div>
 
                 <!-- Years of Experience -->
                 <div class="stat-card rounded-2xl p-6 text-center">
-                    <div class="text-4xl font-bold text-[#00ff88] mb-2">8+</div>
+                    <div class="text-4xl font-bold text-[#00ff88] mb-2">{{ $agent->years_of_experience }}+</div>
                     <div class="text-gray-300 font-semibold">Years Experience</div>
                     <div class="text-sm text-gray-400 mt-1">In real estate</div>
                 </div>
@@ -124,96 +127,39 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- About Section -->
                 <div class="lg:col-span-2">
-                    <h2 class="text-3xl font-bold mb-6">About Sara</h2>
+                    <h2 class="text-3xl font-bold mb-6">About {{ $agent->user->name }} </h2>
                     <div class="profile-card rounded-2xl p-8">
                         <p class="text-gray-300 leading-relaxed mb-6">
-                            With over 8 years of experience in the Addis Ababa real estate market, Sara Tadesse has established herself as one of the most trusted and knowledgeable agents in the city. She specializes in residential properties and has a particular expertise in helping first-time home buyers navigate the complex process of purchasing their dream home.
+                            {{ $agent->about_me }}
                         </p>
-                        <p class="text-gray-300 leading-relaxed mb-6">
+                        {{-- <p class="text-gray-300 leading-relaxed mb-6">
                             Sara's deep understanding of the Bole and Yeka areas, combined with her commitment to personalized service, has earned her numerous satisfied clients and referrals. She believes in building long-term relationships with her clients and providing them with honest, professional advice throughout their real estate journey.
                         </p>
                         <p class="text-gray-300 leading-relaxed">
                             When she's not helping clients find their perfect property, Sara enjoys exploring new neighborhoods in Addis Ababa, staying updated on market trends, and volunteering with local community organizations.
-                        </p>
+                        </p> --}}
                     </div>
                 </div>
-
-                <!-- Specialties -->
-                {{-- <div>
-                    <h2 class="text-3xl font-bold mb-6">Specialties</h2>
-                    <div class="space-y-4">
-                        <div class="profile-card rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-[#00ff88] rounded-lg flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-[#12181f]" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-white">Residential Properties</h3>
-                                    <p class="text-sm text-gray-400">Apartments & Houses</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="profile-card rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-[#00ff88] rounded-lg flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-[#12181f]" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-white">First-Time Buyers</h3>
-                                    <p class="text-sm text-gray-400">Guidance & Support</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="profile-card rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-[#00ff88] rounded-lg flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-[#12181f]" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-white">Bole & Yeka Areas</h3>
-                                    <p class="text-sm text-gray-400">Local Expert</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="profile-card rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-[#00ff88] rounded-lg flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-[#12181f]" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-white">Investment Properties</h3>
-                                    <p class="text-sm text-gray-400">ROI Analysis</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
+                
             </div>
         </div>
 
         <!-- Agent's Properties -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold">Sara's Properties</h2>
-                <button class="text-[#00ff88] hover:text-green-400 font-semibold">View All (47)</button>
+                <h2 class="text-3xl font-bold">{{ $agent->user->name }}'s Properties</h2>
+                <button
+                    onclick="window.location = '/properties?id={{ $agent->user_id }}'"
+                    class="text-[#00ff88] hover:text-green-400 font-semibold">
+                    View All ({{ count($properties) }})
+                </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Property Card 1 -->
-                @for ($i = 0; $i < 6; $i++)
-                    <x-property.property-card />
-                @endfor
+                @foreach ($properties as $property)
+                    <x-property.property-card :property="$property" />
+                @endforeach
             </div>
             <div class="w-full flex justify-center">
                 <button class="w-fit bg-[#00ff88] text-gray-900 text-xl py-4 px-8 mt-6 rounded-lg font-semibold hover:bg-green-400 transition-colors">

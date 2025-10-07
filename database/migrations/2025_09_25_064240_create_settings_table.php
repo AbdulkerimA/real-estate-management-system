@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('appointment_reminder')->default(true);
             $table->boolean('two_factor_authentication')->default(true);
             $table->boolean('allow_direct_message')->default(false);
+            $table->boolean('show_online_statatus')->default(false);
             $table->boolean('deactivated')->default(false);
             $table->timestamps();
         });

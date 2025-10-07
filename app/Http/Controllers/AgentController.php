@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agent;
 use App\Models\Document;
 use App\Models\Media;
+use App\Models\Property;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,9 @@ class AgentController extends Controller
      */
     public function index()
     {
-        return view('agents.index');
+        $agents = Agent::with('user')->paginate(20);
+        // dd();
+        return view('agents.index',['agents'=>$agents]);
     }
 
     /**
@@ -33,6 +36,7 @@ class AgentController extends Controller
     public function store(Request $request)
     {
         // dd($request->hasFile('documentInput'));
+        // dd($request->post());
         
         $validated = request()->validate([
             'fullName'        => 'required|string|max:255',
@@ -42,7 +46,8 @@ class AgentController extends Controller
             'password'        => 'required|min:8|confirmed', 
             'profilePic'      => 'required|image|mimes:jpg,jpeg,png|max:5120',
             'documentInput.*'   => 'required|mimes:jpg,jpeg,png,pdf|max:5120',
-            'bio'             => 'required|string|min:10|max:1000',
+            'bio'             => 'required|string|min:10|max:255',
+            'about'           => 'required|string|min:200|max:2550',
             'speciality'      => 'required|string|in:apartments,houses,land,commercial,luxury,all',
             'experience'      => 'required|integer|min:0|max:50',
             'agreeTerms'      => 'accepted',
@@ -64,7 +69,7 @@ class AgentController extends Controller
         $user = User::create([
             'name' => $validated['fullName'],
             'email' => $validated['email'],
-            'tel' => $validated['phone'],
+            'phone' => $validated['phone'],
             'password' => $validated['password'],
             'role' => 'agent'
         ]);
@@ -84,6 +89,7 @@ class AgentController extends Controller
             'media_id' => $media->id,
             'document_id' => $document->id,
             'bio' => $validated['bio'],
+            'about_me' => $validated['about'],
             'address' => $validated['location'],
             'speciality' => $validated['speciality'],
             'years_of_experience' => $validated['experience'],
@@ -99,7 +105,10 @@ class AgentController extends Controller
      */
     public function show(Agent $agent)
     {
-        return view('agents.show',['agent'=>$agent]);
+        
+        $properties = Property::where('agent_id',$agent->user_id)->get();
+        // dd($properties[0]);
+        return view('agents.show',['agent'=>$agent,'properties'=>$properties]);
     }
 
     /**
@@ -107,7 +116,7 @@ class AgentController extends Controller
      */
     public function edit(Agent $agent)
     {
-        //
+
     }
 
     /**

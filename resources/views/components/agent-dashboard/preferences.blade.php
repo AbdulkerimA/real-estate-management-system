@@ -1,13 +1,20 @@
-@props(['title'=>'','subtitle'=>'','status'=>'checked'])
+@props(['title' => '', 'subtitle' => '', 'action' =>'' ,'status' => false])
 
-<div class="notification-item">
+<div {{ $attributes->merge(['class' => 'notification-item']) }}>
     <div class="flex items-center justify-between">
         <div>
             <p class="text-white font-medium">{{ $title }}</p>
             <p class="text-gray-400 text-sm">{{ $subtitle }}</p>
         </div>
+
         <label class="toggle-switch">
-            <input type="checkbox" {{ $status }}>
+            <input 
+                type="checkbox" 
+                name="{{ Str::slug($title, '_') }}" 
+                {{ $status ? 'checked' : '' }}
+                class="toggle-input"
+                data-url="{{ $action }}"
+            >
             <span class="toggle-slider"></span>
         </label>
     </div>

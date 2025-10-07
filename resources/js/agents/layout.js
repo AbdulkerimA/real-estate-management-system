@@ -55,7 +55,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
         if (pageName === 'Logout') {
             alert('Logging out...');
         } else {
-            alert(`Navigating to: ${pageName}`);
+            // alert(`Navigating to: ${pageName}`);
 
             if (pageName === 'My Properties') {
                 window.location = '/dashboard/properties';
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }):'';
 
     // Initial progress update
-    updateProgress();
+    // updateProgress();
 });
 
 // Image upload functionality
@@ -609,7 +609,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
         const pageName = this.textContent.trim();
         
         if (pageName !== 'My Properties') {
-            alert(`Navigating to: ${pageName}`);
+            // alert(`Navigating to: ${pageName}`);
         }
     });
 });
@@ -739,7 +739,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
         if (pageName === 'Logout') {
             alert('Logging out...');
         } else if (pageName !== 'Appointments') {
-            alert(`Navigating to: ${pageName}`);
+            // alert(`Navigating to: ${pageName}`);
         }
     });
 });
@@ -1046,7 +1046,7 @@ function validatePersonalForm() {
 }
 
 personalForm ? personalForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (validatePersonalForm()) {
         // Simulate saving
         const button = this.querySelector('button[type="submit"]');
@@ -1072,19 +1072,19 @@ phoneInput ? phoneInput.addEventListener('input', validatePersonalForm) : '';
 // Professional form
 const professionalForm = document.getElementById('professionalForm');
 professionalForm ? professionalForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    
     const button = this.querySelector('button[type="submit"]');
     button.disabled = true;
     button.textContent = 'Saving...';
     
-    setTimeout(() => {
-        button.disabled = false;
-        button.textContent = 'Save Professional Information';
-        document.getElementById('professionalSuccess').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('professionalSuccess').classList.add('hidden');
-        }, 3000);
-    }, 1000);
+    // setTimeout(() => {
+    //     button.disabled = false;
+    //     button.textContent = 'Save Professional Information';
+    //     document.getElementById('professionalSuccess').classList.remove('hidden');
+    //     setTimeout(() => {
+    //         document.getElementById('professionalSuccess').classList.add('hidden');
+    //     }, 3000);
+    // }, 1000);
 }) : '';
 
 // Specialty tags
@@ -1100,16 +1100,16 @@ const bioCounter = document.getElementById('bioCounter');
 const bioError = document.getElementById('bioError');
 
 function updateBioCounter() {
-    const length = bioTextarea.value.length;
+    const length = bioTextarea?bioTextarea.value.length:0;
     const maxLength = 500;
-    bioCounter.textContent = `${length}/${maxLength}`;
+    bioCounter?bioCounter.textContent = `${length}/${maxLength}`:'';
     
     if (length > maxLength) {
-        bioError.classList.remove('hidden');
-        bioTextarea.classList.add('error');
+        bioError?bioError.classList.remove('hidden'):'';
+        bioTextarea?bioTextarea.classList.add('error'):'';
     } else {
-        bioError.classList.add('hidden');
-        bioTextarea.classList.remove('error');
+        bioError?bioError.classList.add('hidden'):'';
+        bioTextarea?bioTextarea.classList.remove('error'):'';
     }
 }
 
@@ -1170,23 +1170,25 @@ confirmPasswordInput ? confirmPasswordInput.addEventListener('input', validatePa
 // Password form
 const passwordForm = document.getElementById('passwordForm');
 passwordForm ? passwordForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (validatePasswordMatch() && newPasswordInput.value.length >= 8) {
+    // e.preventDefault();
+    if (validatePasswordMatch() && newPasswordInput.value.length >= 6) {
         const button = this.querySelector('button[type="submit"]');
         button.disabled = true;
         button.textContent = 'Updating...';
         
-        setTimeout(() => {
-            button.disabled = false;
-            button.textContent = 'Update Password';
-            document.getElementById('passwordSuccess').classList.remove('hidden');
-            this.reset();
-            strengthBar.className = 'password-strength';
-            strengthText.textContent = 'Enter password';
-            setTimeout(() => {
-                document.getElementById('passwordSuccess').classList.add('hidden');
-            }, 3000);
-        }, 1000);
+        // setTimeout(() => {
+        //     button.disabled = false;
+        //     button.textContent = 'Update Password';
+        //     document.getElementById('passwordSuccess').classList.remove('hidden');
+        //     this.reset();
+        //     strengthBar.className = 'password-strength';
+        //     strengthText.textContent = 'Enter password';
+        //     setTimeout(() => {
+        //         document.getElementById('passwordSuccess').classList.add('hidden');
+        //     }, 3000);
+        // }, 1000);
+    }else{
+        e.preventDefault();
     }
 }) : '';
 
@@ -1207,7 +1209,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
         if (pageName === 'Logout') {
             alert('Logging out...');
         } else if (pageName !== 'Profile') {
-            alert(`Navigating to: ${pageName}`);
+            // alert(`Navigating to: ${pageName}`);
         }
     });
 });
@@ -1248,7 +1250,7 @@ function validateAccountForm() {
 }
 
 accountForm ? accountForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (validateAccountForm()) {
         const button = this.querySelector('button[type="submit"]');
         button.disabled = true;
@@ -1296,14 +1298,22 @@ savePreferencesBtn ? savePreferencesBtn.addEventListener('click', function() {
     this.disabled = true;
     this.textContent = 'Saving...';
     
-    setTimeout(() => {
-        this.disabled = false;
-        this.textContent = 'Save Preferences';
-        document.getElementById('preferencesSuccess').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('preferencesSuccess').classList.add('hidden');
-        }, 3000);
-    }, 1000);
+    showConfirmModal(
+        'coming soon',
+        'localization feature will be implemented soon',
+        ()=>{
+            this.disabled = false;
+            this.textContent = 'Save Preferences';
+        });
+
+    // setTimeout(() => {
+    //     this.disabled = false;
+    //     this.textContent = 'Save Preferences';
+    //     document.getElementById('preferencesSuccess').classList.remove('hidden');
+    //     setTimeout(() => {
+    //         document.getElementById('preferencesSuccess').classList.add('hidden');
+    //     }, 3000);
+    // }, 1000);
 }) : '';
 
 // Auto-save notification toggles
@@ -1392,53 +1402,158 @@ modalCancel ? modalCancel.addEventListener('click', () => {
 
 // Deactivate account
 const deactivateBtn = document.getElementById('deactivateBtn');
-deactivateBtn ? deactivateBtn.addEventListener('click', function() {
-    showConfirmModal(
-        'Deactivate Account',
-        'Your account will be temporarily disabled. You can reactivate it by logging in again. Continue?',
-        () => {
-            alert('Account deactivated successfully. You will be logged out.');
-        }
-    );
-}) : '';
+
+if (deactivateBtn) {
+    deactivateBtn.addEventListener('click', function () {
+        const url = '/dashboard/settings';
+
+        showConfirmModal(
+            'Deactivate Account',
+            'Your account will be temporarily disabled. You can reactivate it by logging in again. Continue?',
+            async () => { // make this async so we can await fetch
+                try {
+                    const response = await fetch(url, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: JSON.stringify({
+                            setting: 'deactivated',
+                            value: 1
+                        }),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Preference updated:", data);
+
+                        // // Optionally show a message or redirect
+                        // alert("Your account has been deactivated. Logging out...");
+                        // window.location.href = '/logout'; // optional
+                    } else {
+                        console.error("Update failed:", await response.text());
+                        alert("Failed to deactivate account.");
+                    }
+                } catch (error) {
+                    console.error("Error sending request:", error);
+                    alert("Something went wrong while deactivating your account.");
+                }
+            }
+        );
+    });
+}
+
+
+
+function showInputModal(title, message, onConfirm) {
+    const inputModal = document.getElementById('inputModal');
+    const inputModalTitle = document.getElementById('inputModalTitle');
+    const inputModalMessage = document.getElementById('inputModalMessage');
+    const inputModalField = document.getElementById('inputModalField');
+    const inputModalConfirm = document.getElementById('inputModalConfirm');
+    const inputModalCancel = document.getElementById('inputModalCancel');
+
+    // Set modal text
+    inputModalTitle.textContent = title;
+    inputModalMessage.textContent = message;
+    inputModalField.value = ''; // clear input
+
+    // Show modal
+    inputModal.classList.add('active');
+
+    // Confirm
+    inputModalConfirm.onclick = () => {
+        const inputValue = inputModalField.value.trim();
+        inputModal.classList.remove('active');
+        onConfirm(inputValue);
+    };
+
+    // Cancel
+    inputModalCancel.onclick = () => {
+        inputModal.classList.remove('active');
+    };
+}
+
 
 // Delete account
 const deleteAccountBtn = document.getElementById('deleteBtn');
-deleteAccountBtn ? deleteAccountBtn.addEventListener('click', function() {
-    showConfirmModal(
-        'Delete Account Permanently',
-        'This action cannot be undone. All your data, properties, and messages will be permanently deleted. Are you absolutely sure?',
-        () => {
-            // Second confirmation for delete
-            showConfirmModal(
-                'Final Confirmation',
-                'Type "DELETE" to confirm permanent account deletion.',
-                () => {
-                    alert('Account deletion initiated. You will receive a confirmation email.');
+
+if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', function () {
+        showConfirmModal(
+            'Delete Account Permanently',
+            'This action cannot be undone. All your data, properties, and messages will be permanently deleted. Are you absolutely sure?',
+            () => {
+                // Second confirmation for delete
+                showInputModal(
+                    'Final Confirmation',
+                    'Type "DELETE" to confirm permanent account deletion.',
+                    async (inputValue) => {
+                        if (inputValue.trim().toUpperCase() === 'DELETE') {
+                            const url = '/dashboard/settings/delete';
+
+                            try {
+                                const response = await fetch(url, {
+                                    method: "DELETE",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                                    },
+                                });
+
+                                if (response.ok) {
+                                    alert('Account deletion initiated. You will receive a confirmation email.');
+                                    window.location.href = '/'; 
+                                } else {
+                                    alert('Failed to delete account. Please try again.');
+                                    console.error(await response.text());
+                                }
+                            } catch (error) {
+                                console.error("Error deleting account:", error);
+                                alert("Something went wrong. Please try again later.");
+                            }
+                        } else {
+                            alert('You must type "DELETE" to confirm.');
+                        }
+                    }
+                );
+            }
+        );
+    });
+}
+
+
+// toggle button handler
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".toggle-input").forEach(toggle => {
+        toggle.addEventListener("change", async (e) => {
+            const checkbox = e.target;
+            const url = checkbox.dataset.url;
+            const status = checkbox.checked;
+
+            try {
+                const response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({
+                        setting: checkbox.name,
+                        value: status ? 1 : 0
+                    }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Preference updated:", data);
+                } else {
+                    console.error("Update failed:", await response.text());
                 }
-            );
-        }
-    );
-}) : '';
-
-// Sidebar navigation
-// document.querySelectorAll('.sidebar-item').forEach(item => {
-//     item.addEventListener('click', function(e) {
-//         e.preventDefault();
-        
-//         // Remove active class from all items
-//         document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-        
-//         // Add active class to clicked item
-//         this.classList.add('active');
-        
-//         // Get the page name
-//         const pageName = this.textContent.trim();
-
-//         if (pageName === 'Logout') {
-//             alert('Logging out...');
-//         } else if (pageName !== 'Settings') {
-//             alert(`Navigating to: ${pageName}`);
-//         }
-//     });
-// });
+            } catch (error) {
+                console.error("Error sending request:", error);
+            }
+        });
+    });
+});

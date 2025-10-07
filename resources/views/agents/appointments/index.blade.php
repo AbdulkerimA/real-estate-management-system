@@ -13,13 +13,19 @@
     
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <!-- Next Appointment -->
-        <x-agent-dashboard.appointment-quick-show-card status="next" action="view details">
-            <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
-        </x-agent-dashboard.appointment-quick-show-card>
+        @foreach ($appointments->take(3) as $appointment )
+            <x-agent-dashboard.appointment-quick-show-card status="next" action="view details" :appointment="$appointment">
+                {{-- <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg> --}}
+                <img src="{{ asset('storage/'.(json_decode($appointment->property->media->file_path,true)[0] ?? 'default.png')) }}" 
+                    alt=""
+                    class="w-full h-full rounded"
+                >
+            </x-agent-dashboard.appointment-quick-show-card>
+        @endforeach
 
-        <!-- Second Appointment -->
+        {{-- <!-- Second Appointment -->
         <x-agent-dashboard.appointment-quick-show-card >
             <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -31,7 +37,7 @@
             <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
             </svg>
-        </x-agent-dashboard.appointment-quick-show-card>
+        </x-agent-dashboard.appointment-quick-show-card> --}}
     </div>
 </div>
 
@@ -78,11 +84,11 @@
 </div>
 
 <!-- Appointments Table -->
-<div class="content-card rounded-2xl p-6 mb-8">
+<div class="content-card rounded-2xl p-6 my-8">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold">All Appointments</h2>
         <div class="text-sm text-gray-400">
-            Showing 8 appointments
+            Showing {{ Count($appointments) }} appointments
         </div>
     </div>
     
@@ -98,9 +104,9 @@
                 </tr>
             </thead>
             <tbody id="appointmentsTableBody">
-                @for ($i = 0; $i < 5; $i++)
-                    <x-agent-dashboard.appointment-table-row />
-                @endfor
+                @foreach ($appointments as $appointment)
+                    <x-agent-dashboard.appointment-table-row :appointment="$appointment"/>
+                @endforeach
                 
                 {{-- <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="scheduled">
                     <td class="py-4 px-2">
@@ -265,6 +271,10 @@
                 </tr> --}}
             </tbody>
         </table>
+        <div class="my-4">
+            {{-- pagination goes here --}}
+            {{ $appointments->links('vendor.pagination.dashboard-pagination') }}
+        </div>
     </div>
 </div>
 </x-agent-dashboard.dashboard-layout>

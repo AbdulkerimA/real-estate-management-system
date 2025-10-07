@@ -65,8 +65,12 @@ mainGalleryImage.addEventListener('click', function() {
 document.querySelectorAll('button').forEach(button => {
     if (button.textContent.includes('Schedule Viewing') || button.textContent.includes('Schedule a Viewing')) {
         button.addEventListener('click', function() {
-            alert('Opening viewing scheduler for this luxury apartment...');
-            window.location = '/schedule/1';
+            if(button.classList.contains('deactivated')){
+                alert('you have alrady scheduled an appointment to this appartment :)');
+            }else{
+                alert('Opening viewing scheduler for this luxury apartment...');
+                window.location = `/schedule/${propertyId}`;
+            }
         });
     }
 });
@@ -84,17 +88,17 @@ document.querySelectorAll('button').forEach(button => {
 document.querySelectorAll('button').forEach(button => {
     if (button.textContent.includes('Call Agent')) {
         button.addEventListener('click', function() {
-            alert('Calling Sara Tadesse at +251 922 345 678...');
+            // made call to the agent  
         });
     }
     if (button.textContent.includes('Send Message')) {
         button.addEventListener('click', function() {
-            alert('Opening message composer for Sara Tadesse...');
+            alert('direct message function will be implemented comming soon');
         });
     }
     if (button.textContent.includes('View Profile')) {
         button.addEventListener('click', function() {
-            alert('Opening Sara Tadesse\'s agent profile...');
+            // alert('Opening Sara Tadesse\'s agent profile...');
         });
     }
 });

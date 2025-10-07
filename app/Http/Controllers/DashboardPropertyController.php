@@ -16,7 +16,8 @@ class DashboardPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::paginate(10);
+        $properties = Property::where('agent_id',Auth::id())
+                                ->paginate(10);
         return view('agents.properties.index',['properties'=>$properties]);
     }
 

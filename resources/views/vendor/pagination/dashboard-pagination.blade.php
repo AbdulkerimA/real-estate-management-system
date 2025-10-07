@@ -5,7 +5,7 @@
                 Showing {{ $paginator->firstItem() }}-{{ $paginator->lastItem() }} of {{ $paginator->total() }} properties
             </span>
             <div class="filter-dropdown">
-                <form method="GET" action="">
+                <form method="GET" action="{{ '/'.request()->path() }}">
                     <select name="per_page" onchange="this.form.submit()" class="bg-[#12181f] border border-gray-600 rounded-lg px-3 py-2 text-white text-sm">
                         <option value="5" {{ request('per_page') == 5 ? 'selected' : '' }}>5 per page</option>
                         <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10 per page</option>

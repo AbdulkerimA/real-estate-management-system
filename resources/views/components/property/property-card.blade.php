@@ -2,6 +2,8 @@
 
 @php
     $images = json_decode($property->media->file_path, true);
+
+    // dd($property->details->area_size);
 @endphp
 
 <div class="property-card bg-[#1c252e] rounded-2xl shadow-lg overflow-hidden">
@@ -31,7 +33,7 @@
             <div class="flex space-x-4 text-sm text-gray-400">
                 <span><i class="fa text-green-400 fa-bed mr-1"></i>{{ $property->details->bed_rooms }} Beds</span>
                 <span><i class="fas text-green-400 fa-bath mr-1"></i>{{ $property->details->bath_rooms }} Baths</span> 
-                <span><i class="fas text-green-400 fa-ruler-combined mr-1"></i>{{ $property->area_size }}m²</span>
+                <span><i class="fas text-green-400 fa-ruler-combined mr-1"></i>{{ $property->details->area_size }}m²</span>
             </div>
         </div>
         

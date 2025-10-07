@@ -7,23 +7,7 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/schedule.css','resources/js/schedule.js'])
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        '[#1c252e]': '[#1c252e]',
-                        '[#12181f]': '[#12181f]',
-                        '[#00ff88]': '[#00ff88]'
-                    }
-                }
-            }
-        }
-    </script>
-    {{-- <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style> --}}
+    
 </head>
 <body class="bg-[#12181f] text-white min-h-screen">
     <!-- Navigation -->
@@ -61,27 +45,35 @@
                 <div class="flex flex-col md:flex-row gap-6">
                     <!-- Property Image -->
                     <div class="property-image rounded-xl w-full md:w-48 h-32 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-12 h-12 text-white opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                        {{-- <svg class="w-12 h-12 text-white opacity-50" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
+                        </svg> --}}
+                        <img src="{{ asset('storage/'.(json_decode($property->media->file_path,true)[0] ?? 'default.png')) }}" 
+                            alt=""
+                            class="rounded-lg h-full w-full"
+                        >
                     </div>
 
                     <!-- Property Details -->
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold mb-2">Luxury Apartment in Bole</h2>
-                        <p class="text-gray-400 mb-3"><i class="fa-solid fa-location-dot text-[#00ff88] mr-2"></i> Bole, Addis Ababa, Ethiopia</p>
+                        <h2 class="text-2xl font-bold mb-2">{{ $property->name }}</h2>
+                        <p class="text-gray-400 mb-3"><i class="fa-solid fa-location-dot text-[#00ff88] mr-2"></i> 
+                            {{ $property->location }}    
+                        </p>
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                             <div class="mb-4 sm:mb-0">
-                                <span class="text-3xl font-bold text-[#00ff88]">ETB 4,500,000</span>
+                                <span class="text-3xl font-bold text-[#00ff88]">ETB {{ number_format($property->price) }}</span>
                             </div>
-                            <button class="border-2 border-[#00ff88] text-[#00ff88] px-6 py-2 rounded-lg font-semibold hover:bg-[#00ff88] hover:text-[#12181f] transition-colors">
+                            <button
+                                onclick="window.location = '/property/{{ $property->id }}'" 
+                                class="border-2 border-[#00ff88] text-[#00ff88] px-6 py-2 rounded-lg font-semibold hover:bg-[#00ff88] hover:text-[#12181f] transition-colors">
                                 View Full Details
                             </button>
                         </div>
                         <div class="flex gap-6 mt-4 text-sm text-gray-400">
-                            <span><i class="fa-solid fa-bed text-md text-[#00ff88]"></i> 3 Bedrooms</span>
-                            <span><i class="fas fa-bath text-md text-[#00ff88]"></i> 2 Bathrooms</span>
-                            <span><i class="fas fa-ruler-combined text-md text-[#00ff88]"></i> 120 m²</span>
+                            <span><i class="fa-solid fa-bed text-md text-[#00ff88]"></i> {{ $property->details->bed_rooms }} Bedrooms</span>
+                            <span><i class="fas fa-bath text-md text-[#00ff88]"></i> {{ $property->details->bath_rooms }} Bathrooms</span>
+                            <span><i class="fas fa-ruler-combined text-md text-[#00ff88]"></i> {{ $property->details->area_size }} m²</span>
                         </div>
                     </div>
                 </div>
@@ -93,34 +85,54 @@
                     <div class="form-card rounded-2xl p-8">
                         <h3 class="text-2xl font-bold mb-6">Book Your Viewing</h3>
                         
-                        <form id="viewingForm" class="space-y-6">
+                        <form action="/schedule" method="POST" id="viewingForm" class="space-y-6">
                             @csrf
+                            <input type="hidden" name="propertyId" value="{{ $property->id }}">
                             <!-- Personal Information -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold mb-2">Full Name *</label>
-                                    <input type="text" id="fullName" class="form-input w-full px-4 py-3 rounded-xl" placeholder="Enter your full name" required>
+                                    <input 
+                                        type="text" 
+                                        id="fullName" 
+                                        name="fullName" 
+                                        value="{{  Auth::user()->name }}"
+                                        class="form-input w-full px-4 py-3 rounded-xl" placeholder="Enter your full name" disabled>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold mb-2">Email Address *</label>
-                                    <input type="email" id="email" class="form-input w-full px-4 py-3 rounded-xl" placeholder="your.email@example.com" required>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        value="{{ Auth::user()->email }}"
+                                        class="form-input w-full px-4 py-3 rounded-xl" placeholder="your.email@example.com" disabled>
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold mb-2">Phone Number *</label>
-                                <input type="tel" id="phone" class="form-input w-full px-4 py-3 rounded-xl" placeholder="+251 9XX XXX XXX" required>
+                                <input 
+                                    type="tel" 
+                                    id="phone" 
+                                    name="phone"
+                                    value="{{ '+'.Auth::user()->phone }}"
+                                    class="form-input w-full px-4 py-3 rounded-xl" placeholder="+251 9XX XXX XXX" disabled>
                             </div>
 
                             <!-- Date & Time Selection -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold mb-2">Preferred Date *</label>
-                                    <input type="date" id="viewingDate" class="form-input w-full px-4 py-3 rounded-xl" required>
+                                    <input 
+                                        type="date" 
+                                        name="prefDate" 
+                                        value="old('prefDate')"
+                                        id="viewingDate" class="form-input w-full px-4 py-3 rounded-xl" required>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold mb-2">Preferred Time *</label>
-                                    <select id="viewingTime" class="form-input w-full px-4 py-3 rounded-xl" required>
+                                    <select id="viewingTime" name="prefTime" class="form-input w-full px-4 py-3 rounded-xl" >
                                         <option value="">Select time slot</option>
                                         <option value="09:00">9:00 AM</option>
                                         <option value="10:00">10:00 AM</option>
@@ -132,24 +144,27 @@
                                         <option value="16:00">4:00 PM</option>
                                         <option value="17:00">5:00 PM</option>
                                     </select>
+                                    <x-form-input-error fildName="prefTime"/>
                                 </div>
                             </div>
 
                             <!-- Contact Preference -->
                             <div>
                                 <label class="block text-sm font-semibold mb-2">Preferred Contact Method</label>
-                                <select id="contactMethod" class="form-input w-full px-4 py-3 rounded-xl">
+                                <select id="contactMethod" name="contactMethod" class="form-input w-full px-4 py-3 rounded-xl">
                                     <option value="email">Email</option>
                                     <option value="call">Phone Call</option>
                                     <option value="whatsapp">WhatsApp</option>
                                     <option value="sms">SMS</option>
                                 </select>
+                                <x-form-input-error fildName="contactMethod"/>
                             </div>
 
                             <!-- Additional Notes -->
                             <div>
                                 <label class="block text-sm font-semibold mb-2">Additional Notes</label>
-                                <textarea id="notes" class="form-input w-full px-4 py-3 rounded-xl h-24 resize-none" placeholder="Any specific questions or requirements for the viewing?"></textarea>
+                                <textarea id="notes" name="note" class="form-input w-full px-4 py-3 rounded-xl h-24 resize-none" placeholder="Any specific questions or requirements for the viewing?"></textarea>
+                                <x-form-input-error fildName="note"/>
                             </div>
 
                             <!-- Terms & Conditions -->
@@ -158,6 +173,7 @@
                                 <label for="terms" class="text-sm text-gray-300">
                                     I agree to the <a href="#" class="text-[#00ff88] hover:underline">Terms & Conditions</a> and <a href="#" class="text-[#00ff88] hover:underline">Privacy Policy</a>. I consent to being contacted about this property viewing.
                                 </label>
+                                {{-- <x-form-input-error fildName=""/> --}}
                             </div>
 
                             <!-- Submit Button -->
@@ -167,7 +183,7 @@
                         </form>
 
                         <!-- Success/Error Messages -->
-                        <div id="successMessage" class="success-message rounded-xl p-4 mt-6 hidden">
+                        {{-- <div id="successMessage" class="success-message rounded-xl p-4 mt-6 hidden">
                             <div class="flex items-center">
                                 <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -189,7 +205,7 @@
                                     <p class="text-sm mt-1" id="errorText">All required fields must be completed.</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 

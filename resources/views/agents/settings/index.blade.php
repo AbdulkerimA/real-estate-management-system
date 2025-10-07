@@ -1,7 +1,7 @@
 <x-agent-dashboard.dashboard-layout>
 <div class="space-y-6">
             <!-- Account Settings -->
-            <div class="settings-card rounded-2xl p-6">
+            {{-- <div class="settings-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Account Settings</h3>
                 <form id="accountForm" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -31,27 +31,12 @@
                         Account settings updated successfully!
                     </div>
                 </form>
-            </div>
+            </div> --}}
 
             <!-- Dashboard Preferences -->
             <div class="settings-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Dashboard Preferences</h3>
                 <div class="space-y-6">
-                    <!-- Theme Selection -->
-                    {{-- <div>
-                        <label class="block text-gray-400 text-sm font-medium mb-3">Theme</label>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex items-center space-x-2">
-                                <div class="theme-preview dark active" data-theme="dark"></div>
-                                <span class="text-white">Dark Mode</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <div class="theme-preview light" data-theme="light"></div>
-                                <span class="text-gray-400">Light Mode</span>
-                            </div>
-                        </div>
-                    </div> --}}
-
                     <!-- Language Selection -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -93,10 +78,28 @@
             <div class="settings-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Notification Settings</h3>
                 <div class="space-y-4">
-                    <x-agent-dashboard.preferences title="Email Notifications" subtitle="Receive updates via email" status="checked" />
-                    <x-agent-dashboard.preferences title="SMS Notifications" subtitle="Receive updates via SMS" status="checked" />
-                    <x-agent-dashboard.preferences title="Appointment Reminders" subtitle="Receive updates via email" status="checked" />
-                    <x-agent-dashboard.preferences title="Push Notifications" subtitle="Receive browser push notifications" status="checked" />
+                    <x-agent-dashboard.preferences 
+                        title="Email Notification" 
+                        subtitle="Receive updates via email" 
+                        action="/dashboard/settings"
+                        :status="$user->settings->email_notification" />
+
+                    <x-agent-dashboard.preferences 
+                        title="SMS Notification" 
+                        subtitle="Receive updates via SMS"  
+                        action="/dashboard/settings"
+                        :status="$user->settings->sms_notification" />
+
+                    <x-agent-dashboard.preferences 
+                        title="Appointment Reminder" 
+                        subtitle="Receive updates via email" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->appointment_reminder"/>
+
+                    {{-- <x-agent-dashboard.preferences 
+                        title="Push Notifications" 
+                        subtitle="Receive browser push notifications"
+                        :status="$user->settings->appointment_reminder"/> --}}
                     
                 </div>
             </div>
@@ -105,9 +108,25 @@
             <div class="settings-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Privacy & Security</h3>
                 <div class="space-y-4">
-                    <x-agent-dashboard.preferences title="Two-Factor Authentication" subtitle="Add an extra layer of security to your account" status="checked" />
-                    <x-agent-dashboard.preferences title="Show Online Status" subtitle="Let clients see when you're online" status="checked" />
-                    <x-agent-dashboard.preferences title="Allow Client Messages" subtitle="Allow clients to send you direct messages" status="checked" />
+                    <x-agent-dashboard.preferences 
+                        title="Two Factor Authentication" 
+                        subtitle="Add an extra layer of security to your account" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->two_factor_authentication" />
+
+                    <x-agent-dashboard.preferences 
+                        title="Show Online Status" 
+                        subtitle="Let clients see when you're online" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->show_online_status"
+                         />
+                        
+                    <x-agent-dashboard.preferences 
+                        title="Allow Direct Message" 
+                        subtitle="Allow clients to send you direct messages" 
+                        status="checked" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->allow_direct_message"/>
                     
                     
                     <div class="flex justify-between items-center pt-4 border-t border-gray-600">
@@ -149,7 +168,10 @@
             </div>
         </div>
     <!-- Confirmation Modal -->
-    <div class="modal" id="confirmModal">
+
+    <x-agent-dashboard.confirm-modal />
+    
+    {{-- <div class="modal" id="confirmModal">
         <div class="modal-content">
             <h3 class="text-xl font-bold mb-4" id="modalTitle">Confirm Action</h3>
             <p class="text-gray-400 mb-6" id="modalMessage">Are you sure you want to proceed?</p>
@@ -162,7 +184,29 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
+    
+    <!-- Input Modal -->
+    <x-agent-dashboard.input-modal />
+    {{-- <div class="modal" id="inputModal">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-4" id="inputModalTitle">Final Confirmation</h3>
+            <p class="text-gray-400 mb-4" id="inputModalMessage">Type "DELETE" to confirm permanent account deletion.</p>
+            <input 
+                type="text" 
+                id="inputModalField" 
+                class="w-full p-3 rounded-lg bg-gray-700 text-white mb-6 outline-none focus:ring-2 focus:ring-red-500" 
+                placeholder='Type "DELETE" here...'>
+            <div class="flex space-x-4">
+                <button class="flex-1 bg-gray-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-gray-500" id="inputModalCancel">
+                    Cancel
+                </button>
+                <button class="flex-1 danger-button px-4 py-3 rounded-lg text-white font-semibold" id="inputModalConfirm">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div> --}}
 
     <!-- Data Download Progress Modal -->
     <div class="modal" id="downloadModal">

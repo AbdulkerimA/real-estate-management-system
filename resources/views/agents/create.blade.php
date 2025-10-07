@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="text-red-500">
-        {{ count($errors) > 0 ? dd($errors) : '' }}
+        {{-- {{ count($errors) > 0 ? dd($errors) : '' }} --}}
         {{-- @foreach ($errors as $item)
             <p>
                 {{ $item }}
@@ -103,6 +103,7 @@
                                         value="{{ old('fullName') }}"
                                         required
                                         >
+                                    <x-form-input-error fildName="fullName" />
                                 </div>
                                 
                                 <div>
@@ -115,6 +116,7 @@
                                         value="{{ old('email') }}"
                                         required
                                         >
+                                    <x-form-input-error fildName="email" />
                                 </div>
 
                                 <div>
@@ -126,6 +128,7 @@
                                         placeholder="+251 911 123 456" 
                                         value="{{ old('phone') }}"
                                         required>
+                                    <x-form-input-error fildName="phone" />
                                 </div>
 
                                 <div>
@@ -137,6 +140,7 @@
                                         placeholder="City, Country" 
                                         value="{{ old('location') }}"
                                         required>
+                                    <x-form-input-error fildName="location" />
                                 </div>
                             </div>
 
@@ -158,6 +162,7 @@
                                         required>
                                     <div class="password-strength mt-2" id="passwordStrength"></div>
                                     <p class="text-gray-400 text-xs mt-1">Minimum 8 characters with letters and numbers</p>
+                                    <x-form-input-error fildName="password" />
                                 </div>
 
                                 <div>
@@ -192,6 +197,7 @@
                                 placeholder="0" min="0" max="50" 
                                 value="{{ old('experience') }}"
                                 required>
+                            <x-form-input-error fildName="experience" />
                         </div>
 
                         <div>
@@ -200,17 +206,24 @@
                                 <option value="">Select your specialty</option>
                                 <option value="apartments">Apartments</option>
                                 <option value="houses">Houses</option>
-                                <option value="land">Land</option>
+                                <option value="lands">Lands</option>
                                 <option value="commercial">Commercial Properties</option>
                                 <option value="luxury">Luxury Properties</option>
                                 <option value="all">All Property Types</option>
                             </select>
+                            <x-form-input-error fildName="speciality" />
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-gray-300 text-sm font-medium mb-2">Bio / About Me</label>
-                        <textarea name="bio" rows="4" class="form-input w-full px-4 py-3 rounded-lg text-white resize-none" placeholder="Tell potential clients about your background, expertise, and approach to real estate..."></textarea>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">Bio</label>
+                        <textarea name="bio" rows="1" class="form-input w-full px-4 py-3 rounded-lg text-white resize-none" placeholder="Tell potential clients about your background, expertise, and approach to real estate in short terms..."></textarea>
+                        <x-form-input-error fildName="bio" />
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">About Me</label>
+                        <textarea name="about" rows="6" class="form-input w-full px-4 py-3 rounded-lg text-white resize-none" placeholder="Explain yourself in more details"></textarea>
+                        <x-form-input-error fildName="about" />
                     </div>
                 </div>
 
@@ -244,7 +257,7 @@
                         </div>
 
                         <div id="documentList" class="space-y-3 hidden">
-                            <!-- Uploaded documents will appear here -->
+                            <!-- Uploaded documents will appear here --> 
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/properties.css','resources/js/propertyDetails.js'])
 </head>
-
+@php
+    $id = json_encode($property->id);
+@endphp
 <body class="bg-[#12181f] text-white">
     <!-- Navigation -->
     <x-nav.nav-layout />
@@ -41,9 +43,10 @@
                     <div class="text-center">
                         @php
                             $images = json_decode($property->media->file_path, true);
+                            $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
                         @endphp
 
-                        <img src="{{ asset('storage/' . $images[0]) }}" alt="property Image" class="h-96 lg:h-[500px]">
+                        <img src="{{ asset('storage/' . $firstImage) }}" alt="property Image" class="h-96 lg:h-[500px]">
                     </div>
                 </div>
 
@@ -97,7 +100,8 @@
                     <div class="flex flex-col sm:flex-row gap-4">
                         <button
                             {{-- onclick="window.location = '/schedule/{{ $property->id }}'"  --}}
-                            class="contact-btn bg-[#00ff88] text-[#12181f] px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-400 transition-colors">
+                            class=" {{ $scheduled ? 'deactivated' : '' }}
+                                contact-btn bg-[#00ff88] text-[#12181f] px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-400 transition-colors">
                             Schedule Viewing
                         </button>
                         <button
@@ -276,5 +280,8 @@
         <!-- Footer -->
         <x-footer />
     </div>
+    <script>
+        let propertyId = @json($id);
+    </script>
 </body>
 </html>

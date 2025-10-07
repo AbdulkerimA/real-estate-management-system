@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->date('scheduled_date');
             $table->time('scheduled_time');
-            $table->string('contact_method')->default('phone call');
+            $table->string('contact_method')->default('call');
             $table->text('additional_note')->nullable();
-            $table->enum('status', ['requested','confirmed','completed','cancelled'])->default('requested');
+            $table->enum('status', ['pending','scheduled','completed','cancelled'])->default('pending');
             $table->timestamps();
         });
     }

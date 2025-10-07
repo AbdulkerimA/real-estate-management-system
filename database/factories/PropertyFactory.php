@@ -20,9 +20,8 @@ class PropertyFactory extends Factory
     {
         return [
             'agent_id' => Agent::factory(),
-            'media_id' => Media::factory(),
-            'document_id' => \App\Models\Document::factory(),
             'title' => $this->faker->sentence(3),
+            'type' => $this->faker->randomElement(['Apartment','Villa','House','Condominium','Studio','Office','Warehouse','condominium']),
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 5000, 1000000),
             'location' => $this->faker->city(),

@@ -11,8 +11,8 @@ class Agent extends Model
     use HasFactory;
 
      protected $fillable = [
-        'user_id','media_id','document_id','bio','address',
-        'speciality','years_of_experience'
+        'user_id','media_id','document_id','bio','about_me',
+        'address','speciality','years_of_experience'
     ];
     
      // Relationships

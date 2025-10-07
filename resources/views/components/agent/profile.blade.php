@@ -48,7 +48,7 @@
             </button> --}}
             
             <button
-                onclick="window.location = 'agnet/{{ $agent->id }}'" 
+                onclick="window.location = '/agent/{{ $agent->id }}'" 
                 class="w-full border border-gray-600 text-[#00ff88]  py-3 rounded-lg font-semibold hover:border-[#00ff88] hover:text-[#00ff88] transition-colors">
                 <i class="fas fa-user mr-3 w-5 h-5"></i> View Profile
             </button>

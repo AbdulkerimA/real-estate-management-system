@@ -1,9 +1,40 @@
-@props(['action'=>'view details', 'status'=>'Scheduled'])
+@props(['action'=>'view details', 'status'=>'Scheduled','appointment'=>[],])
+
+@php
+function remainingTime($scheduledTime,$scheduledDate) {
+    $now = new DateTime();                      // current time
+    $scheduled = new DateTime($scheduledTime);  // scheduled time
+    
+    $interval = $now->diff($scheduled);         // get difference
+    
+    if ($scheduledDate != date('Y-m-d')) {
+        return date('M d, Y', strtotime($scheduledDate)); 
+    }
+
+    if ($scheduled < $now) {
+        return "Time passed";
+    }
+
+    // format remaining time as "H hours i minutes"
+    return $interval->format('%h hours %i minutes');
+}
+
+function displayDate($scheduledDate){
+    if ($scheduledDate != date('Y-m-d')) {
+        return date('M d, Y', strtotime($scheduledDate)); 
+    }else{
+        return "Today".$appointment->scheduled_time;
+    }
+}  
+@endphp
 
 <div class="appointment-card rounded-xl p-6 border-l-4" style="border-color: #00ff88;">
     <div class="flex items-center justify-between mb-4">
         <span class="{{$status != 'Pending' ?'status-scheduled':'status-pending' }} px-3 py-1 rounded-full text-xs font-semibold">{{ $status }}</span>
-        <span class="countdown-timer text-lg font-bold">In 2 hours</span>
+        <span class="countdown-timer text-lg font-bold">
+            {{-- In {{ }} hours --}}
+            {{ remainingTime($appointment->scheduled_time,$appointment->scheduled_date) }}
+        </span>
     </div>
 
     <div class="flex items-center space-x-4 mb-4">
@@ -11,13 +42,16 @@
             {{$slot}}
         </div>
         <div>
-            <p class="font-semibold">Luxury Apartment in Bole</p>
-            <p class="text-sm" style="color: #9ca3af;">Client: Meron Bekele</p>
+            <p class="font-semibold">{{ $appointment->property->title }}</p>
+            <p class="text-sm" style="color: #9ca3af;">Client: {{ $appointment->buyer->name }}</p>
         </div>
     </div>
 
     <div class="flex items-center justify-between text-sm">
-        <span style="color: #9ca3af;">Today, 2:00 PM</span>
+        <span style="color: #9ca3af;">
+            {{ displayDate($appointment->scheduled_date) }}
+        </span>
+
         <button class="font-medium {{ $status == 'Pending' ? 'text-yellow-400 hover:text-yellow-300' : 'text-[#00ff88] hover:text-green-300' }}" 
                 style="transition: color 0.2s;">
             {{ $action }}
