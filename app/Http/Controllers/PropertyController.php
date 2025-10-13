@@ -18,9 +18,9 @@ class PropertyController extends Controller
 
         $agent_id = $request->get('id');
         if($agent_id == null)
-            $properties = Property::with('details')->paginate(20);
+            $properties = Property::with('details')->where('status','approved')->paginate(10);
         else
-            $properties = Property::with('details')->where('agent_id',$agent_id)->paginate(20);
+            $properties = Property::with('details')->where('agent_id',$agent_id)->paginate(10);
         
         // dd($properties);
         return view('properties.index',['properties'=>$properties]);

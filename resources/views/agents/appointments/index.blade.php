@@ -1,4 +1,43 @@
+@php
+function numberConverter($num) {
+    if ($num >= 1000000000) {
+        return round($num / 1000000000, 1) . 'B';
+    }
+    if ($num >= 1000000) {
+        return round($num / 1000000, 1) . 'M';
+    }
+    if ($num >= 1000) {
+        return round($num / 1000, 1) . 'K';
+    }
+    return $num;
+}
 
+function remainingTime($scheduledTime,$scheduledDate) {
+    $now = new DateTime();                      // current time
+    $scheduled = new DateTime($scheduledTime);  // scheduled time
+    
+    $interval = $now->diff($scheduled);         // get difference
+    
+    if ($scheduledDate != date('Y-m-d')) {
+        return date('M d, Y', strtotime($scheduledDate)); 
+    }
+
+    if ($scheduled < $now) {
+        return "Time passed";
+    }
+
+    // format remaining time as "H hours i minutes"
+    return $interval->format('%h hours %i minutes');
+}
+
+function displayDate($scheduledDate,$appointment) {
+    if ($scheduledDate != date('Y-m-d')) {
+        return date('M d, Y', strtotime($scheduledDate)); 
+    }else{
+        return "Today " .$appointment->scheduled_time;
+    }
+}  
+@endphp
 <x-agent-dashboard.dashboard-layout>
 
 <!-- Upcoming Appointments Highlight -->

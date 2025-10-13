@@ -4,18 +4,7 @@
     $images = json_decode($appointment->property->media->file_path, true);
     $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
    
-   function numberConverter($num) {
-        if ($num >= 1000000000) {
-            return round($num / 1000000000, 1) . 'B';
-        }
-        if ($num >= 1000000) {
-            return round($num / 1000000, 1) . 'M';
-        }
-        if ($num >= 1000) {
-            return round($num / 1000, 1) . 'K';
-        }
-        return $num;
-    }
+   
 @endphp
 
 {{-- {{ 

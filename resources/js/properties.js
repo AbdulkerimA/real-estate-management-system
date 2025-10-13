@@ -1,38 +1,38 @@
 // Price range slider functionality
 
-const priceRange = document.getElementById('price-range');
-const priceDisplay = document.getElementById('price-display');
+// const priceRange = document.getElementById('price-range');
+// const priceDisplay = document.getElementById('price-display');
 
-priceRange.addEventListener('input', function() {
-    const value = parseInt(this.value);
-    priceDisplay.textContent = value.toLocaleString();
-});
+// priceRange.addEventListener('input', function() {
+//     const value = parseInt(this.value);
+//     priceDisplay.textContent = value.toLocaleString();
+// });
 
 // Search functionality
 document.getElementById('search-btn').addEventListener('click', function() {
     const location = document.getElementById('location-filter').value;
     const type = document.getElementById('type-filter').value;
-    const price = document.getElementById('price-filter').value;
+    // const price = document.getElementById('price-filter').value;
     const bedrooms = document.getElementById('bedroom-filter').value;
     
     // Simulate search
     alert(`Searching properties...\nLocation: ${location || 'All'}\nType: ${type || 'All'}\nPrice: ${price || 'Any'}\nBedrooms: ${bedrooms || 'Any'}`);
 });
 
-// Reset filters
-document.getElementById('reset-btn').addEventListener('click', function() {
-    document.getElementById('location-filter').value = '';
-    document.getElementById('type-filter').value = '';
-    document.getElementById('price-filter').value = '';
-    document.getElementById('bedroom-filter').value = '';
-    priceRange.value = 5000000;
-    priceDisplay.textContent = '5,000,000';
+// // Reset filters
+// document.getElementById('reset-btn').addEventListener('click', function() {
+//     document.getElementById('location-filter').value = '';
+//     document.getElementById('type-filter').value = '';
+//     // document.getElementById('price-filter').value = '';
+//     document.getElementById('bedroom-filter').value = '';
+//     priceRange.value = 5000000;
+//     priceDisplay.textContent = '5,000,000';
     
-    // Reset checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-});
+//     // Reset checkboxes
+//     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+//         checkbox.checked = false;
+//     });
+// });
 
 // Mobile filter sidebar toggle
 const mobileFilterBtn = document.getElementById('mobile-filter-btn');
@@ -96,4 +96,19 @@ if (mobileMenuBtn) {
 // Sort functionality
 document.querySelector('select').addEventListener('change', function() {
     alert(`Sorting by: ${this.value}`);
+});
+
+const bookMarks = document.querySelectorAll('.bookMark');
+
+bookMarks.forEach((bookMarkEl) => {
+    let bookMarked = false; // Separate state for each icon
+
+    // send fetch request to update the book mark table 
+    bookMarkEl.addEventListener('click', () => {
+        bookMarked = !bookMarked;
+
+        bookMarkEl.innerHTML = bookMarked
+            ? '<i class="fas fa-bookmark" aria-hidden="true"></i>'
+            : '<i class="far fa-bookmark" aria-hidden="true"></i>';
+    });
 });

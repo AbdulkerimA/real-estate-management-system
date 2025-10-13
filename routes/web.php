@@ -32,23 +32,24 @@ Route::controller(UserController::class)->group(function (){
 Route::controller(SessionController::class)->group(function () {
     Route::get('/login','create')->name('login');
     Route::post('/login','store');
+    Route::delete('/logout','destroy');
 });
 
 Route::controller(AgentController::class)->group(function (){
     Route::get('/agents','index');
     Route::get('/agent/register','create');
     Route::get('/agent/{agent}','show');
-    Route::get('/dashboard/profile/edit','edit');
+    Route::get('/dashboard/profile/edit','edit')->middleware('auth')->can('isAgent','App\Models\Agent');
 
     Route::post('/agent/register','store');
-    Route::PUT('/dashboard/profile/edit','update');
+    Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 });
 
 Route::controller(AgentProfileConttroller::class)->group(function(){
-    Route::get('/dashboard/profile','show')->middleware('auth');
-    Route::get('/dashboard/profile/edit','edit')->middleware('auth');
+    Route::get('/dashboard/profile','show')->middleware('auth')->can('isAgent','App\Models\Agent');
+    Route::get('/dashboard/profile/edit','edit')->middleware('auth')->can('isAgent','App\Models\Agent');
 
-    Route::PUT('/dashboard/profile/edit','update')->middleware('auth');
+    Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 });
 
 Route::controller(PropertyController::class)->group(function (){
@@ -58,29 +59,30 @@ Route::controller(PropertyController::class)->group(function (){
 });
 
 Route::controller(DashboardPropertyController::class)->group(function(){
-    Route::get('/dashboard/properties','index')->middleware(['auth','can:viewAny']);
-    Route::get('/dashboard/property/create','create')->middleware(['auth','can:create']);
 
-    Route::post('/dashboard/property/create','store')->middleware(['auth','can:create']);
+    Route::get('/dashboard/properties','index')->middleware(['auth','can:manages,App\Models\Property']);
+    Route::get('/dashboard/property/create','create')->middleware(['auth','can:create,App\Models\Property']);
+
+    Route::post('/dashboard/property/create','store')->middleware(['auth','can:create,App\Models\Property']);
 });
 
 Route::controller(AppointmentController::class)->group(function(){
     // Route::get('')
-    Route::get('/schedule/{property}','create')->middleware('auth');
-    Route::get('/dashboard/appointments','index');
+    Route::get('/schedule/{property}','create')->middleware(['auth'])->can('view','property','App\Models\Property');
+    Route::get('/dashboard/appointments','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
-    Route::post('/schedule','store')->middleware('auth');
+    Route::post('/schedule','store')->middleware(['auth']);
 });
 
 Route::controller(SettingController::class)->group(function () {
-    Route::get('/dashboard/settings','index');
+    Route::get('/dashboard/settings','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
-    Route::put('/dashboard/settings','update');
-    Route::delete('/dashboard/settings/delete','destroy');
+    Route::put('/dashboard/settings','update')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::delete('/dashboard/settings/delete','destroy')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 });
 
-Route::view('/dashboard','agents.dashboard');
-Route::view('/dashboard/home','agents.dashboard');
+Route::view('/dashboard','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
-Route::view('/dashboard/earnings','agents.earning.index');
+Route::view('/dashboard/earnings','agents.earning.index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 

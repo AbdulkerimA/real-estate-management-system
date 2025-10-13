@@ -18,7 +18,7 @@ sidebarOverlay.addEventListener('click', () => {
 // const notificationBtn = document.getElementById('notificationBtn');
 // const notificationDropdown = document.getElementById('notificationDropdown');
 const profileBtn = document.getElementById('profileBtn');
-const profileDropdown = document.getElementById('profileDropdown');
+const profileDropdown = document.getElementById('profileDropdown'); 
 
 // notificationBtn.addEventListener('click', (e) => {
 //     e.stopPropagation();

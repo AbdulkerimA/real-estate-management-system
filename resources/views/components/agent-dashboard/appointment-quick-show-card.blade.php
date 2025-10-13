@@ -1,32 +1,6 @@
 @props(['action'=>'view details', 'status'=>'Scheduled','appointment'=>[],])
 
-@php
-function remainingTime($scheduledTime,$scheduledDate) {
-    $now = new DateTime();                      // current time
-    $scheduled = new DateTime($scheduledTime);  // scheduled time
-    
-    $interval = $now->diff($scheduled);         // get difference
-    
-    if ($scheduledDate != date('Y-m-d')) {
-        return date('M d, Y', strtotime($scheduledDate)); 
-    }
 
-    if ($scheduled < $now) {
-        return "Time passed";
-    }
-
-    // format remaining time as "H hours i minutes"
-    return $interval->format('%h hours %i minutes');
-}
-
-function displayDate($scheduledDate){
-    if ($scheduledDate != date('Y-m-d')) {
-        return date('M d, Y', strtotime($scheduledDate)); 
-    }else{
-        return "Today".$appointment->scheduled_time;
-    }
-}  
-@endphp
 
 <div class="appointment-card rounded-xl p-6 border-l-4" style="border-color: #00ff88;">
     <div class="flex items-center justify-between mb-4">
@@ -49,7 +23,7 @@ function displayDate($scheduledDate){
 
     <div class="flex items-center justify-between text-sm">
         <span style="color: #9ca3af;">
-            {{ displayDate($appointment->scheduled_date) }}
+            {{ displayDate($appointment->scheduled_date,$appointment) }}
         </span>
 
         <button class="font-medium {{ $status == 'Pending' ? 'text-yellow-400 hover:text-yellow-300' : 'text-[#00ff88] hover:text-green-300' }}" 

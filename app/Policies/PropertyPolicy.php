@@ -17,6 +17,13 @@ class PropertyPolicy
         return $user->role != 'agent';
     }
 
+    public function manages(User $user){
+        return $user->role == 'agent';
+    }
+    
+    public function viewProperty(User $user, Property $property){
+        return $user->role == 'agent' && $property->agent_id == $user->id; 
+    }
     /**
      * Determine whether the user can view the model.
      */

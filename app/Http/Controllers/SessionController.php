@@ -95,6 +95,8 @@ class SessionController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        //dd($request->all())
+        Auth::logout();
+        return redirect('/');
     }
 }

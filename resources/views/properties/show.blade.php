@@ -42,7 +42,8 @@
                 <div class="hero-image rounded-3xl h-96 lg:h-[500px] flex items-center justify-center">
                     <div class="text-center">
                         @php
-                            $images = json_decode($property->media->file_path, true);
+                            $encodedImages = $property->media->file_path;
+                            $images = json_decode($encodedImages, true);
                             $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
                         @endphp
 

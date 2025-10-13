@@ -42,7 +42,7 @@
     $i = 0;
 @endphp
 
-<div {{ $attributes->merge(['class' => 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8']) }}>
+{{-- <div {{ $attributes->merge(['class' => 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8']) }}>
     <h2 class="text-3xl font-bold mb-6">Property Gallery</h2>
     
     <!-- Main Gallery Image -->
@@ -72,4 +72,57 @@
             </div>
         @endforeach
     </div>
+</div> --}}
+@vite(['resources/css/swiperjs.css','resources/js/swiper.js'])
+  <!-- Swiper -->
+<h3 class="mx-4 px-4 sm:px-6 lg:px-8 py-8 text-4xl">
+    property gallary
+</h3>
+<div class="m-4">
+    
+  <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2 max-w-7xl max-h-[50vh] lg:max-h-[100vh] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="swiper-wrapper mx-2">
+        @foreach ($images as $image)
+            <div class="swiper-slide h-96 rounded-xl md:rounded-2xl">
+                <img src="{{ asset('storage/'.$image) }}" class="rounded-xl md:rounded-2xl"/>
+            </div>      
+        @endforeach
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+  <div thumbsSlider="" class="swiper mySwiper mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="swiper-wrapper">
+        @foreach ($images as $image)
+            <div class="swiper-slide rounded-xl md:rounded-2xl">
+                <img src="{{ asset('storage/'.$image) }}" class=" rounded-xl md:rounded-2xl" />
+            </div>      
+        @endforeach
+    </div>
+  </div>
+
 </div>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      loop: true,
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesProgress: true,
+    });
+    var swiper2 = new Swiper(".mySwiper2", {
+      loop: true,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: swiper,
+      },
+    });
+  </script>

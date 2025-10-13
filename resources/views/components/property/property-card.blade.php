@@ -20,6 +20,10 @@
             {{ $property->status }}
         </x-property.tag>
 
+        <div class = "absolute top-0 right-0 px-4 py-2 bg-green-400/30 text-green-600 font-bold rounded-full text-3xl bookMark" >
+            <i class="far fa-bookmark" aria-hidden="true"></i> <!-- outline version -->
+        </div>
+
     </div>
     
     <div class="p-6">
