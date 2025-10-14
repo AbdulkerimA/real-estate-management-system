@@ -73,40 +73,42 @@
         @endforeach
     </div>
 </div> --}}
-@vite(['resources/css/swiperjs.css','resources/js/swiper.js'])
+{{-- @vite(['resources/css/swiperjs.css','resources/js/swiper.js']) --}}
   <!-- Swiper -->
 <h3 class="mx-4 px-4 sm:px-6 lg:px-8 py-8 text-4xl">
     property gallary
 </h3>
-<div class="m-4">
-    
-  <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2 max-w-7xl max-h-[50vh] lg:max-h-[100vh] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="swiper-wrapper mx-2">
-        @foreach ($images as $image)
-            <div class="swiper-slide h-96 rounded-xl md:rounded-2xl">
-                <img src="{{ asset('storage/'.$image) }}" class="rounded-xl md:rounded-2xl"/>
-            </div>      
-        @endforeach
-    </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-  </div>
-  <div thumbsSlider="" class="swiper mySwiper mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="swiper-wrapper">
-        @foreach ($images as $image)
-            <div class="swiper-slide rounded-xl md:rounded-2xl">
-                <img src="{{ asset('storage/'.$image) }}" class=" rounded-xl md:rounded-2xl" />
-            </div>      
-        @endforeach
-    </div>
-  </div>
+  <div class="m-4">
+    @if(count($images) > 0)
+        <!-- Main Slider -->
+        {{-- The keen-slider__slide divs must be direct children of the keen-slider container. --}}
+        <div id="main-keen-slider" class="keen-slider max-w-7xl max-h-[50vh] lg:max-h-[100vh] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            @foreach ($images as $image)
+                <div class="keen-slider__slide rounded-xl md:rounded-2xl">
+                    <img src="{{ asset('storage/'.$image) }}" class="rounded-xl md:rounded-2xl w-full h-full " alt="Slider image">
+                </div>
+            @endforeach
+        </div>
 
+        <!-- Thumbnail Slider -->
+        {{-- The keen-slider__slide divs must be direct children of the keen-slider container. --}}
+        <div id="thumbnails" class="keen-slider thumbnail mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            @foreach ($images as $image)
+                <div class="keen-slider__slide rounded-xl md:rounded-2xl">
+                    <img src="{{ asset('storage/'.$image) }}" class="rounded-xl md:rounded-2xl w-full h-full object-cover" alt="Thumbnail image">
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p>No images to display.</p>
+    @endif
 </div>
+
   <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
 
   <!-- Initialize Swiper -->
-  <script>
+  {{-- <script>
     var swiper = new Swiper(".mySwiper", {
       loop: true,
       spaceBetween: 10,
@@ -125,4 +127,4 @@
         swiper: swiper,
       },
     });
-  </script>
+  </script> --}}

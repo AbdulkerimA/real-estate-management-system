@@ -40,14 +40,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Hero Image -->
                 <div class="hero-image rounded-3xl h-96 lg:h-[500px] flex items-center justify-center">
-                    <div class="text-center">
+                    <div class="text-center w-full h-full">
                         @php
                             $encodedImages = $property->media->file_path;
                             $images = json_decode($encodedImages, true);
                             $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
                         @endphp
 
-                        <img src="{{ asset('storage/' . $firstImage) }}" alt="property Image" class="h-96 lg:h-[500px]">
+                        <img src="{{ asset('storage/' . $firstImage) }}" alt="property Image" class="lg:h-[500px] w-full h-full object-cover">
                     </div>
                 </div>
 
