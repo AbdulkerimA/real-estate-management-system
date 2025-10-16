@@ -22,7 +22,7 @@ Route::get('/home', function(){
 });
 
 Route::view('/about','home.about');
-Route::view('/admin/agents', 'admin.agents.index');
+
 
 Route::controller(UserController::class)->group(function (){
     Route::get('/signup','create');
@@ -85,4 +85,15 @@ Route::view('/dashboard','agents.dashboard')->middleware(['auth'])->can('isAgent
 Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
 Route::view('/dashboard/earnings','agents.earning.index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+
+
+// admin dashboard navigations
+Route::view('/admin','admin.dashboard');
+Route::view('/admin/agents', 'admin.agents.index');
+Route::view('/admin/customers', 'admin.customers.index');
+Route::view('/admin/properties','admin.properties.index');
+Route::view('/admin/transactions','admin.payment.index');
+Route::view('/admin/analytics','admin.analytics.index');
+Route::view('/admin/settings','admin.settings');
+
 

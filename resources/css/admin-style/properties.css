@@ -1,0 +1,105 @@
+.zoom-out {
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 1) 20%,
+        rgba(0, 0, 0, 1) 80%,
+        rgba(0, 0, 0, 0)
+    );
+}
+
+.zoom-out .keen-slider__slide {
+    overflow: visible;
+}
+
+.zoom-out .keen-slider__slide div {
+    overflow: hidden;
+}
+
+.zoom-out .keen-slider__slide img {
+    transform-origin: center center;
+    transition: transform 0.5s;
+}
+
+.zoom-out__slide {
+    cursor: pointer;
+}
+
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #1c252e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+.bulk-actions {
+    background: rgba(28, 37, 46, 0.95);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    backdrop-filter: blur(10px);
+    transform:translateY(-100) ;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.bulk-actions.active {
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.property-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+.checkbox-custom {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.25rem;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+}
+
+.checkbox-custom:checked {
+    background: #00ff88;
+    border-color: #00ff88;
+}
+
+.checkbox-custom:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #1c252e;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
