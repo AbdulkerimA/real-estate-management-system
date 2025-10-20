@@ -1,3 +1,6 @@
+
+@vite(['resources/js/inputModal'])
+
 <div class="modal" id="inputModal">
     <div class="modal-content">
         <h3 class="text-xl font-bold mb-4" id="inputModalTitle">Final Confirmation</h3>

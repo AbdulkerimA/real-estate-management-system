@@ -42,14 +42,13 @@ Route::controller(AgentController::class)->group(function (){
     Route::get('/dashboard/profile/edit','edit')->middleware('auth')->can('isAgent','App\Models\Agent');
 
     Route::post('/agent/register','store');
-    Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
+    // Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 });
 
 Route::controller(AgentProfileConttroller::class)->group(function(){
     Route::get('/dashboard/profile','show')->middleware('auth')->can('isAgent','App\Models\Agent');
-    Route::get('/dashboard/profile/edit','edit')->middleware('auth')->can('isAgent','App\Models\Agent');
 
-    Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
+    Route::PUT('/dashboard/profile','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 });
 
 Route::controller(PropertyController::class)->group(function (){
@@ -73,7 +72,7 @@ Route::controller(AppointmentController::class)->group(function(){
 
     Route::post('/schedule','store')->middleware(['auth']);
 });
-
+ 
 Route::controller(SettingController::class)->group(function () {
     Route::get('/dashboard/settings','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
@@ -95,5 +94,6 @@ Route::view('/admin/properties','admin.properties.index');
 Route::view('/admin/transactions','admin.payment.index');
 Route::view('/admin/analytics','admin.analytics.index');
 Route::view('/admin/settings','admin.settings');
+Route::view('/admin/profile','admin.profile.index');
 
 

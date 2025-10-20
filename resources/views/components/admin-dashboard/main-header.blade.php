@@ -44,6 +44,10 @@
             'title' => 'Add New Property',
             'subtitle' => 'Enter property details to create a new listing'
         ],
+        'admin/pofile' => [
+            'title' => 'Add New Property',
+            'subtitle' => 'Enter property details to create a new listing'
+        ],
         
     ];
     $path = request()->path();
@@ -89,7 +93,7 @@
                 <!-- Profile Dropdown -->
                 <div class="profile-dropdown" id="profileDropdown">
                     <div class="p-2">
-                        <a href="/profile" class="flex items-center px-3 py-2 text-gray-300 hover:text-[#00ff88] hover:bg-gray-700 rounded">
+                        <a href="/admin/profile" class="flex items-center px-3 py-2 text-gray-300 hover:text-[#00ff88] hover:bg-gray-700 rounded">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
@@ -103,14 +107,17 @@
                             Settings
                         </a>
                         <hr class="my-2 border-gray-600">
-                        <a href="#" class="flex items-center px-3 py-2 text-red-400 hover:bg-gray-700 rounded">
+                        <div class="flex items-center px-3 py-2 text-red-400 hover:bg-gray-700 rounded">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
                             <button type="submit" form="logout">
                                 Logout
                             </button>
-                        </a>
+                        </div>
+                        <form action="/logout" method="post" id="logout" class="hidden">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </div>

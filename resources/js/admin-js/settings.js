@@ -55,25 +55,21 @@ function copyApiKey(type) {
     });
 }
 
-function deactivatePlatform() {
-    const modal = document.getElementById('inputModal');
-    modal.style.height = `${window.innerHeight}px`;
-    modal.classList.add('active');
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
+// // working with input and confirm modals
 
-function deleteAccount() {
-    const modal = document.getElementById('confirmModal');
-    modal.style.height = `${window.innerHeight}px`;
-    modal.classList.add('active');
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
+// const inputModal = document.getElementById('inputModal');
+// const confirmModal = document.getElementById('confirmModal');
+
+
+// function deactivatePlatform() {
+//     // inputModal.style.height = `${window.innerHeight}px`;
+//     inputModal.classList.add('active');
+// }
+
+// function deleteAccount() {
+//     // modal.style.height = `${window.innerHeight}px`;
+//     confirmModal.classList.add('active');
+// }
 
 // making all functions global scoped 
 window.openPasswordModal = openPasswordModal;
@@ -86,18 +82,10 @@ window.backupDatabase = backupDatabase;
 window.restoreDatabase = restoreDatabase;
 window.clearCache = clearCache;
 window.copyApiKey = copyApiKey;
-window.deactivatePlatform = deactivatePlatform;
-window.deleteAccount = deleteAccount;
+// window.deactivatePlatform = deactivatePlatform;
+// window.deleteAccount = deleteAccount;
 
-// Toggle switch functionality
-document.querySelectorAll('.toggle-switch input').forEach(toggle => {
-    toggle.addEventListener('change', function() {
-        const setting = this.closest('.setting-item').querySelector('h4').textContent;
-        const status = this.checked ? 'enabled' : 'disabled';
-        console.log(`${setting} ${status}`);
-    });
-});
-    // Form validation
+// Form validation
 document.querySelectorAll('.form-input').forEach(input => {
     input.addEventListener('blur', function() {
         if (this.value.trim() === '') {

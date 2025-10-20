@@ -1,5 +1,7 @@
 @props(['title' => '', 'subtitle' => '', 'action' =>'' ,'status' => false])
 
+@vite(['resources/js/toggleSwitch.js'])
+
 <div {{ $attributes->merge(['class' => 'notification-item setting-item']) }}>
     <div class="flex items-center justify-between w-full h-full">
         <div>

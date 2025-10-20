@@ -1,5 +1,11 @@
 <x-admin-dashboard.main-layout>
     @vite(['resources/css/admin-style/settings.css','resources/js/admin-js/settings.js'])
+    
+    @php
+        $user = Auth::user();
+        // dd($user);
+    @endphp
+    
     <!-- Page Content -->
     <div class="p-6 space-y-6">
         <!-- Account Settings -->
@@ -141,43 +147,43 @@
                 <x-agent-dashboard.preferences 
                     title="System Alerts" 
                     subtitle="Critical system notifications and updates" 
-                    action="/admin/settings"
-                    {{-- :status="$user->settings->email_notification"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->email_notification" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Payment Notifications"
                     subtitle="Transaction confirmations and payment alerts"
-                    action="/admin/settings/payment"
-                    {{-- :status="$user->settings->payment_notifications"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->payment_notifications" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Agent Verification Requests"
                     subtitle="New agent registration approvals"
-                    action="/admin/settings/agent-verification"
-                    {{-- :status="$user->settings->agent_verification_requests"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->agent_verification_requests" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Buyer Registrations"
                     subtitle="New buyer account notifications"
-                    action="/admin/settings/buyer-registrations"
-                    {{-- :status="$user->settings->buyer_registrations"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->buyer_registrations" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Appointment Updates"
                     subtitle="Property viewing and meeting notifications"
-                    action="/admin/settings/appointments"
-                    {{-- :status="$user->settings->appointment_updates"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->appointment_updates" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Email Notifications"
                     subtitle="Receive notifications via email"
-                    action="/admin/settings/email"
-                    {{-- :status="$user->settings->email_notification"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->email_notification" 
                 />
 
             </div>
@@ -201,29 +207,29 @@
                 <x-agent-dashboard.preferences 
                     title="Two-Factor Authentication"
                     subtitle="Add an extra layer of security to your account"
-                    action="/admin/settings/two-factor-auth"
-                    {{-- :status="$user->settings->two_factor_authentication"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->two_factor_authentication" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Admin Activity Logs"
                     subtitle="Track all administrative actions"
-                    action="/admin/settings/admin-logs"
-                    {{-- :status="$user->settings->admin_activity_logs"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->admin_activity_logs" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Auto-Logout"
                     subtitle="Automatically logout after 30 minutes of inactivity"
-                    action="/admin/settings/auto-logout"
-                    {{-- :status="$user->settings->auto_logout"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->auto_logout" 
                 />
 
                 <x-agent-dashboard.preferences 
                     title="Login Notifications"
                     subtitle="Get notified of new login attempts"
-                    action="/admin/settings/login-notifications"
-                    {{-- :status="$user->settings->login_notifications"  --}}
+                    action="/dashboard/settings"
+                    :status="$user->settings->login_notifications" 
                 />
 
             </div>
@@ -351,7 +357,7 @@
                         <h4 class="text-white font-medium">Deactivate Platform</h4>
                         <p class="text-gray-400 text-sm">Temporarily disable the entire platform</p>
                     </div>
-                    <button class="danger-button px-4 py-2 rounded-lg text-white font-medium" onclick="deactivatePlatform()">
+                    <button class="danger-button px-4 py-2 rounded-lg text-white font-medium" id="deactivateBtn">
                         Deactivate
                     </button>
                 </div>
@@ -361,7 +367,7 @@
                         <h4 class="text-white font-medium">Delete Admin Account</h4>
                         <p class="text-gray-400 text-sm">Permanently delete your administrator account</p>
                     </div>
-                    <button class="danger-button px-4 py-2 rounded-lg text-white font-medium" onclick="deleteAccount()">
+                    <button class="danger-button px-4 py-2 rounded-lg text-white font-medium" id="deleteBtn">
                         Delete Account
                     </button>
                 </div>

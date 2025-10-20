@@ -1,3 +1,7 @@
+@php
+// temporaty clear it
+    $user = Auth::user();
+@endphp
 <x-agent-dashboard.dashboard-layout>
 <!-- Main Content -->
     <div class=" space-y-6">
@@ -246,7 +250,7 @@
                         <x-agent-dashboard.preferences 
                             title='Email Authentication' 
                             subTitle='Receive codes via email'
-                            action="/dashboard/profile/edit" 
+                            action="/dashboard/settings" 
                             :status="$user->settings->two_factor_authentication" />
 
                         {{-- <div class="flex items-center justify-between p-4 bg-[#12181f] rounded-lg">

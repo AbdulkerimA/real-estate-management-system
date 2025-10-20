@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration
 {
     /**
@@ -11,12 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('earnings', function (Blueprint $table) {
+        Schema::create('checkout_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('agent_id')->constrained('agents')->onDelete('cascade');
-            $table->decimal('total_earnings',10,2)->default(0);
-            $table->decimal('total_check_out',10,2)->default(0);
-            $table->decimal('remaning_amount',10,2)->default(0);
+            $table->foreignId('earning_id')->constrained('earnings')->onDelete('cascade');
+            $table->decimal('requested_amount',10,2)->default(0);;
+            $table->boolean('request_status')->default(false);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('earnings');
+        //
     }
 };

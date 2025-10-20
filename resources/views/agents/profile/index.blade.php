@@ -7,8 +7,13 @@
                 <!-- Profile Photo -->
                 <div class="profile-photo" id="profilePhoto">
                     <div class="w-32 h-32 bg-gradient-to-br from-[#00ff88] to-green-600 rounded-full flex items-center justify-center text-[#12181f] font-bold text-4xl relative overflow-hidden">
-                        <img src="" alt="Profile" class="w-full h-full object-cover rounded-full hidden" id="profileImage">
-                        <span id="profileInitials">ST</span>
+                        <img 
+                            src="{{ asset('storage/'.$user->agentProfile->media->file_path) }}" 
+                            alt="Profile" 
+                            class="w-full h-full object-cover rounded-full hidden" 
+                            id="profileImage"
+                            >
+                        {{-- <span id="profileInitials">ST</span> --}}
                         <div class="photo-overlay">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
@@ -21,18 +26,21 @@
 
                 <!-- Profile Info -->
                 <div class="flex-1 text-center lg:text-left">
-                    <h2 class="text-3xl font-bold text-white mb-2">Sara Tadesse</h2>
-                    <p class="text-[#00ff88] text-lg font-medium mb-4">Senior Real Estate Agent</p>
-                    <p class="text-gray-400 mb-6">Specializing in luxury properties and commercial real estate in Addis Ababa. Helping clients find their perfect property for over 8 years.</p>
+                    <h2 class="text-3xl font-bold text-white mb-2">{{ $user->agentProfile->user->name }}</h2>
+                    <p class="text-[#00ff88] text-lg font-medium mb-4">{{ $user->agentProfile->speciality }}</p>
+                    <p class="text-gray-400 mb-6">
+                        {{-- Specializing in luxury properties and commercial real estate in Addis Ababa. Helping clients find their perfect property for over 8 years. --}}
+                        {{ $user->agentProfile->bio }}
+                    </p>
                     
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="stat-card rounded-xl p-4 text-center">
-                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="47">0</p>
+                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ count($properties) }}">0</p>
                             <p class="text-gray-400 text-sm">Properties Listed</p>
                         </div>
                         <div class="stat-card rounded-xl p-4 text-center">
-                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="18">0</p>
+                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ $user->agentProfile->deals_closed }}">0</p>
                             <p class="text-gray-400 text-sm">Deals Closed</p>
                         </div>
                         <div class="stat-card rounded-xl p-4 text-center">
@@ -54,29 +62,54 @@
             <!-- Personal Information -->
             <div class="profile-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Personal Information</h3>
-                <form id="personalForm" class="space-y-4">
+                <form method="POST" action="/dashboard/profile/edit" id="personalForm" class="space-y-4">
                     @csrf
+                    @method('PUT')
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Full Name</label>
-                        <input type="text" class="form-input w-full rounded-lg px-4 py-3 text-white" value="Sara Tadesse" id="fullName">
+                        <input 
+                            type="text"
+                            name="fullName"
+                            value="{{ $user->agentProfile->user->name }}" 
+                            class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                            id="fullName">
+                            <x-form-input-error fildName="fullName" />
                         <div class="text-red-400 text-xs mt-1 hidden" id="fullNameError">Please enter your full name</div>
                     </div>
                     
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Email Address</label>
-                        <input type="email" class="form-input w-full rounded-lg px-4 py-3 text-white" value="sara.tadesse@propertyhub.et" id="email">
+                        <input 
+                            type="email"
+                            name = "email"
+                            class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                            value="{{ $user->agentProfile->user->email }}" 
+                            id="email">
+                            <x-form-input-error fildName="email" />
                         <div class="text-red-400 text-xs mt-1 hidden" id="emailError">Please enter a valid email address</div>
                     </div>
                     
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Phone Number</label>
-                        <input type="tel" class="form-input w-full rounded-lg px-4 py-3 text-white" value="+251 911 234 567" id="phone">
+                        <input 
+                            type="tel" 
+                            name="phone"
+                            class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                            value="{{ $user->agentProfile->user->phone }}" 
+                            id="phone">
+                            <x-form-input-error fildName="phone" />
                         <div class="text-red-400 text-xs mt-1 hidden" id="phoneError">Please enter a valid phone number</div>
                     </div>
                     
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Location</label>
-                        <input type="text" class="form-input w-full rounded-lg px-4 py-3 text-white" value="Addis Ababa, Ethiopia" id="location">
+                        <input 
+                            type="text" 
+                            name="location"
+                            class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                            value="{{ $user->agentProfile->address}}" 
+                            id="location">
+                            <x-form-input-error fildName="location" />
                     </div>
                     
                     <button type="submit" class="save-button w-full py-3 rounded-lg text-[#12181f] font-semibold">
@@ -92,40 +125,45 @@
             <!-- Professional Information -->
             <div class="profile-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Professional Information</h3>
-                <form id="professionalForm" class="space-y-4">
+                <form method="POST" action="/dashboard/profile/edit" id="professionalForm" class="space-y-4">
                     @csrf
+                    @method('PUT')
+
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Agency/Company Name</label>
-                        <input type="text" class="form-input w-full rounded-lg px-4 py-3 text-white" value="AnchorHomes" id="agency">
+                        <input 
+                            type="text" 
+                            class="form-input w-full rounded-lg px-4 py-3 text-white" value="AnchorHomes" id="agency" disabled>
                     </div>
-                    
-                    {{-- <div>
-                        <label class="block text-gray-400 text-sm font-medium mb-2">Years of Experience</label>
-                        <select class="form-input w-full rounded-lg px-4 py-3 text-white" id="experience">
-                            <option value="1-2">1-2 years</option>
-                            <option value="3-5">3-5 years</option>
-                            <option value="6-10" selected>6-10 years</option>
-                            <option value="10+">10+ years</option>
-                        </select>
-                    </div> --}}
-                    
-                    {{-- <div>
-                        <label class="block text-gray-400 text-sm font-medium mb-2">Specialties</label>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="specialty-tag selected px-3 py-1 rounded-full text-xs font-medium cursor-pointer" data-specialty="apartments">Apartments</span>
-                            <span class="specialty-tag selected px-3 py-1 rounded-full text-xs font-medium cursor-pointer" data-specialty="houses">Houses</span>
-                            <span class="specialty-tag selected px-3 py-1 rounded-full text-xs font-medium cursor-pointer" data-specialty="commercial">Commercial</span>
-                            <span class="specialty-tag px-3 py-1 rounded-full text-xs font-medium cursor-pointer" data-specialty="land">Land</span>
-                        </div>
-                    </div> --}}
-                    
+                    {{-- bio --}}
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Bio / About Me</label>
-                        <textarea class="form-input w-full rounded-lg px-4 py-3 text-white h-44 resize-none" maxlength="500" id="bio" placeholder="Tell clients about yourself and your expertise...">
-                            Experienced real estate agent specializing in luxury properties and commercial real estate in Addis Ababa. I have successfully helped over 100 families find their dream homes and assisted numerous businesses in securing prime commercial locations.</textarea>
+                        <textarea name="bio" class="form-input w-full rounded-lg px-4 py-3 text-white row-2 resize-none" maxlength="500" id="bio" placeholder="Tell clients about yourself and your expertise...">
+                            {{-- Experienced real estate agent specializing in luxury properties and commercial real estate in Addis Ababa. I have successfully helped over 100 families find their dream homes and assisted numerous businesses in securing prime commercial locations. --}}
+                            {{ trim($user->agentProfile->bio,'') }}
+                        </textarea>
+                        <x-form-input-error fildName="bio" />
                         <div class="flex justify-between items-center mt-1">
-                            <div class="text-red-400 text-xs hidden" id="bioError">Bio is too long</div>
-                            <div class="text-gray-400 text-xs" id="bioCounter">245/500</div>
+                            <div class="text-red-400 text-xs hidden" id="bioError">bio is too long</div>
+                            <div class="text-gray-400 text-xs" id="bioCounter">
+                                <span id="bioCount"></span>/2250
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- // about me --}}
+                    <div>
+                        <label class="block text-gray-400 text-sm font-medium mb-2">Bio / About Me</label>
+                        <textarea name="about_me" class="form-input w-full rounded-lg px-4 py-3 text-white h-44 resize-none" maxlength="500" id="about_me" placeholder="Tell clients about yourself and your expertise...">
+                            {{-- Experienced real estate agent specializing in luxury properties and commercial real estate in Addis Ababa. I have successfully helped over 100 families find their dream homes and assisted numerous businesses in securing prime commercial locations. --}}
+                            {{ $user->agentProfile->about_me }}
+                        </textarea>
+                        <x-form-input-error fildName="about_me" />
+                        <div class="flex justify-between items-center mt-1">
+                            <div class="text-red-400 text-xs hidden" id="bioError">about me is too long</div>
+                            <div class="text-gray-400 text-xs" id="bioCounter">
+                                <span id="bioCount"></span>/2250
+                            </div>
                         </div>
                     </div>
                     
@@ -147,16 +185,28 @@
                 <!-- Change Password -->
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Change Password</h4>
-                    <form id="passwordForm" class="space-y-4">
+                    <form method="POST" action="/dashboard/profile/edit" id="passwordForm" class="space-y-4">
                         @csrf
+                        @method('PUT')
+
                         <div>
                             <label class="block text-gray-400 text-sm font-medium mb-2">Current Password</label>
-                            <input type="password" class="form-input w-full rounded-lg px-4 py-3 text-white" id="currentPassword">
+                            <input 
+                                type="password" 
+                                name="current_password"
+                                class="form-input w-full rounded-lg px-4 py-3 text-white"
+                                id="currentPassword">
+                                <x-form-input-error fildName="password" />
                         </div>
                         
                         <div>
                             <label class="block text-gray-400 text-sm font-medium mb-2">New Password</label>
-                            <input type="password" class="form-input w-full rounded-lg px-4 py-3 text-white" id="newPassword">
+                            <input 
+                                type="password"
+                                name="password"
+                                class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                                id="newPassword">
+                                <x-form-input-error fildName="password" />
                             <div class="mt-2">
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-xs text-gray-400">Password Strength</span>
@@ -170,7 +220,12 @@
                         
                         <div>
                             <label class="block text-gray-400 text-sm font-medium mb-2">Confirm New Password</label>
-                            <input type="password" class="form-input w-full rounded-lg px-4 py-3 text-white" id="confirmPassword">
+                            <input 
+                                type="password" 
+                                name="password_confirmation"
+                                class="form-input w-full rounded-lg px-4 py-3 text-white" 
+                                id="password_confirmation">
+                                <x-form-input-error fildName="password" />
                             <div class="text-red-400 text-xs mt-1 hidden" id="passwordError">Passwords do not match</div>
                         </div>
                         
@@ -188,7 +243,13 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Two-Factor Authentication</h4>
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-[#12181f] rounded-lg">
+                        <x-agent-dashboard.preferences 
+                            title='Email Authentication' 
+                            subTitle='Receive codes via email'
+                            action="/dashboard/settings" 
+                            :status="$user->settings->two_factor_authentication" />
+
+                        {{-- <div class="flex items-center justify-between p-4 bg-[#12181f] rounded-lg">
                             <div>
                                 <p class="text-white font-medium">SMS Authentication</p>
                                 <p class="text-gray-400 text-sm">Receive codes via SMS</p>
@@ -197,9 +258,9 @@
                                 <input type="checkbox" id="smsAuth">
                                 <span class="toggle-slider"></span>
                             </label>
-                        </div>
+                        </div> --}}
                         
-                        <div class="flex items-center justify-between p-4 bg-[#12181f] rounded-lg">
+                        {{-- <div class="flex items-center justify-between p-4 bg-[#12181f] rounded-lg">
                             <div>
                                 <p class="text-white font-medium">Email Authentication</p>
                                 <p class="text-gray-400 text-sm">Receive codes via email</p>
@@ -208,7 +269,7 @@
                                 <input type="checkbox" id="emailAuth" checked>
                                 <span class="toggle-slider"></span>
                             </label>
-                        </div>
+                        </div> --}}
                         
                         <div class="bg-blue-500/10 border border-blue-500 border-opacity-30 rounded-lg p-4">
                             <div class="flex items-start space-x-3">
@@ -227,18 +288,5 @@
         </div>
 
         <!-- Notification Preferences -->
-        <div class="profile-card rounded-2xl p-6">
-            <h3 class="text-xl font-bold mb-6">Notification Preferences</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                <x-agent-dashboard.preferences title="Email Notifications" subtitle="Receive updates via email" status="checked" />
-                <x-agent-dashboard.preferences title="SMS Notifications" subtitle="Receive updates via SMS" status="checked" />
-                <x-agent-dashboard.preferences title="Appointment Reminders" subtitle="Receive updates via email" status="checked" />
-                <x-agent-dashboard.preferences title="New Messages Alerts" subtitle="Get notified of new client messages" status="checked" />
-
-            </div>
-        </div>
     </div>
 </x-agent-dashboard.dashboard-layout>
-        
-

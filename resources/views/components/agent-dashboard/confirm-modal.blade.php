@@ -1,3 +1,5 @@
+@vite(['resources/js/confirmModal'])
+
 <div class="modal" id="confirmModal">
     <div class="modal-content">
         <h3 class="text-xl font-bold mb-4" id="modalTitle">Confirm Action</h3>
