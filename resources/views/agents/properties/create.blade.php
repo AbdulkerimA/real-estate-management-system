@@ -5,7 +5,7 @@
                 
                 @csrf
 
-                <!-- Property Information -->
+                <!-- Property Information --> 
                 <div class="form-card rounded-2xl p-6">
                     <div class="flex items-center mb-6">
                         <div class="w-12 h-12 bg-[#00ff88]/20 rounded-xl flex items-center justify-center mr-4">
@@ -295,9 +295,9 @@
                         <button type="button" class="primary-button px-6 py-3 rounded-lg text-[#12181f] font-medium" onclick="document.getElementById('imageInput').click()">
                             Choose Images
                         </button>
-                        <x-form-input-error fildName="images" />
+                        
                     </div>
-
+                    <x-form-input-error fildName="images" />
                     <div id="imagePreview" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
                         <!-- Image previews will be inserted here -->
                     </div>

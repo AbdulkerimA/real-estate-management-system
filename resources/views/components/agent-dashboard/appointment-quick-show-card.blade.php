@@ -23,7 +23,9 @@
 
     <div class="flex items-center justify-between text-sm">
         <span style="color: #9ca3af;">
-            {{ displayDate($appointment->scheduled_date,$appointment) }}
+            {{
+                "scheduled at: ".date('M d, Y', strtotime($appointment->scheduled_date))
+            }}
         </span>
 
         <button class="font-medium {{ $status == 'Pending' ? 'text-yellow-400 hover:text-yellow-300' : 'text-[#00ff88] hover:text-green-300' }}" 

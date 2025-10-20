@@ -4,13 +4,17 @@
     $images = json_decode($appointment->property->media->file_path, true);
     $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
    
-   
+//    dd($appointment->buyer)
 @endphp
 
 {{-- {{ 
     dd($appointment->property->details)
 }} --}}
+
 <tr class="border-b border-[#374151] hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="scheduled">
+    <td class="hidden apid">
+        {{ $appointment->id }}
+    </td>
     <td class="py-4 px-2">
         <div class="flex items-center space-x-3">
             {{-- <div class="w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#9333ea] rounded-full flex items-center justify-center text-[#ffffff] font-bold text-sm">
@@ -62,17 +66,17 @@
     <td class="py-4 px-2">
         <div class="flex space-x-3">
             <button
-                onclick="window.location = '{{ $appointment->id }}'" 
+                {{-- onclick="window.location = '{{ $appointment->id }}'"  --}}
                 class="text-[#60a5fa] hover:text-[#93c5fd] font-medium appointment-action" data-action="view">
                 View
             </button>
             <button 
-                onclick="window.location = '{{ $appointment->id }}'"
+                {{-- onclick="window.location = '{{ $appointment->id }}'" --}}
                 class="text-[#22c55e] hover:text-[#22c55e] font-medium appointment-action" data-action="confirm">
                 Confirm
             </button>
             <button
-                onclick="window.location = '{{ $appointment->id }}'" 
+                {{-- onclick="window.location = '{{ $appointment->id }}'"  --}}
                 class="text-[#f87171] hover:text-[#fca5a5] font-medium appointment-action" data-action="cancel">
                 Cancel
             </button>

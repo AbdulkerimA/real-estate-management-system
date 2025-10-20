@@ -61,10 +61,6 @@ body { font-family: 'Inter', sans-serif; }
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.property-image {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
 .status-available {
     background: rgba(0, 255, 136, 0.2);
     color: #00ff88;

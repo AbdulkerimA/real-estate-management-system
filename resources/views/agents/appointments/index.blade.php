@@ -12,31 +12,32 @@ function numberConverter($num) {
     return $num;
 }
 
-function remainingTime($scheduledTime,$scheduledDate) {
+function remainingTime($scheduledTime, $scheduledDate) {
     $now = new DateTime();                      // current time
     $scheduled = new DateTime($scheduledTime);  // scheduled time
-    
-    $interval = $now->diff($scheduled);         // get difference
-    
-    if ($scheduledDate != date('Y-m-d')) {
-        return date('M d, Y', strtotime($scheduledDate)); 
+
+    // Check if the scheduled date is in the past
+    if ($scheduledDate < date('Y-m-d')) {
+        return "Day passed";
     }
 
-    if ($scheduled < $now) {
-        return "Time passed";
+    // Check if the scheduled date is today
+    if ($scheduledDate == date('Y-m-d')) {
+
+        // Calculate remaining time until scheduled time
+        if ($now > $scheduled) {
+            return "Time passed";
+        }
+
+        $interval = $now->diff($scheduled); // get difference
+        return $interval->format('%h hours %i minutes remaining');
     }
 
-    // format remaining time as "H hours i minutes"
-    return $interval->format('%h hours %i minutes');
+    // If the scheduled date is not today, return the formatted date
+    return date('M d, Y', strtotime($scheduledDate)); 
 }
 
-function displayDate($scheduledDate,$appointment) {
-    if ($scheduledDate != date('Y-m-d')) {
-        return date('M d, Y', strtotime($scheduledDate)); 
-    }else{
-        return "Today " .$appointment->scheduled_time;
-    }
-}  
+
 @endphp
 <x-agent-dashboard.dashboard-layout>
 
@@ -63,20 +64,6 @@ function displayDate($scheduledDate,$appointment) {
                 >
             </x-agent-dashboard.appointment-quick-show-card>
         @endforeach
-
-        {{-- <!-- Second Appointment -->
-        <x-agent-dashboard.appointment-quick-show-card >
-            <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
-        </x-agent-dashboard.appointment-quick-show-card>
-
-        <!-- Third Appointment -->
-        <x-agent-dashboard.appointment-quick-show-card status="Pending" action="confirm">
-            <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
-        </x-agent-dashboard.appointment-quick-show-card> --}}
     </div>
 </div>
 
@@ -135,6 +122,7 @@ function displayDate($scheduledDate,$appointment) {
         <table class="w-full">
             <thead>
                 <tr class="border-b border-gray-600">
+                    <th class="text-left py-4 px-2 font-semibold hidden">ID</th>
                     <th class="text-left py-4 px-2 font-semibold">Client</th>
                     <th class="text-left py-4 px-2 font-semibold">Property</th>
                     <th class="text-left py-4 px-2 font-semibold">Date & Time</th>
@@ -146,168 +134,6 @@ function displayDate($scheduledDate,$appointment) {
                 @foreach ($appointments as $appointment)
                     <x-agent-dashboard.appointment-table-row :appointment="$appointment"/>
                 @endforeach
-                
-                {{-- <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="scheduled">
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                DH
-                            </div>
-                            <div>
-                                <p class="font-semibold">Daniel Haile</p>
-                                <p class="text-sm text-gray-400">+251 922 654 321</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-4">
-                            <div class="property-image w-16 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold">Modern Villa in Kazanchis</p>
-                                <p class="text-sm text-gray-400">5 bed • 4 bath • ETB 8.2M</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <p class="font-medium">Tomorrow, Dec 29</p>
-                        <p class="text-sm text-gray-400">10:00 AM - 11:30 AM</p>
-                    </td>
-                    <td class="py-4 px-2">
-                        <span class="status-scheduled px-4 py-2 rounded-full text-sm font-semibold">Scheduled</span>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex space-x-3">
-                            <button class="text-blue-400 hover:text-blue-300 font-medium appointment-action" data-action="view">View</button>
-                            <button class="text-[#12181f] hover:text-green-400 font-medium appointment-action" data-action="confirm">Confirm</button>
-                            <button class="text-red-400 hover:text-red-300 font-medium appointment-action" data-action="cancel">Cancel</button>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="pending">
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                HA
-                            </div>
-                            <div>
-                                <p class="font-semibold">Hanan Ahmed</p>
-                                <p class="text-sm text-gray-400">+251 933 789 012</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-4">
-                            <div class="property-image w-16 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M3 21h18M5 21V7l8-4v18M19 21V10l-6-3"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold">Commercial Building in Piassa</p>
-                                <p class="text-sm text-gray-400">Office space • ETB 12M</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <p class="font-medium">Dec 31, 2024</p>
-                        <p class="text-sm text-gray-400">3:00 PM - 4:00 PM</p>
-                    </td>
-                    <td class="py-4 px-2">
-                        <span class="status-pending px-4 py-2 rounded-full text-sm font-semibold">Pending</span>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex space-x-3">
-                            <button class="text-blue-400 hover:text-blue-300 font-medium appointment-action" data-action="view">View</button>
-                            <button class="text-[#12181f] hover:text-green-400 font-medium appointment-action" data-action="confirm">Confirm</button>
-                            <button class="text-red-400 hover:text-red-300 font-medium appointment-action" data-action="cancel">Cancel</button>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="completed">
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                SM
-                            </div>
-                            <div>
-                                <p class="font-semibold">Selamawit Mulu</p>
-                                <p class="text-sm text-gray-400">+251 944 567 890</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-4">
-                            <div class="property-image w-16 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold">Family House in CMC</p>
-                                <p class="text-sm text-gray-400">4 bed • 3 bath • ETB 3.8M</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <p class="font-medium">Dec 26, 2024</p>
-                        <p class="text-sm text-gray-400">11:00 AM - 12:00 PM</p>
-                    </td>
-                    <td class="py-4 px-2">
-                        <span class="status-completed px-4 py-2 rounded-full text-sm font-semibold">Completed</span>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex space-x-3">
-                            <button class="text-blue-400 hover:text-blue-300 font-medium appointment-action" data-action="view">View</button>
-                            <button class="text-gray-500 font-medium cursor-not-allowed">Completed</button>
-                        </div>
-                    </td>
-                </tr>
-                
-                <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors" data-status="canceled">
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                AT
-                            </div>
-                            <div>
-                                <p class="font-semibold">Abebe Tesfaye</p>
-                                <p class="text-sm text-gray-400">+251 955 234 567</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex items-center space-x-4">
-                            <div class="property-image w-16 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold">Residential Land in Lebu</p>
-                                <p class="text-sm text-gray-400">1000 sqm • ETB 2.5M</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-2">
-                        <p class="font-medium">Dec 25, 2024</p>
-                        <p class="text-sm text-gray-400">4:00 PM - 5:00 PM</p>
-                    </td>
-                    <td class="py-4 px-2">
-                        <span class="status-canceled px-4 py-2 rounded-full text-sm font-semibold">Canceled</span>
-                    </td>
-                    <td class="py-4 px-2">
-                        <div class="flex space-x-3">
-                            <button class="text-blue-400 hover:text-blue-300 font-medium appointment-action" data-action="view">View</button>
-                            <button class="text-gray-500 font-medium cursor-not-allowed">Canceled</button>
-                        </div>
-                    </td>
-                </tr> --}}
             </tbody>
         </table>
         <div class="my-4">

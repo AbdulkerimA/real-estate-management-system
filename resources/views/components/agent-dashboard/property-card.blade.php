@@ -1,4 +1,11 @@
 @props(['data'])
+@php
+    
+    $images = json_decode($data->media->file_path);
+    $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
+
+    // dd($data->media->file_path);
+@endphp
 
 <div 
     class="property-card rounded-2xl overflow-hidden" 
@@ -7,9 +14,9 @@
 >
     {{-- Property Image / Placeholder --}}
     <div class="property-image h-48 flex items-center justify-center bg-gray-200">
-        <svg class="w-16 h-16 text-gray-500 opacity-60" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
+        <div class="img h-full w-full">
+            <img src="{{ asset('storage/'.$firstImage) }}" alt="{{ $data->title }}" class="w-full h-full object-cover" >
+        </div>
     </div>
 
     {{-- Property Details --}}

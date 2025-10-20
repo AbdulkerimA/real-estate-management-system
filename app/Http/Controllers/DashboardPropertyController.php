@@ -35,7 +35,7 @@ class DashboardPropertyController extends Controller
     public function store(Request $request)
     {
         // see request content for debuging
-        // dd($request->post());
+        // dd($request->post(),$request->hasFile('images'));
         // dd($request->hasFile('images'));
         
         //validation 
@@ -68,6 +68,7 @@ class DashboardPropertyController extends Controller
         ]);
 
         // dd($validated['amenities']);
+        
         $agent = Auth::user();
         $amenities = $validated['amenities'] ?? [];
         $paths = [];

@@ -86,7 +86,7 @@ document.querySelectorAll('.content-card button svg').forEach(button => {
     button.parentElement.addEventListener('click', function(e) {
         e.stopPropagation();
         const appointmentCard = this.closest('.flex');
-        const clientName = appointmentCard.querySelector('.font-semibold').textContent;
+        // const clientName = appointmentCard.querySelector('.font-semibold').textContent;
         const phoneNumber = appointmentCard.querySelector('.text-gray-400').textContent;
         window.location.href = `tel:${phoneNumber}`;
     });
@@ -244,38 +244,9 @@ document.querySelectorAll('.stat-card').forEach(card => {
 });
 
 // property related script
-// View toggle functionality
-const tableViewBtn = document.getElementById('tableViewBtn');
-const cardViewBtn = document.getElementById('cardViewBtn');
-const tableView = document.getElementById('tableView');
-const cardView = document.getElementById('cardView');
-
-if(tableViewBtn){
-    tableViewBtn.addEventListener('click', () => {
-    tableViewBtn.classList.add('active');
-    cardViewBtn.classList.remove('active');
-    tableViewBtn.classList.remove('text-gray-400');
-    cardViewBtn.classList.add('text-gray-400');
-    
-    tableView.classList.remove('hidden');
-    cardView.classList.add('hidden');   
-    });
-}
-
-if(cardViewBtn){
-    cardViewBtn.addEventListener('click', () => {
-        cardViewBtn.classList.add('active');
-        tableViewBtn.classList.remove('active');
-        cardViewBtn.classList.remove('text-gray-400');
-        tableViewBtn.classList.add('text-gray-400');
-        
-        cardView.classList.remove('hidden');
-        tableView.classList.add('hidden');
-    });
-}
 
 // Filter functionality
-const statusFilter = document.getElementById('apstatusFilter');
+const statusFilter = document.getElementById('apStatusFilter');
 const typeFilter = document.getElementById('typeFilter');
 const propertySearch = document.getElementById('propertySearch');
 
@@ -331,17 +302,18 @@ document.querySelectorAll('.property-action').forEach(button => {
         const action = this.getAttribute('data-action');
         const propertyCard = this.closest('tr, .property-card');
         const propertyName = propertyCard.querySelector('.font-semibold, h3').textContent;
+        const propertyId = propertyCard.querySelector('.pid').textContent;
         
         switch(action) {
             case 'view':
-                alert(`Viewing details for: ${propertyName}`);
+                alert(`Viewing details for: ${propertyId}`);
                 break;
             case 'edit':
-                alert(`Opening edit form for: ${propertyName}`);
+                alert(`Opening edit form for: ${propertyId}`);
                 break;
             case 'delete':
                 if (confirm(`Are you sure you want to delete: ${propertyName}?`)) {
-                    alert(`Property deleted: ${propertyName}`);
+                    alert(`Property deleted: ${propertyId}`);
                     // In a real app, you would remove the element and update the backend
                 }
                 break;
@@ -674,10 +646,11 @@ document.querySelectorAll('.appointment-action').forEach(button => {
         const row = this.closest('tr');
         const clientName = row.querySelector('.font-semibold').textContent;
         const propertyName = row.querySelectorAll('.font-semibold')[1].textContent;
+        const appointmentId = row.querySelector('.apid').textContent.trim();
         
         switch(action) {
             case 'view':
-                alert(`Viewing appointment details:\nClient: ${clientName}\nProperty: ${propertyName}`);
+                window.location = `/dashboard/appointment/${appointmentId}`
                 break;
             case 'confirm':
                 if (confirm(`Confirm appointment with ${clientName} for ${propertyName}?`)) {
@@ -1316,7 +1289,7 @@ savePreferencesBtn ? savePreferencesBtn.addEventListener('click', function() {
     // }, 1000);
 }) : '';
 
-// Auto-save notification toggles
+// Auto-save notification toggles 
 document.querySelectorAll('.toggle-switch input[type="checkbox"]').forEach(toggle => {
     toggle.addEventListener('change', function() {
         // Auto-save notification preferences
