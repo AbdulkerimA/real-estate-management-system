@@ -7,6 +7,8 @@ use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Pest\Laravel\get;
+
 class PropertyController extends Controller
 {
     /**
@@ -24,6 +26,42 @@ class PropertyController extends Controller
         
         // dd($properties);
         return view('properties.index',['properties'=>$properties]);
+    }
+
+    /**
+     * display propertis in the admin page
+     */
+    public function adminPropertyIndex(Property $properties){
+
+
+        $paginationNumber = request()->get('per_page') ?? 5;
+
+        $allProperties = $properties->all();
+        
+        
+        $pendingProperties = $allProperties->filter(function ($property){
+            return $property->status == 'pending'; 
+        });
+        
+        $approvedProperties = $allProperties->filter(function ($property){
+            return $property->status == 'approved'; 
+        });
+
+        $soldProperties = $allProperties->filter(function ($property){
+            return $property->status == 'sold'; 
+        });
+        
+
+        
+        // dd(json_decode($allProperties->first()->media->file_path));
+        
+        return view('admin.properties.index',[
+            'totalProperties' => $allProperties != null ? count($allProperties) : 0,
+            'pendingProperties' => $pendingProperties != null ? count($pendingProperties) : 0,
+            'approvedProperties' => $approvedProperties != null ? count($approvedProperties) : 0,
+            'soldProperties' => $soldProperties != null ? count($soldProperties) : 0,
+            'properties' => $properties->paginate($paginationNumber),
+        ]);
     }
 
     /**

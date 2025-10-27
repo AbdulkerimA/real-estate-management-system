@@ -58,6 +58,9 @@ Route::controller(PropertyController::class)->group(function (){
     Route::get('/properties','index');
     Route::get('/property/{property}','show')->middleware(['auth','can:view,property']);
     Route::get('/property/{property}/{message}','show')->middleware(['auth','can:view,property']);
+
+    // admin page 
+    Route::get('/admin/properties','adminPropertyIndex');
 });
 
 Route::controller(DashboardPropertyController::class)->group(function(){
@@ -104,7 +107,6 @@ Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('is
 Route::view('/admin','admin.dashboard');
 Route::view('/admin/agents', 'admin.agents.index');
 Route::view('/admin/customers', 'admin.customers.index');
-Route::view('/admin/properties','admin.properties.index');
 Route::view('/admin/transactions','admin.payment.index');
 Route::view('/admin/analytics','admin.analytics.index');
 Route::view('/admin/settings','admin.settings');

@@ -19,7 +19,7 @@ class Property extends Model
     // Relationships
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'agent_id','id');
     }
 
     public function media()

@@ -57,17 +57,41 @@ class DatabaseSeeder extends Seeder
 
         // properties images
         Media::create([
-            'file_path' => 'profiles/vRPRYviV8yLO6e7jwWmifE0HaNLSWWDJOoWGIr7F.jpg',
+            'file_path' => '[
+                                "properties/F3r3Tv0tqZzzaCK2fLg8FjUklilkUIlip6p2MJzc.jpg",
+                                "properties/tRIgCtcUI3hHKaeg0joZjdrpgM32rPquQDgozR8q.jpg",
+                                "properties/xuzF3tL3ISLh8vBPGiaWmw6z8IoOoweFugAIMBgJ.jpg",
+                                "properties/hYr6qhkwtexjh8xG5zyvxcSEtlBymRaWZoDUS9uA.jpg",
+                                "properties/CZ4zJdpRKjMdFZSLUBMRoUrBd3dvDT8U2u7Z2FSH.jpg",
+                                "properties/FAEdpIzpNhwWxoy12sy7FJdMNa4oDp4U71zwJuJw.jpg",
+                                "properties/XGflrraW6nzZWJLYooV6OGTfVFR4iGpJ6iuQZdII.jpg"
+                            ]',
             'file_type' => 'image/png',
         ]);
 
         Media::create([
-            'file_path' => 'profiles/vRPRYviV8yLO6e7jwWmifE0HaNLSWWDJOoWGIr7F.jpg',
+            'file_path' => '[
+                                "properties/F3r3Tv0tqZzzaCK2fLg8FjUklilkUIlip6p2MJzc.jpg",
+                                "properties/tRIgCtcUI3hHKaeg0joZjdrpgM32rPquQDgozR8q.jpg",
+                                "properties/xuzF3tL3ISLh8vBPGiaWmw6z8IoOoweFugAIMBgJ.jpg",
+                                "properties/hYr6qhkwtexjh8xG5zyvxcSEtlBymRaWZoDUS9uA.jpg",
+                                "properties/CZ4zJdpRKjMdFZSLUBMRoUrBd3dvDT8U2u7Z2FSH.jpg",
+                                "properties/FAEdpIzpNhwWxoy12sy7FJdMNa4oDp4U71zwJuJw.jpg",
+                                "properties/XGflrraW6nzZWJLYooV6OGTfVFR4iGpJ6iuQZdII.jpg"
+                            ]',
             'file_type' => 'image/png',
         ]);
 
         Media::create([
-            'file_path' => 'profiles/vRPRYviV8yLO6e7jwWmifE0HaNLSWWDJOoWGIr7F.jpg',
+            'file_path' => '[
+                                "properties/F3r3Tv0tqZzzaCK2fLg8FjUklilkUIlip6p2MJzc.jpg",
+                                "properties/tRIgCtcUI3hHKaeg0joZjdrpgM32rPquQDgozR8q.jpg",
+                                "properties/xuzF3tL3ISLh8vBPGiaWmw6z8IoOoweFugAIMBgJ.jpg",
+                                "properties/hYr6qhkwtexjh8xG5zyvxcSEtlBymRaWZoDUS9uA.jpg",
+                                "properties/CZ4zJdpRKjMdFZSLUBMRoUrBd3dvDT8U2u7Z2FSH.jpg",
+                                "properties/FAEdpIzpNhwWxoy12sy7FJdMNa4oDp4U71zwJuJw.jpg",
+                                "properties/XGflrraW6nzZWJLYooV6OGTfVFR4iGpJ6iuQZdII.jpg"
+                            ]',
             'file_type' => 'image/png',
         ]);
 

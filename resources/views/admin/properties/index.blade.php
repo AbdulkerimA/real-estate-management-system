@@ -5,7 +5,12 @@
         <!-- Quick Stats --> 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <x-admin-dashboard.status-card themeColor="green" statusNum="1247" title="Total Properties Listed">
+            <x-admin-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ Number::format($totalProperties) }}" 
+                title="Total Properties Listed"
+                >
+
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -14,7 +19,12 @@
             </x-admin-dashboard.status-card>
 
             {{-- Pending Approvals --}}
-            <x-admin-dashboard.status-card themeColor="yellow" statusNum="23" title="Pending Approvals">
+            <x-admin-dashboard.status-card 
+                themeColor="yellow" 
+                statusNum="{{ Number::format($pendingProperties) }}" 
+                title="Pending Approvals"
+                >
+
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,7 +34,12 @@
             </x-admin-dashboard.status-card>
 
             {{-- Approved Properties --}}
-            <x-admin-dashboard.status-card themeColor="green" statusNum="1156" title="Approved Properties">
+            <x-admin-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ Number::format($approvedProperties) }}" 
+                title="Approved Properties"
+                >
+
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +49,12 @@
             </x-admin-dashboard.status-card>
 
             {{-- Sold Properties --}}
-            <x-admin-dashboard.status-card themeColor="purple" statusNum="68" title="Sold Properties">
+            <x-admin-dashboard.status-card 
+                themeColor="purple" 
+                statusNum="{{ Number::format($soldProperties) }}" 
+                title="Sold Properties"
+                >
+
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,37 +105,93 @@
                         </tr>
                     </thead>
                     <tbody id="propertiesTableBody">
-                        <tr class="table-row border-b border-gray-700" data-property-id="1">
-                            <td class="py-3 px-4">
-                                <input type="checkbox" class="checkbox-custom property-checkbox" value="1">
-                            </td>
-                            <td class="py-3 px-4">
-                                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4">
-                                <div>
-                                    <p class="text-white font-medium">Luxury 3BR Apartment</p>
-                                    <p class="text-gray-400 text-sm">Modern amenities, city view</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4 text-white">Bole, Addis Ababa</td>
-                            <td class="py-3 px-4 text-white font-semibold">₹2,50,000</td>
-                            <td class="py-3 px-4 text-white">Sara Tadesse</td>
-                            <td class="py-3 px-4"><span class="status-badge status-pending">Pending</span></td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center space-x-2">
-                                    <button class="action-btn btn-view" onclick="viewData(1)">View</button>
-                                    <button class="action-btn btn-approve" onclick="approve(1)">Approve</button>
-                                    <button class="action-btn btn-reject" onclick="reject(1)">Reject</button>
-                                    <button class="action-btn btn-edit" onclick="edit(1)">Edit</button>
-                                    <button class="action-btn btn-delete" onclick="deleteAction(1)">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach ($properties as $property)
+                            @php
+                                $images = json_decode($property->media->file_path);
+                                $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
+                            @endphp 
+                            <tr class="table-row border-b border-gray-700" data-property-id="1">
+                                <td class="py-3 px-4">
+                                    <input type="checkbox" class="checkbox-custom property-checkbox" value="1">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                        <img src="{{ asset('storage/'.$firstImage) }}" alt="{{ 'image of '.$property->title}}" class="w-full h-full object-cover rounded-xl">
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div>
+                                        <p class="text-white font-medium">{{ $property->title }}</p>
+                                        {{-- <p class="text-gray-400 text-sm">
+                                            @foreach ($property->details as $detail)
+                                                {{ $detail }}
+                                            @endforeach
+                                        </p> --}}
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-white">{{ $property->location }}</td>
+                                <td class="py-3 px-4 text-white font-semibold">{{ Number::format($property->price) }} ETB</td>
+                                <td class="py-3 px-4 text-white">{{ $property->user->name }}</td>
+                                <td class="py-3 px-4"><span class="status-badge status-pending">{{ $property->status }}</span></td>
+                                <td class="py-3 px-4">
+                                    <div class="flex flex-wrap w-48 gap-2 items-center space-x-2">
+                                        @if ($property->status == 'pending')
+                                            <button class="action-btn btn-view" 
+                                                onclick="viewData({{ $property->id }})">
+                                                View
+                                            </button>
+                                            
+                                            <button 
+                                                class="action-btn btn-approve" 
+                                                onclick="approve({{ $property->id }})">
+                                                Approve
+                                            </button>
+
+                                            <button 
+                                                class="action-btn btn-reject" 
+                                                onclick="reject({{ $property->id }})">
+                                                Reject
+                                            </button>
+                                            
+                                            <button 
+                                                class="action-btn btn-delete" 
+                                                onclick="deleteAction({{ $property->id }})">
+                                                Delete
+                                            </button>
+                                        @elseif( $property->status == 'approved')
+                                            <button class="action-btn btn-view" 
+                                                onclick="viewData({{ $property->id }})">
+                                                View
+                                            </button>
+
+                                            <button 
+                                                class="action-btn btn-reject" 
+                                                onclick="reject({{ $property->id }})">
+                                                Reject
+                                            </button>
+                                            
+                                            <button 
+                                                class="action-btn btn-delete" 
+                                                onclick="deleteAction({{ $property->id }})">
+                                                Delete
+                                            </button>
+                                        @else
+                                            <button class="action-btn btn-view" 
+                                                onclick="viewData({{ $property->id }})">
+                                                View
+                                            </button>
+                                            
+                                            <button 
+                                                class="action-btn btn-delete" 
+                                                onclick="deleteAction({{ $property->id }})">
+                                                Delete
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>    
+                        @endforeach
+{{--                         
 
                         <tr class="table-row border-b border-gray-700" data-property-id="2">
                             <td class="py-3 px-4">
@@ -205,13 +281,14 @@
                                     <button class="action-btn btn-delete" onclick="deleteAction(4)">Delete</button>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
-            <div class="flex items-center justify-between mt-6">
+            {{ $properties->links('vendor.pagination.dashboard-pagination') }}
+            {{-- <div class="flex items-center justify-between mt-6">
                 <p class="text-gray-400 text-sm">Showing 1-4 of 1,247 properties</p>
                 <div class="flex items-center space-x-2">
                     <button class="pagination-button rounded">Previous</button>
@@ -223,6 +300,7 @@
                     <button class="pagination-button rounded">Next</button>
                 </div>
             </div>
+             --}}
         </div>
     </div>
 
@@ -242,52 +320,41 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Property Image -->
                 <div class="space-y-4 keen-slider zoom-out" id="my-keen-slider">
-                    <div class="keen-slider__slide zoom-out__slide w-full h-64 rounded-lg flex items-center justify-center">
+                    @foreach (json_decode($properties->first()->media->file_path) as $image)
+                        <div class="keen-slider__slide zoom-out__slide w-full h-64 rounded-lg flex items-center justify-center">
                         <div>
-                            <img
-                                src="https://images.unsplash.com/photo-1590004953392-5aba2e72269a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=500&w=800&q=80"
-                            />
+                            {{-- fix needed here--}}
+                            <img src="{{ asset('storage/'.$image) }}" alt="property image ">
                         </div>
                     </div>
-                    <div class="keen-slider__slide zoom-out__slide w-full h-64 rounded-lg flex items-center justify-center">
-                        <div>
-                            <img
-                                src="https://images.unsplash.com/photo-1590004845575-cc18b13d1d0a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=500&w=800&q=80"
-                            />
-                        </div>
-                    </div>
-                    <div class="keen-slider__slide zoom-out__slide w-full h-64 rounded-lg flex items-center justify-center">
-                        <div>
-                            <img
-                                src="https://images.unsplash.com/photo-1590004987778-bece5c9adab6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=500&w=800&q=80"
-                            />
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Property Info -->
                 <div class="space-y-4">
                     <div>
-                        <h3 class="text-xl font-bold text-white mb-2" id="modalTitle">Luxury 3BR Apartment</h3>
-                        <p class="text-gray-400" id="modalDescription">Modern amenities with stunning city views. This luxury apartment features spacious rooms, high-end finishes, and premium location access.</p>
+                        <h3 class="text-xl font-bold text-white mb-2" id="modalTitle">{{ $properties->first()->title }}</h3>
+                        <p class="text-gray-400" id="modalDescription">{{ $properties->first()->description }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-gray-400 text-sm">Location</p>
-                            <p class="text-white font-medium" id="modalLocation">Bole, Addis Ababa</p>
+                            <p class="text-white font-medium" id="modalLocation">{{ $properties->first()->location }}</p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Price</p>
-                            <p class="text-[#00ff88] font-bold text-xl" id="modalPrice">₹2,50,000</p>
+                            <p class="text-[#00ff88] font-bold text-xl" id="modalPrice">
+                                {{ Number::format($properties->first()->price) }} ETB
+                            </p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Property Type</p>
-                            <p class="text-white font-medium" id="modalType">Apartment</p>
+                            <p class="text-white font-medium" id="modalType">{{ $properties->first()->type }}</p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Status</p>
-                            <span class="status-badge status-pending" id="modalStatus">Pending</span>
+                            <span class="status-badge status-pending" id="modalStatus">{{ $properties->first()->status }}</span>
                         </div>
                     </div>
 
@@ -295,10 +362,14 @@
                         <p class="text-gray-400 text-sm">Agent Information</p>
                         <div class="flex items-center space-x-3 mt-2">
                             <div class="w-10 h-10 bg-[#00ff88] rounded-full flex items-center justify-center text-[#12181f] font-bold">
-                                ST
+                                <img 
+                                    src="{{ asset('storage/'.$properties->first()->user->agentProfile->media->file_path) }}" 
+                                    alt="profile picture"
+                                    class="w-full h-full rounded-full object-cover"
+                                    >
                             </div>
                             <div>
-                                <p class="text-white font-medium" id="modalAgent">Sara Tadesse</p>
+                                <p class="text-white font-medium" id="modalAgent">{{ $properties->first()->user->name }}</p>
                                 <p class="text-gray-400 text-sm">Licensed Real Estate Agent</p>
                             </div>
                         </div>
