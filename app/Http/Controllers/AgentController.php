@@ -6,6 +6,7 @@ use App\Models\Agent;
 use App\Models\Document;
 use App\Models\Media;
 use App\Models\Property;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +72,11 @@ class AgentController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => $validated['password'],
-            'role' => 'agent'
+            'role' => 'agent',
+        ]);
+
+        $setting = Setting::create([
+            'user_id' => $user->id,
         ]);
 
         $media = Media::create([

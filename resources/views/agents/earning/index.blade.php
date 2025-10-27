@@ -1,71 +1,77 @@
+@php
+    // $blalance = $agent->first()->blalance;
+    // $
+    // dd($weeklyReport)
+    // $week = filter_key
+@endphp
 <x-agent-dashboard.dashboard-layout>
-    
-    <div class="p-2 space-y-6">
+    @vite(['resources/js/agents/earnings'])
+    <div class="p-2 space-y-6 relative">
         <!-- Earnings Overview Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Total Earnings -->
-            <div class="earnings-card rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-[#00ff88] to-green-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-[#12181f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs text-[#00ff88] font-medium">+12.5%</span>
-                </div>
-                <h3 class="text-gray-400 text-sm font-medium mb-2">Total Earnings</h3>
-                <p class="text-2xl font-bold text-white counter" data-target="2847500">ETB 0</p>
-                <div class="mt-3 bg-gray-700 rounded-full h-2">
-                    <div class="progress-bar h-2 rounded-full" style="width: 0%" data-width="78%"></div>
-                </div>
-            </div>
+            <!-- Total Earnings --> 
+            <x-agent-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ $agent->balance->current_balance }}" 
+                notifier="+12.5%">
+                <svg class="w-7 h-7 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+
+                @slot("statusText")
+                    Total Earnings
+                @endslot
+            </x-agent-dashboard.status-card>
+
 
             <!-- Pending Payments -->
-            <div class="earnings-card rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs text-yellow-400 font-medium">3 pending</span>
-                </div>
-                <h3 class="text-gray-400 text-sm font-medium mb-2">Pending Payments</h3>
-                <p class="text-2xl font-bold text-white counter" data-target="485000">ETB 0</p>
-                <p class="text-xs text-gray-400 mt-2">Expected: Dec 30, 2024</p>
-            </div>
+            <x-agent-dashboard.status-card 
+                themeColor="yellow" 
+                statusNum="{{ $pendingTotal != null ? $pendingTotal : 0 }}" 
+                notifier="
+                        {{ 
+                            $agent->checkoutRequest!= null ? count($agent->checkoutRequest) : 0
+                        }} 
+                        pending">
+                <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+
+                @slot("statusText")
+                    Pending Payments
+                @endslot
+            </x-agent-dashboard.status-card>
+
 
             <!-- Completed Payments -->
-            <div class="earnings-card rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs text-green-400 font-medium">15 deals</span>
-                </div>
-                <h3 class="text-gray-400 text-sm font-medium mb-2">Completed Payments</h3>
-                <p class="text-2xl font-bold text-white counter" data-target="2362500">ETB 0</p>
-                <p class="text-xs text-gray-400 mt-2">Last payment: Dec 15, 2024</p>
-            </div>
+            <x-agent-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ $agent->balance->total_check_out }}" 
+                notifier="15 deals">
+                <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+
+                @slot("statusText")
+                    Completed Payments
+                @endslot
+            </x-agent-dashboard.status-card>
+
 
             <!-- Current Month -->
-            <div class="earnings-card rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs text-blue-400 font-medium">December</span>
-                </div>
-                <h3 class="text-gray-400 text-sm font-medium mb-2">Current Month</h3>
-                <p class="text-2xl font-bold text-white counter" data-target="675000">ETB 0</p>
-                <div class="mt-3 bg-gray-700 rounded-full h-2">
-                    <div class="progress-bar h-2 rounded-full" style="width: 0%" data-width="65%"></div>
-                </div>
-            </div>
+            <x-agent-dashboard.status-card 
+                themeColor="blue" 
+                statusNum="{{ $thisMonthTotal }}" 
+                notifier="December">
+                <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+
+                @slot("statusText")
+                    Current Month
+                @endslot
+            </x-agent-dashboard.status-card>
+
         </div>
 
         <!-- Charts and Commission Summary Row -->
@@ -84,50 +90,6 @@
                 </div>
             </div>
 
-            <!-- Commission Summary -->
-            {{-- <div class="earnings-card rounded-2xl p-6">
-                <h2 class="text-xl font-bold mb-6">Commission Summary</h2>
-                
-                <div class="space-y-6">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-400 text-sm">Commission Rate</span>
-                            <span class="text-[#00ff88] font-bold">3.5%</span>
-                        </div>
-                        <div class="bg-gray-700 rounded-full h-2">
-                            <div class="bg-[#00ff88] h-2 rounded-full" style="width: 35%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-400 text-sm">Total Commission</span>
-                            <span class="text-white font-bold">ETB 2,847,500</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-400 text-sm">Closed Deals</span>
-                            <span class="text-white font-bold">18</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-gray-400 text-sm">Avg. Deal Value</span>
-                            <span class="text-white font-bold">ETB 4.2M</span>
-                        </div>
-                    </div>
-
-                    <div class="pt-4 border-t border-gray-600">
-                        <div class="text-center">
-                            <p class="text-2xl font-bold text-[#00ff88]">Top 5%</p>
-                            <p class="text-xs text-gray-400">Agent Ranking</p>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
 
         <!-- Payout Section -->
@@ -135,13 +97,36 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold mb-2">Payout Management</h2>
-                    <p class="text-gray-400 text-sm">Last payout: ETB 1,250,000 on Dec 15, 2024</p>
-                    <p class="text-gray-400 text-sm">Next scheduled payout: Dec 30, 2024</p>
+                    <p class="text-gray-400 text-sm ">
+                        Last payout:  
+                       <span class="font-bold">
+                        {{ 
+                            // dd($agent->lastApprovedCheckout->first()) 
+                            $agent->lastApprovedCheckout->first() != null
+                            ?
+                                Number::format($agent->lastApprovedCheckout->first()->requested_amount,2)
+                            :
+                                0
+                        }}
+                        ETB
+                       </span>
+                        
+                        {{ 
+                            $agent->lastApprovedCheckout->first() 
+                            ?
+                               'on '.date('M d, Y', strtotime($agent->lastApprovedCheckout->first()->created_at)) 
+                            :
+                            ''
+                        }}
+                    </p>
+                    {{-- <p class="text-gray-400 text-sm">Next scheduled payout: Dec 30, 2024</p> --}}
                 </div>
                 <div class="text-right">
                     <p class="text-sm text-gray-400 mb-2">Available for payout</p>
-                    <p class="text-2xl font-bold text-[#00ff88] mb-4">ETB 485,000</p>
-                    <button class="bg-[#00ff88] text-[#12181f] px-6 py-3 rounded-xl font-semibold hover:bg-green-400 transition-colors" id="requestPayoutBtn">
+                    <p class="text-2xl font-bold text-[#00ff88] mb-4">ETB {{ Number::format($agent->balance->current_balance,2) }}</p>
+                    <button 
+                        class="bg-[#00ff88] text-[#12181f] px-6 py-3 rounded-xl font-semibold hover:bg-green-400 transition-colors" 
+                        id="requestPayoutBtn">
                         Request Payout
                     </button>
                 </div>
@@ -221,16 +206,58 @@
                 </div>
             </div>
         </div>
+
+        {{-- message diaply modal --}}
+        <div id="message" 
+            class="fixed top-22 right-0 flex justify-evenly items-center text-md font-semibold px-4 py-2 m-2 border rounded-2xl shadow-lg z-50 hidden">
+            <i class="fa fa-exclamation-triangle text-xl mx-2" aria-hidden="true"></i>
+            <p class="mx-2" id="message-text">
+                
+            </p>
+            <button onclick="hideError()" class="px-2 rounded bg-red-200 mx-2 text-xl">
+                <i class="fa fa-times text-red-500" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
+
+
+    <div class="modal" id="checkOutModal">
+        <div class="modal-content">
+            {{-- <h3 class="text-xl font-bold mb-4" id="inputModalTitle">Final Confirmation</h3> --}}
+            <p class="text-gray-400 mb-4" id="inputModalMessage">Type How Much You Want To Withdraw.</p>
+            <input 
+                type="number" 
+                id="inputModalField" 
+                class="w-full p-3 rounded-lg bg-gray-700 text-white mb-6 outline-none focus:ring-2 focus:ring-red-500" 
+                placeholder='Type the Number Here'
+                reuiqred
+            >
+            <div class="flex space-x-4">
+                <button class="flex-1 bg-gray-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-gray-500" id="inputModalCancel">
+                    Cancel
+                </button>
+                <button class="flex-1 danger-button px-4 py-3 rounded-lg text-white font-semibold" id="inputModalConfirm">
+                    Send Request
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let weeklyReport = @json($weeklyReport);
+
+        // Extract weeks and totals for Chart.js
+        const weekLabels = weeklyReport.map(item => item.week);
+        const weekTotals = weeklyReport.map(item => item.total);
+
         const ctx = document.getElementById('earningsChart').getContext('2d');
         const earningsChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                labels: weekLabels,
                 datasets: [{
                     label: 'Earnings (ETB)',
-                    data: [125000, 180000, 220000, 195000, 275000, 315000],
+                    data: weekTotals,
                     borderColor: '#00ff88',
                     backgroundColor: 'rgba(0, 255, 136, 0.1)',
                     borderWidth: 3,

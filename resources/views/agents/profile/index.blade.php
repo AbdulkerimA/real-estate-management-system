@@ -1,4 +1,5 @@
 <x-agent-dashboard.dashboard-layout>
+@vite(['resources/js/agents/profile'])
 <!-- Main Content -->
     <div class=" space-y-6">
         <!-- Profile Overview Card -->
@@ -10,9 +11,10 @@
                         <img 
                             src="{{ asset('storage/'.$user->agentProfile->media->file_path) }}" 
                             alt="Profile" 
-                            class="w-full h-full object-cover rounded-full hidden" 
+                            class="w-full h-full object-cover rounded-full " 
                             id="profileImage"
-                            >
+                            class="z-10"
+                        >
                         {{-- <span id="profileInitials">ST</span> --}}
                         <div class="photo-overlay">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,7 +23,7 @@
                             </svg>
                         </div>
                     </div>
-                    <input type="file" id="photoInput" accept="image/*" class="hidden">
+                    <input type="file" name="profilePic" id="photoInput" accept="image/*" class="hidden">
                 </div>
 
                 <!-- Profile Info -->
@@ -62,7 +64,7 @@
             <!-- Personal Information -->
             <div class="profile-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Personal Information</h3>
-                <form method="POST" action="/dashboard/profile/edit" id="personalForm" class="space-y-4">
+                <form method="POST" action="/dashboard/profile" id="personalForm" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <div>
@@ -125,7 +127,7 @@
             <!-- Professional Information -->
             <div class="profile-card rounded-2xl p-6">
                 <h3 class="text-xl font-bold mb-6">Professional Information</h3>
-                <form method="POST" action="/dashboard/profile/edit" id="professionalForm" class="space-y-4">
+                <form method="POST" action="/dashboard/profile" id="professionalForm" class="space-y-4">
                     @csrf
                     @method('PUT')
 
@@ -185,7 +187,7 @@
                 <!-- Change Password -->
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Change Password</h4>
-                    <form method="POST" action="/dashboard/profile/edit" id="passwordForm" class="space-y-4">
+                    <form method="POST" action="/dashboard/profile" id="passwordForm" class="space-y-4">
                         @csrf
                         @method('PUT')
 
@@ -243,6 +245,7 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Two-Factor Authentication</h4>
                     <div class="space-y-4">
+                        {{-- {{ dd($user) }} --}}
                         <x-agent-dashboard.preferences 
                             title='Email Authentication' 
                             subTitle='Receive codes via email'

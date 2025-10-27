@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login - AnchorHomes</title>
      <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -40,7 +41,7 @@
         </div>
     </div>
 
-    {{-- error display box --}}
+    {{-- error display box --}} 
     @error('error')
         <div id="error-message" 
         class="fixed top-0 right-0 flex justify-evenly items-center bg-red-400/10 text-red-500 text-md font-semibold px-4 py-2 m-2 border border-red-600 rounded-2xl shadow-lg z-50">

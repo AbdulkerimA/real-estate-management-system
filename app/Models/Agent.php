@@ -38,6 +38,21 @@ class Agent extends Model
 
     public function earnings()
     {
-        return $this->hasOne(Earning::class);
+        return $this->hasMany(Earning::class);
     }
+
+    public function balance(){
+        return $this->hasOne(Balance::class);
+    }
+
+    public function checkoutRequest(){
+        return $this->hasMany(CheckoutRequest::class);
+    }
+
+    // a relationship helper function 
+    public function lastApprovedCheckout(){
+        return $this->hasMany(CheckoutRequest::class)
+                    ->where('request_status', 'approved')
+                    ->latest('created_at');
+    } 
 }

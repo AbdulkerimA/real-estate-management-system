@@ -1,4 +1,7 @@
 @props(['themeColor','statusNum','notifier'])
+
+@vite(['resources/js/agents/status-card'])
+
 <div class="stat-card rounded-2xl p-6">
 
     <div class="flex items-center justify-between mb-4">
@@ -14,7 +17,9 @@
     </div>
     
     <h3 class="text-3xl font-bold text-{{ $themeColor }}-400 mb-2">
-        {{ $statusNum }}
+        {{ 
+             Number::abbreviate($statusNum, precision: 2) 
+        }}
     </h3>
     
     <p class="text-gray-400">

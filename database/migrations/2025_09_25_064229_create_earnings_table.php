@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('earnings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('agent_id')->constrained('agents')->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->decimal('total_earnings',10,2)->default(0);
-            $table->decimal('total_check_out',10,2)->default(0);
-            $table->decimal('remaning_amount',10,2)->default(0);
-            $table->timestamps();
+            $table->decimal('commission',10,2)->default(0);
+            $table->timestamps(); 
         });
     }
 

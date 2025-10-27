@@ -41,7 +41,15 @@ class AgentProfileConttroller extends Controller
     {
         //
         // dd()
-        return view('agents.profile.index',['agent' => $agent]);
+        $user = Auth::user();
+        $properties = Property::with('details')->where('agent_id',Auth::id())->get();
+        
+        // dd($user->settings);
+        
+        return view('agents.profile.index',[
+            'user' => $user,
+            'properties'=> $properties
+        ]);
     }
 
     /**
@@ -71,7 +79,6 @@ class AgentProfileConttroller extends Controller
         // dd($request->all());
         // return json_encode($request->all()); // for js requests
 
-
         $validatedPassFilds = $request->validate([
             'current_password' => ['nullable', 'current_password'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
@@ -97,6 +104,8 @@ class AgentProfileConttroller extends Controller
         // dd(Auth::user()->agentProfile);
 
         $user = Auth::user();
+
+        
 
 
         if($validatedPassFilds){

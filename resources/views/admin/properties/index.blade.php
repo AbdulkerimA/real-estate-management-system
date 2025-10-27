@@ -2,7 +2,7 @@
     @vite(['resources/css/admin-style/properties.css','resources/js/admin-js/properties.js']) 
     <!-- Page Content -->
     <div class="p-6 space-y-6">
-        <!-- Quick Stats -->
+        <!-- Quick Stats --> 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
             <x-admin-dashboard.status-card themeColor="green" statusNum="1247" title="Total Properties Listed">

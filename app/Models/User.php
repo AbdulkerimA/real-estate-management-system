@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'role',
     ];
 
     /**
@@ -75,7 +76,7 @@ class User extends Authenticatable
 
     public function settings()
     {
-        return $this->hasOne(Setting::class);
+        return $this->hasOne(Setting::class,'user_id','id');
     }
 
 }

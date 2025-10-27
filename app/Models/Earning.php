@@ -10,11 +10,17 @@ class Earning extends Model
     /** @use HasFactory<\Database\Factories\EarningFactory> */
     use HasFactory;
 
-    protected $fillable = ['agent_id','total_earnings','total_check_out','requested_check_out'];
+    protected $fillable = ['agent_id','property_id','total_earnings','commission'];
     
     // Relationships
     public function agent()
     {
         return $this->belongsTo(Agent::class);
     }
+
+    public function peroperty(){
+        return $this->belongsTo(Property::class);
+    }
+
 }
+
