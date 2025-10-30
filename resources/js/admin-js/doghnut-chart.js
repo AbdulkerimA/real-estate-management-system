@@ -1,3 +1,5 @@
+import Chart from 'chart.js/auto';
+
 const agentPerformanceCtx = document.getElementById('doghnut').getContext('2d');
         new Chart(agentPerformanceCtx, {
             type: 'doughnut',

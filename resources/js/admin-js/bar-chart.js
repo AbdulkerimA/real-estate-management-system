@@ -1,3 +1,5 @@
+import Chart from 'chart.js/auto';
+
 const propertySalesCtx = document.getElementById('bar').getContext('2d');
         new Chart(propertySalesCtx, {
             type: 'bar',

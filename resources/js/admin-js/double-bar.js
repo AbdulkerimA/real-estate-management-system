@@ -1,3 +1,5 @@
+import Chart from 'chart.js/auto';
+
 // Buyer Engagement Chart
 function initializeBuyerChart() {
     const ctx = document.getElementById('buyerChart').getContext('2d');
