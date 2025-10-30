@@ -64,6 +64,25 @@ class PropertyController extends Controller
         ]);
     }
 
+    public function getPropertyInfo ($id){
+        $property = Property::with(['user.agentProfile.media', 'media'])->findOrFail($id);
+
+        return response()->json([
+            'id' => $property->id,
+            'title' => $property->title,
+            'description' => $property->description,
+            'location' => $property->location,
+            'price' => $property->price,
+            'type' => $property->type,
+            'status' => $property->status,
+            'agent' => [
+                'name' => $property->user->name,
+                'image' => asset('storage/'.$property->user->agentProfile->media->file_path)
+            ],
+            'images' => json_decode($property->media->file_path)
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

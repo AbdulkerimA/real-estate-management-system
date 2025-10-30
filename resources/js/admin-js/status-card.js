@@ -1,4 +1,6 @@
 // Counter animation
+import Chart from 'chart.js/auto';
+
 function animateCounter(element, target, duration = 2000) {
     const start = 0;
     const increment = target / (duration / 16);

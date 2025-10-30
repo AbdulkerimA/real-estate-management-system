@@ -18,6 +18,58 @@ class AgentProfileConttroller extends Controller
         //
     }
 
+    // display agents for admin 
+    public function adminAgentsIndex(Agent $agents){
+
+        $paginationNumber = request()->get('per_page') ?? 5;
+        
+        $numOfAgents = count($agents->all());
+        $pendingAgents = $agents->all()->filter(function ($agent){
+            return $agent->user->status == 'pending';
+        });
+        $verifiedAgents = $agents->all()->filter(function ($agent){
+            return $agent->user->status == 'verfied';
+        });
+        $suspendedAgents = $agents->all()->filter(function ($agent){
+            return $agent->user->status == 'suspended';
+        });
+
+        // dd($numOfAgents,$pendingAgents,$verifiedAgents,$suspendedAgents);
+
+        return view('admin.agents.index',[
+            'pendingAgents' => count($pendingAgents),
+            'verifiedAgents' => count($verifiedAgents),
+            'suspendedAgents' => count($suspendedAgents),
+            'numOfAllAgents' => $numOfAgents,
+            'agents' => $agents->paginate($paginationNumber), 
+        ]);
+    }
+
+    public function getAgentInfo ($id){
+
+        $agent = Agent::with(['user', 'media'])->where('id',$id)->first();
+
+        
+
+        if (!$agent) {
+            return response()->json(['error' => 'Agent not found'], 404);
+        }
+
+        // dd($agent);
+        // Return JSON for frontend
+        return response()->json([
+            'id' => $agent->id,
+            'name' => $agent->user->name,
+            'email' => $agent->user->email,
+            'phone' => $agent->user->phone,
+            'address' => $agent->address ?? '',
+            'status' => $agent->user->status ?? '',
+            'bio' => $agent->bio,
+            'experience' => $agent->years_of_experience,
+            'image' => asset('storage/' . $agent->media->file_path),
+            'properties' => $agent->user->properties->count(),
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */

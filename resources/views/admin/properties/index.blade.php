@@ -320,41 +320,34 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Property Image -->
                 <div class="space-y-4 keen-slider zoom-out" id="my-keen-slider">
-                    @foreach (json_decode($properties->first()->media->file_path) as $image)
-                        <div class="keen-slider__slide zoom-out__slide w-full h-64 rounded-lg flex items-center justify-center">
-                        <div>
-                            {{-- fix needed here--}}
-                            <img src="{{ asset('storage/'.$image) }}" alt="property image ">
-                        </div>
-                    </div>
-                    @endforeach
+                  {{-- the images will be populated here --}}
                 </div>
 
                 <!-- Property Info -->
                 <div class="space-y-4">
                     <div>
-                        <h3 class="text-xl font-bold text-white mb-2" id="modalTitle">{{ $properties->first()->title }}</h3>
-                        <p class="text-gray-400" id="modalDescription">{{ $properties->first()->description }}</p>
+                        <h3 class="text-xl font-bold text-white mb-2" id="modalTitle"></h3>
+                        <p class="text-gray-400" id="modalDescription"></p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-gray-400 text-sm">Location</p>
-                            <p class="text-white font-medium" id="modalLocation">{{ $properties->first()->location }}</p>
+                            <p class="text-white font-medium" id="modalLocation"></p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Price</p>
                             <p class="text-[#00ff88] font-bold text-xl" id="modalPrice">
-                                {{ Number::format($properties->first()->price) }} ETB
+                                ETB
                             </p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Property Type</p>
-                            <p class="text-white font-medium" id="modalType">{{ $properties->first()->type }}</p>
+                            <p class="text-white font-medium" id="modalType"></p>
                         </div>
                         <div>
                             <p class="text-gray-400 text-sm">Status</p>
-                            <span class="status-badge status-pending" id="modalStatus">{{ $properties->first()->status }}</span>
+                            <span class="status-badge status-pending" id="modalStatus"></span>
                         </div>
                     </div>
 
@@ -362,14 +355,11 @@
                         <p class="text-gray-400 text-sm">Agent Information</p>
                         <div class="flex items-center space-x-3 mt-2">
                             <div class="w-10 h-10 bg-[#00ff88] rounded-full flex items-center justify-center text-[#12181f] font-bold">
-                                <img 
-                                    src="{{ asset('storage/'.$properties->first()->user->agentProfile->media->file_path) }}" 
-                                    alt="profile picture"
-                                    class="w-full h-full rounded-full object-cover"
-                                    >
+                                {{-- agent profile here --}}
+                                <img src="" alt="" class="w-full h-full rounded-full object-cover agent-image">
                             </div>
                             <div>
-                                <p class="text-white font-medium" id="modalAgent">{{ $properties->first()->user->name }}</p>
+                                <p class="text-white font-medium" id="modalAgent"></p>
                                 <p class="text-gray-400 text-sm">Licensed Real Estate Agent</p>
                             </div>
                         </div>

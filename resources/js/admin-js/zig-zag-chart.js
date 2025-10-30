@@ -1,3 +1,5 @@
+import Chart from 'chart.js/auto';
+
 const earningsCtx = document.getElementById('zig-zag').getContext('2d');
 new Chart(earningsCtx, {
     type: 'line',

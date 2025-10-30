@@ -30,6 +30,8 @@ Route::view('/about','home.about');
 Route::controller(UserController::class)->group(function (){
     Route::get('/signup','create');
     Route::post('/signup','store');
+
+    Route::get('/admin/customers','adminAgentsIndex');
 });
 
 Route::controller(SessionController::class)->group(function () {
@@ -46,12 +48,17 @@ Route::controller(AgentController::class)->group(function (){
 
     Route::post('/agent/register','store');
     // Route::PUT('/dashboard/profile/edit','update')->middleware('auth')->can('isAgent','App\Models\Agent');
+
 });
 
 Route::controller(AgentProfileConttroller::class)->group(function(){
     Route::get('/dashboard/profile','show')->middleware('auth')->can('isAgent','App\Models\Agent');
 
     Route::PUT('/dashboard/profile','update')->middleware('auth')->can('isAgent','App\Models\Agent');
+
+    // display agents for admin page
+    Route::get('/admin/agents', 'adminAgentsIndex');
+    Route::get('/admin/agents/{agent}', 'getAgentInfo');
 });
 
 Route::controller(PropertyController::class)->group(function (){
@@ -61,6 +68,7 @@ Route::controller(PropertyController::class)->group(function (){
 
     // admin page 
     Route::get('/admin/properties','adminPropertyIndex');
+    Route::get('/admin/properties/{property}','getPropertyInfo');
 });
 
 Route::controller(DashboardPropertyController::class)->group(function(){
@@ -105,8 +113,6 @@ Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('is
 
 // admin dashboard navigations
 Route::view('/admin','admin.dashboard');
-Route::view('/admin/agents', 'admin.agents.index');
-Route::view('/admin/customers', 'admin.customers.index');
 Route::view('/admin/transactions','admin.payment.index');
 Route::view('/admin/analytics','admin.analytics.index');
 Route::view('/admin/settings','admin.settings');

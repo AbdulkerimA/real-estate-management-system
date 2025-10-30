@@ -74,8 +74,54 @@ document.getElementById('clearSelection').addEventListener('click', function() {
 const propertyModal = document.getElementById('modal');
 const closeModal = document.getElementById('closeModal');
 
-function openModal() {
-    propertyModal.classList.add('active');
+async function openModal(propertyId) {
+    try {
+        const response = await fetch(`/admin/properties/${propertyId}`);
+        if (!response.ok) throw new Error('Failed to fetch property data');
+
+        const property = await response.json();
+
+        // Populate property info
+        document.getElementById('modalTitle').textContent = property.title;
+        document.getElementById('modalDescription').textContent = property.description || 'No description available';
+        document.getElementById('modalLocation').textContent = property.location || 'N/A';
+        document.getElementById('modalPrice').textContent = `${property.price.toLocaleString()} ETB`;
+        document.getElementById('modalType').textContent = property.type;
+        document.getElementById('modalStatus').textContent = property.status;
+
+        // Agent info
+        document.getElementById('modalAgent').textContent = property.agent.name;
+        const agentImg = propertyModal.querySelector('.agent-image');
+        if (agentImg) agentImg.src = property.agent.image;
+
+        // Populate Keen slider dynamically
+        const sliderContainer = document.getElementById('my-keen-slider');
+        sliderContainer.innerHTML = ''; // Clear old slides
+
+        property.images.forEach(imagePath => {
+            const slide = document.createElement('div');
+            slide.classList.add('keen-slider__slide', 'zoom-out__slide', 'w-full', 'h-64', 'rounded-lg', 'flex', 'items-center', 'justify-center');
+            slide.innerHTML = `
+                <div>
+                    <img src="/storage/${imagePath}" alt="property image" class="rounded-lg object-cover w-full h-full">
+                </div>
+            `;
+            sliderContainer.appendChild(slide);
+        });
+
+        // Initialize Keen Slider after content is added
+        if (window.sliderInstance) window.sliderInstance.destroy();
+        window.sliderInstance = new KeenSlider("#my-keen-slider", {
+            loop: true,
+            slides: { perView: 1 },
+        });
+
+        // Open modal
+        propertyModal.classList.add('active');
+    } catch (error) {
+        console.error('Error loading property:', error);
+        alert('Unable to load property data');
+    }
 }
 
 function closeModalFunc() {
@@ -92,7 +138,7 @@ propertyModal.addEventListener('click', function(e) {
 // Property action functions
 function viewData(id) {
     console.log('Viewing property:', id);
-    openModal();
+    openModal(id);
 }
 function approve(id) {
     if (confirm('Are you sure you want to approve this property?')) {

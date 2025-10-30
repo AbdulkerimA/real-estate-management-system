@@ -16,6 +16,56 @@ class UserController extends Controller
         //
     }
 
+    // display agents for admin 
+    public function adminAgentsIndex(User $users){
+
+        $paginationNumber = request()->get('per_page') ?? 5;
+        
+        $numOfUsers = $users->all()->where('role','customer');
+
+        $pendingUsers = $users->all()->filter(function ($user){
+            return $user->status == 'pending';
+        });
+        $verifiedUsers = $users->all()->filter(function ($user){
+            return $user->status == 'verfied';
+        });
+        $suspendedUsers = $users->all()->filter(function ($user){
+            return $user->status == 'suspended';
+        });
+
+        // dd($numOfUsers,$pendingUsers,$verifiedUsers,$suspendedUsers);
+
+        return view('admin.customers.index',[
+            'pendingUsers' => count($pendingUsers),
+            'verifiedUsers' => count($verifiedUsers),
+            'suspendedUsers' => count($suspendedUsers),
+            'numOfAllUsers' => count($numOfUsers),
+            'users' => $users->paginate($paginationNumber)->where('role','customer'), 
+        ]);
+    }
+
+    public function getUsertInfo ($id){
+
+        $user = User::with(['user', 'media'])->where('id',$id)->first();
+
+        
+
+        if (!$user) {
+            return response()->json(['error' => 'user not found'], 404);
+        }
+
+        // dd($user);
+        // Return JSON for frontend
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->user->name,
+            'email' => $user->user->email,
+            'phone' => $user->user->phone,
+            'address' => $user->address ?? '',
+            'status' => $user->user->status ?? '',
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

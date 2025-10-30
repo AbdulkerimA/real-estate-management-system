@@ -51,7 +51,7 @@ class User extends Authenticatable
     // Relationships
     public function properties()
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany(Property::class,'agent_id', 'id');
     }
 
     public function agentProfile()

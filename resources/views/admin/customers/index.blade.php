@@ -134,141 +134,43 @@
                         </tr>
                     </thead>
                     <tbody id="buyersTableBody">
-                        <tr class="table-row border-b border-gray-700" data-buyer-id="1">
-                            <td class="py-3 px-4">
-                                <input type="checkbox" class="checkbox-custom buyer-checkbox" value="1">
-                            </td>
-                            <td class="py-3 px-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    JD
-                                </div>
-                            </td>
-                            <td class="py-3 px-4">
-                                <div>
-                                    <p class="text-white font-medium">John Doe</p>
-                                    <p class="text-gray-400 text-sm">Joined Dec 2024</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4 text-white">john.doe@email.com</td>
-                            <td class="py-3 px-4 text-white">+251-911-123456</td>
-                            <td class="py-3 px-4">
-                                <div class="text-center">
-                                    <p class="text-green-400 font-semibold">2</p>
-                                    <p class="text-gray-400 text-xs">Purchased</p>
-                                    <p class="text-blue-400 text-xs">5 Bookmarked</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4"><span class="status-badge status-active">Active</span></td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center space-x-2">
-                                    <button class="action-btn btn-view" onclick="viewBuyer(1)">View Profile</button>
-                                    <button class="action-btn btn-suspend" onclick="suspendBuyer(1)">Suspend</button>
-                                    <button class="action-btn btn-delete" onclick="deleteBuyer(1)">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr class="table-row border-b border-gray-700" data-buyer-id="2">
-                            <td class="py-3 px-4">
-                                <input type="checkbox" class="checkbox-custom buyer-checkbox" value="2">
-                            </td>
-                            <td class="py-3 px-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    SA
-                                </div>
-                            </td>
-                            <td class="py-3 px-4">
-                                <div>
-                                    <p class="text-white font-medium">Sarah Ahmed</p>
-                                    <p class="text-gray-400 text-sm">Joined Nov 2024</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4 text-white">sarah.ahmed@email.com</td>
-                            <td class="py-3 px-4 text-white">+251-911-789012</td>
-                            <td class="py-3 px-4">
-                                <div class="text-center">
-                                    <p class="text-green-400 font-semibold">1</p>
-                                    <p class="text-gray-400 text-xs">Purchased</p>
-                                    <p class="text-blue-400 text-xs">12 Bookmarked</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4"><span class="status-badge status-active">Active</span></td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center space-x-2">
-                                    <button class="action-btn btn-view" onclick="viewBuyer(2)">View Profile</button>
-                                    <button class="action-btn btn-suspend" onclick="suspendBuyer(2)">Suspend</button>
-                                    <button class="action-btn btn-delete" onclick="deleteBuyer(2)">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr class="table-row border-b border-gray-700" data-buyer-id="3">
-                            <td class="py-3 px-4">
-                                <input type="checkbox" class="checkbox-custom buyer-checkbox" value="3">
-                            </td>
-                            <td class="py-3 px-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    MT
-                                </div>
-                            </td>
-                            <td class="py-3 px-4">
-                                <div>
-                                    <p class="text-white font-medium">Michael Thompson</p>
-                                    <p class="text-gray-400 text-sm">Joined Oct 2024</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4 text-white">michael.t@email.com</td>
-                            <td class="py-3 px-4 text-white">+251-911-345678</td>
-                            <td class="py-3 px-4">
-                                <div class="text-center">
-                                    <p class="text-green-400 font-semibold">0</p>
-                                    <p class="text-gray-400 text-xs">Purchased</p>
-                                    <p class="text-blue-400 text-xs">8 Bookmarked</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4"><span class="status-badge status-suspended">Suspended</span></td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center space-x-2">
-                                    <button class="action-btn btn-view" onclick="viewBuyer(3)">View Profile</button>
-                                    <button class="action-btn btn-view" onclick="reactivateBuyer(3)">Reactivate</button>
-                                    <button class="action-btn btn-delete" onclick="deleteBuyer(3)">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr class="table-row border-b border-gray-700" data-buyer-id="4">
-                            <td class="py-3 px-4">
-                                <input type="checkbox" class="checkbox-custom buyer-checkbox" value="4">
-                            </td>
-                            <td class="py-3 px-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    EW
-                                </div>
-                            </td>
-                            <td class="py-3 px-4">
-                                <div>
-                                    <p class="text-white font-medium">Emily Wilson</p>
-                                    <p class="text-gray-400 text-sm">Joined Jan 2025</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4 text-white">emily.wilson@email.com</td>
-                            <td class="py-3 px-4 text-white">+251-911-567890</td>
-                            <td class="py-3 px-4">
-                                <div class="text-center">
-                                    <p class="text-green-400 font-semibold">3</p>
-                                    <p class="text-gray-400 text-xs">Purchased</p>
-                                    <p class="text-blue-400 text-xs">15 Bookmarked</p>
-                                </div>
-                            </td>
-                            <td class="py-3 px-4"><span class="status-badge status-active">Active</span></td>
-                            <td class="py-3 px-4">
-                                <div class="flex items-center space-x-2">
-                                    <button class="action-btn btn-view" onclick="viewBuyer(4)">View Profile</button>
-                                    <button class="action-btn btn-suspend" onclick="suspendBuyer(4)">Suspend</button>
-                                    <button class="action-btn btn-delete" onclick="deleteBuyer(4)">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach ($users as $user)
+                             <tr class="table-row border-b border-gray-700" data-buyer-id="1">
+                                <td class="py-3 px-4">
+                                    <input type="checkbox" class="checkbox-custom buyer-checkbox" value="1">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        JD
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div>
+                                        <p class="text-white font-medium">{{ $user->name }}</p>
+                                        <p class="text-gray-400 text-sm">Joined {{ date('M d' , strtotime($user->created_at)) }}</p>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-white">{{ $user->email }}</td>
+                                <td class="py-3 px-4 text-white">{{ $user->phone }}</td>
+                                <td class="py-3 px-4">
+                                    <div class="text-center">
+                                        <p class="text-green-400 font-semibold">2</p>
+                                        <p class="text-gray-400 text-xs">Purchased</p>
+                                        <p class="text-blue-400 text-xs">5 Bookmarked</p>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="status-badge status-{{ $user->status }}">{{ $user->status }}</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <div class="flex flex-wrap gap-2 space-x-2">
+                                        <button class="action-btn btn-view" onclick="viewBuyer({{ $user->id }})">View Profile</button>
+                                        <button class="action-btn btn-suspend" onclick="suspendBuyer({{ $user->id }})">Suspend</button>
+                                        <button class="action-btn btn-delete" onclick="deleteBuyer({{ $user->id }})">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
