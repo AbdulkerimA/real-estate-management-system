@@ -20,10 +20,11 @@ class PropertyFactory extends Factory
     {
         return [
             'agent_id' => Agent::factory(),
+            'media_id' => Media::factory(),
             'title' => $this->faker->sentence(3),
-            'type' => $this->faker->randomElement(['Apartment','Villa','House','Condominium','Studio','Office','Warehouse','condominium']),
+            'type' => $this->faker->randomElement(['apartment','house','land','commercial','luxury']),
             'description' => $this->faker->paragraph(),
-            'price' => $this->faker->randomFloat(2, 5000, 1000000),
+            'price' => $this->faker->randomFloat(2, 10000, 1000000),
             'location' => $this->faker->city(),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),

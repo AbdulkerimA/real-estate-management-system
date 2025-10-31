@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Property;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,13 +19,13 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'buyer_id' => \App\Models\User::factory(),
-            'property_id' => \App\Models\Property::factory(),
+            'buyer_id' => User::factory(),
+            'property_id' => Property::factory(),
             'scheduled_date' => $this->faker->date(),
             'scheduled_time' => $this->faker->time(),
-            'contact_method' => $this->faker->randomElement(['phone call','email','sms']),
-            'additional_note' => $this->faker->optional()->sentence(),
-            'status' => $this->faker->randomElement(['requested','confirmed','completed','cancelled']),
+            'contact_method' => $this->faker->randomElement(['call','email','sms']),
+            'additional_note' => $this->faker->sentence(),
+            'status' => $this->faker->randomElement(['pending','scheduled','completed','cancelled']),
         ];
     }
 }

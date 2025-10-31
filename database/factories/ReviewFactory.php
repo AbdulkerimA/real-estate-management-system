@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Agent;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +19,10 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
-            'agent_id' => \App\Models\Agent::factory(),
+            'user_id' => User::factory(),
+            'agent_id' => Agent::factory(),
             'rating' => $this->faker->numberBetween(1,5),
-            'comment' => $this->faker->optional()->paragraph(),
+            'comment' => $this->faker->sentence(),
         ];
     }
 }

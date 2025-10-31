@@ -21,9 +21,11 @@ class AgentFactory extends Factory
             'media_id' => \App\Models\Media::factory(),
             'document_id' => \App\Models\Document::factory(),
             'bio' => $this->faker->paragraph(),
+            'about_me' => $this->faker->paragraph(),
             'address' => $this->faker->address(),
+            'featured' => $this->faker->boolean(),
             'is_verified' => $this->faker->boolean(),
-            'speciality' => $this->faker->randomElement(['apartments','houses','lands','commercial properties','luxury properties']),
+            'speciality' => $this->faker->randomElement(['apartments','houses','lands','commercial','luxury']),
             'years_of_experience' => $this->faker->numberBetween(0, 40),
             'deals_closed' => $this->faker->numberBetween(0, 100),
         ];

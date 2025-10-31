@@ -17,9 +17,8 @@ class DocumentFactory extends Factory
     public function definition(): array
     {
         return [
-            'owner_id' => \App\Models\User::factory(),
-            'doc_type' => $this->faker->word(),
-            'file_path' => $this->faker->filePath(),
+            'doc_type' => '["image\/jpeg"]',
+            'file_path' => '["agentDocuments\/spKlfY2SGkzKilmc0LTHTnI0P9lCqpeIHEpQHSPF.jpg"]',
             'status' => $this->faker->randomElement(['pending','verified','rejected']),
         ];
     }

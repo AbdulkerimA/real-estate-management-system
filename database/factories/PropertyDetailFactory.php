@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +18,10 @@ class PropertyDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'property_id' => \App\Models\Property::factory(),
-            'area_size' => $this->faker->randomFloat(2, 50, 500),
-            'bed_rooms' => $this->faker->numberBetween(1, 10),
-            'bath_rooms' => $this->faker->numberBetween(1, 10),
+            'property_id' => Property::factory(),
+            'area_size' => $this->faker->randomFloat(2, 50, 1000),
+            'bed_rooms' => $this->faker->numberBetween(1,10),
+            'bath_rooms' => $this->faker->numberBetween(1,10),
             'balcony' => $this->faker->boolean(),
             'swimming_pool' => $this->faker->boolean(),
             'garden' => $this->faker->boolean(),

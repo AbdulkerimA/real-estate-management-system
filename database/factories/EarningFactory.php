@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Agent;
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +19,10 @@ class EarningFactory extends Factory
     public function definition(): array
     {
         return [
-            'agent_id' => \App\Models\Agent::factory(),
-            'total_earnings' => $this->faker->randomFloat(2, 1000, 100000),
-            'total_check_out' => $this->faker->randomFloat(2, 500, 50000),
-            'requested_check_out' => $this->faker->randomFloat(2, 100, 10000),
+            'agent_id' => Agent::factory(),
+            'property_id' => Property::factory(),
+            'total_earnings' => $this->faker->randomFloat(2, 0, 100000),
+            'commission' => $this->faker->randomFloat(2, 0, 10000),
         ];
     }
 }

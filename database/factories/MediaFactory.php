@@ -17,9 +17,8 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'owner_id' => \App\Models\User::factory(),
-            'file_path' => $this->faker->imageUrl(640, 480, 'people'),
-            'file_type' => $this->faker->randomElement(['image','video']),
+            'file_path' => 'profiles/et5BBCSuXiSB4Bv2ADHIWKEjnFZj75jZmv11xZs3.png',
+            'file_type' => 'image/png',
         ];
     }
 }
