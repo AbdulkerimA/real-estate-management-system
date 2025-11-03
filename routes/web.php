@@ -9,6 +9,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Earning;
 use App\Models\Property;
@@ -105,6 +106,10 @@ Route::controller(EarningController::class)->group(function (){
     // ->middleware(['auth'])->can('isAgent','App\Models\Agent');
 });
 
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/admin/transactions','index');
+});
+
 Route::view('/dashboard','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
@@ -113,7 +118,6 @@ Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('is
 
 // admin dashboard navigations
 Route::view('/admin','admin.dashboard');
-Route::view('/admin/transactions','admin.payment.index');
 Route::view('/admin/analytics','admin.analytics.index');
 Route::view('/admin/settings','admin.settings');
 Route::view('/admin/profile','admin.profile.index');

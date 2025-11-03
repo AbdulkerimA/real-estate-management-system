@@ -4,7 +4,11 @@
             <!-- Financial Overview Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Total Revenue -->
-                <x-admin-dashboard.status-card themeColor="green" statusNum="2847500" title="Total Revenue">
+                <x-admin-dashboard.status-card 
+                    themeColor="green" 
+                    statusNum="{{ Number::format($pendingTransactions) }} ETB" 
+                    title="Total Revenue"
+                    >
                     @slot("subtitle")
                         <p class="text-xs text-green-400 mt-1">+12.5% from last month</p>
                     @endslot
@@ -15,7 +19,11 @@
                 </x-admin-dashboard.status-card>
 
                 <!-- Pending Payments -->
-                <x-admin-dashboard.status-card themeColor="yellow" statusNum="156800" title="Pending Payments">
+                <x-admin-dashboard.status-card 
+                    themeColor="yellow" 
+                    statusNum="{{ Number::format($pendingTransactions) }}" 
+                    title="Pending Payments"
+                    >
                     @slot("subtitle")
                         <p class="text-xs text-yellow-400 mt-1">23 transactions pending</p>
                     @endslot
@@ -26,7 +34,11 @@
                 </x-admin-dashboard.status-card>
 
                 <!-- Completed Transactions -->
-                <x-admin-dashboard.status-card themeColor="green" statusNum="1847" title="Completed Transactions">
+                <x-admin-dashboard.status-card 
+                    themeColor="green" 
+                    statusNum="{{ Number::format($completedTransactions) }}" 
+                    title="Completed Transactions"
+                    >
                     @slot("subtitle")
                         <p class="text-xs text-green-400 mt-1">+8.2% from last month</p>
                     @endslot
@@ -37,7 +49,11 @@
                 </x-admin-dashboard.status-card>
 
                 <!-- Refunds Issued -->
-                <x-admin-dashboard.status-card themeColor="red" statusNum="45200" title="Refunds Issued">
+                <x-admin-dashboard.status-card 
+                    themeColor="red" 
+                    statusNum="{{ Number::format($refundIssued) }}" 
+                    title="Refunds Issued"
+                    >
                     @slot("subtitle")
                         <p class="text-xs text-red-400 mt-1">12 refunds this month</p>
                     @endslot
@@ -50,7 +66,7 @@
             </div>
 
             <!-- Revenue Chart -->
-            <x-admin-dashboard.charts.zig-zag-chart title="Revenue Analytics" subTitle="Monthly revenue breakdown"/>
+            <x-admin-dashboard.charts.zig-zag-chart :data="$monthlyTransactions" title="Revenue Analytics" subTitle="Monthly revenue breakdown"/>
             
             <!-- Search and Filters -->
 
@@ -81,53 +97,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                            MJ
-                                        </div>
-                                        <div>
-                                            <p class="text-white font-medium">Mike Johnson</p>
-                                            <p class="text-gray-400 text-xs">Senior Agent</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-[#00ff88] font-semibold">₹45,000</td>
-                                <td class="py-3 px-4 text-gray-300">3 Property Sales</td>
-                                <td class="py-3 px-4 text-gray-300">Jan 15, 2025</td>
-                                <td class="py-3 px-4"><span class="status-badge status-pending">Pending</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-approve" onclick="approvePayout('payout-1')">Approve</button>
-                                        <button class="action-btn btn-reject" onclick="rejectPayout('payout-1')">Reject</button>
-                                    </div>
-                                </td>
-                            </tr>
 
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                            LW
+                            @foreach ($checkOuts as $req)
+                               <tr class="table-row border-b border-gray-700">
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                                <img src="{{ asset('storage/'.$req->agent->media->file_path) }}" alt="{{ $req->agent->user->name }}">
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-medium">{{ $req->agent->user->name }}</p>
+                                                <p class="text-gray-400 text-xs">Senior Agent</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-white font-medium">Lisa Wilson</p>
-                                            <p class="text-gray-400 text-xs">Property Specialist</p>
+                                    </td> 
+                                    <td class="py-3 px-4 text-[#00ff88] font-semibold">{{ $req->requested_amount }}</td>
+                                    <td class="py-3 px-4 text-gray-300">3 Property Sales</td>
+                                    <td class="py-3 px-4 text-gray-300">{{ date('M d, Y', strtotime($req->created_at)) }}</td>
+                                    <td class="py-3 px-4"><span class="status-badge status-{{ $req->request_status }}">
+                                        {{ $req->request_status }}
+                                    </span></td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center space-x-2">
+                                            <button class="action-btn btn-approve" onclick="approvePayout('{{ $req->id }}')">Approve</button>
+                                            <button class="action-btn btn-reject" onclick="rejectPayout('{{ $req->id }}')">Reject</button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-[#00ff88] font-semibold">₹32,500</td>
-                                <td class="py-3 px-4 text-gray-300">2 Property Sales</td>
-                                <td class="py-3 px-4 text-gray-300">Jan 14, 2025</td>
-                                <td class="py-3 px-4"><span class="status-badge status-pending">Pending</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-approve" onclick="approvePayout('payout-2')">Approve</button>
-                                        <button class="action-btn btn-reject" onclick="rejectPayout('payout-2')">Reject</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr> 
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -151,170 +148,50 @@
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Agent</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Property</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Amount</th>
-                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Method</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="transactionsTableBody">
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4 text-gray-300">Jan 15, 2025</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            JD
+                            
+                            @foreach ($transactions as $transaction)
+                                <tr class="table-row border-b border-gray-700">
+                                    <td class="py-3 px-4 text-gray-300">{{ date('M d, Y' , strtotime($transaction->created_at)) }}</td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                                                <img src="{{ asset('storage/'.$transaction->buyer->id) }}" alt="customer profile pic">
+                                            </div>
+                                            <span class="text-white">{{ $transaction->buyer->name }}</span>
                                         </div>
-                                        <span class="text-white">John Doe</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            MJ
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                                                {{ $transaction->agent->name[0] }}
+                                                {{-- <img src="{{ asset('storage/'.$transaction->agnet->agentProfile->media->file_path) }}" alt="agent profile pic"> --}}
+                                            </div>
+                                            <span class="text-white">{{ $transaction->agent->name }}</span>
                                         </div>
-                                        <span class="text-white">Mike Johnson</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div>
-                                        <p class="text-white text-sm">Luxury 3BR Apartment</p>
-                                        <p class="text-gray-400 text-xs">Bole, Addis Ababa</p>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-[#00ff88] font-semibold">₹2,50,000</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="payment-method-icon method-card text-[#00ff88]">💳</div>
-                                        <span class="text-gray-300 text-sm">Credit Card</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4"><span class="status-badge status-completed">Completed</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-view" onclick="viewTransaction('tx-1')">View</button>
-                                        <button class="action-btn btn-refund" onclick="refundTransaction('tx-1')">Refund</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <div>
+                                            <p class="text-white text-sm">{{ $transaction->property->name }}</p>
+                                            <p class="text-gray-400 text-xs">{{ $transaction->property->address }}</p>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-4 text-[#00ff88] font-semibold">{{ Number::format($transaction->property->price) }} ETB</td>
+                                    <td class="py-3 px-4"><span class="status-badge status-completed">{{ $transaction->status }}</span></td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex items-center space-x-2">
+                                            <button class="action-btn btn-view" onclick="viewTransaction('{{ $transaction->id }}')">View</button>
+                                            <button class="action-btn btn-refund" onclick="refundTransaction('{{ $transaction->id }}')">Refund</button>
+                                        </div>
+                                    </td>
+                                </tr>
+    
+                            @endforeach
 
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4 text-gray-300">Jan 14, 2025</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            SA
-                                        </div>
-                                        <span class="text-white">Sarah Ahmed</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            LW
-                                        </div>
-                                        <span class="text-white">Lisa Wilson</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div>
-                                        <p class="text-white text-sm">Modern Office Space</p>
-                                        <p class="text-gray-400 text-xs">CMC, Addis Ababa</p>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-accent-green font-semibold">₹1,80,000</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="payment-method-icon method-bank text-blue-400">🏦</div>
-                                        <span class="text-gray-300 text-sm">Bank Transfer</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4"><span class="status-badge status-pending">Pending</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-view" onclick="viewTransaction('tx-2')">View</button>
-                                        <button class="action-btn btn-verify" onclick="approvePayout('tx-2')">Verify</button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4 text-gray-300">Jan 13, 2025</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            MT
-                                        </div>
-                                        <span class="text-white">Michael Thompson</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            DJ
-                                        </div>
-                                        <span class="text-white">David Johnson</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div>
-                                        <p class="text-white text-sm">Family Villa</p>
-                                        <p class="text-gray-400 text-xs">Kazanchis, Addis Ababa</p>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-accent-green font-semibold">₹4,20,000</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="payment-method-icon method-mobile text-yellow-400">📱</div>
-                                        <span class="text-gray-300 text-sm">Mobile Money</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4"><span class="status-badge status-completed">Completed</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-view" onclick="viewTransaction('tx-3')">View</button>
-                                        <button class="action-btn btn-refund" onclick="refundTransaction('tx-3')">Refund</button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="table-row border-b border-gray-700">
-                                <td class="py-3 px-4 text-gray-300">Jan 12, 2025</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            EW
-                                        </div>
-                                        <span class="text-white">Emily Wilson</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            AB
-                                        </div>
-                                        <span class="text-white">Alex Brown</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <div>
-                                        <p class="text-white text-sm">Studio Apartment</p>
-                                        <p class="text-gray-400 text-xs">Piassa, Addis Ababa</p>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4 text-red-400 font-semibold">-₹85,000</td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="payment-method-icon method-card text-accent-green">💳</div>
-                                        <span class="text-gray-300 text-sm">Credit Card</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4"><span class="status-badge status-refunded">Refunded</span></td>
-                                <td class="py-3 px-4">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="action-btn btn-view" onclick="viewTransaction('tx-4')">View</button>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
