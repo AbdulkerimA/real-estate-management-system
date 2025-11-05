@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -16,6 +18,9 @@ class UserController extends Controller
         //
     }
 
+    public function export (){
+         return Excel::download(new UsersExport, 'users.xlsx');
+    }
     // display agents for admin 
     public function adminAgentsIndex(User $users){
 

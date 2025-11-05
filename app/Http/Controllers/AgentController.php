@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AgentsExport;
 use App\Models\Agent;
 use App\Models\Document;
 use App\Models\Media;
@@ -10,6 +11,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AgentController extends Controller
 {
@@ -23,6 +25,10 @@ class AgentController extends Controller
         return view('agents.index',['agents'=>$agents]);
     }
 
+    // export users data in excel format
+    public function export(){
+        return Excel::download(new AgentsExport,'top-performing-agents.xlsx');
+    }
     /**
      * Show the form for creating a new resource.
      */
