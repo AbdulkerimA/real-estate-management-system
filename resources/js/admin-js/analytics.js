@@ -6,8 +6,7 @@ function exportChart(chartType) {
 }
 
 function exportAgentReport() {
-    console.log('Exporting agent performance report');
-    alert('Generating agent performance report...');
+    window.location = "agents/export";
 }
 
 function exportData(format) {

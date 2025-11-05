@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentProfileConttroller;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardPropertyController;
 use App\Http\Controllers\EarningController;
@@ -110,6 +111,10 @@ Route::controller(TransactionController::class)->group(function () {
     Route::get('/admin/transactions','index');
 });
 
+Route::controller(AnalyticsController::class)->group(function () {
+    Route::get('/admin/analytics','index');
+});
+
 Route::view('/dashboard','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
@@ -118,8 +123,12 @@ Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('is
 
 // admin dashboard navigations
 Route::view('/admin','admin.dashboard');
-Route::view('/admin/analytics','admin.analytics.index');
 Route::view('/admin/settings','admin.settings');
 Route::view('/admin/profile','admin.profile.index');
+
+
+// test routes
+Route::get('admin/agents/export/', [AgentController::class, 'export']);
+Route::get('admin/users/export/', [UserController::class, 'export']);
 
 

@@ -5,7 +5,11 @@
         <!-- Key Metrics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-6">
             <!-- Total Properties -->
-            <x-admin-dashboard.status-card themeColor="green" statusNum="1247" title="Total Properties">
+            <x-admin-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ Number::format($allProperties) }}" 
+                title="Total Properties"
+                >
                 @slot("subtitle")
                     <p class="text-xs text-green-400 mt-1">+15.2% this month</p>
                 @endslot
@@ -16,7 +20,11 @@
             </x-admin-dashboard.status-card>
 
             <!-- Properties Sold -->
-            <x-admin-dashboard.status-card themeColor="blue" statusNum="342" title="Properties Sold">
+            <x-admin-dashboard.status-card 
+                themeColor="blue" 
+                statusNum="{{ Number::format($soldProperties) }}" 
+                title="Properties Sold"
+                >
                 @slot("subtitle")
                     <p class="text-xs text-blue-400 mt-1">+8.7% this month</p>
                 @endslot
@@ -27,7 +35,11 @@
             </x-admin-dashboard.status-card>
 
             <!-- Active Agents -->
-            <x-admin-dashboard.status-card themeColor="purple" statusNum="89" title="Active Agents">
+            <x-admin-dashboard.status-card 
+                themeColor="purple" 
+                statusNum="{{ Number::format($agents) }}" 
+                title="Active Agents"
+                >
                 @slot("subtitle")
                     <p class="text-xs text-purple-400 mt-1">+12 new agents</p>
                 @endslot
@@ -38,7 +50,11 @@
             </x-admin-dashboard.status-card>
 
             <!-- Active Buyers -->
-            <x-admin-dashboard.status-card themeColor="orange" statusNum="1856" title="Active Buyers">
+            <x-admin-dashboard.status-card 
+                themeColor="orange" 
+                statusNum="{{ Number::format($customers) }}" 
+                title="Active Buyers"
+                >
                 @slot("subtitle")
                     <p class="text-xs text-orange-400 mt-1">+23.4% this month</p>
                 @endslot
@@ -49,7 +65,11 @@
             </x-admin-dashboard.status-card>
 
             <!-- Total Revenue -->
-            <x-admin-dashboard.status-card themeColor="green" statusNum="2847500" title="Total Revenue">
+            <x-admin-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{Number::format(2847500)}}" 
+                title="Total Revenue"
+                >
                 @slot("subtitle")
                     <p class="text-xs text-green-400 mt-1">+18.9% this month</p>
                 @endslot
@@ -60,7 +80,10 @@
             </x-admin-dashboard.status-card>
 
             <!-- Pending Approvals -->
-            <x-admin-dashboard.status-card themeColor="yellow" statusNum="23" title="Pending Approvals">
+            <x-admin-dashboard.status-card 
+                themeColor="yellow" 
+                statusNum="{{Number::format(23)}}" 
+                title="Pending Approvals">
                 @slot("subtitle")
                     <p class="text-xs text-yellow-400 mt-1">Requires attention</p>
                 @endslot
@@ -91,7 +114,7 @@
                     <canvas id="revenueChart"></canvas>
                 </div>
             </div> --}}
-            <x-admin-dashboard.charts.zig-zag-chart title="Revenue Growth" subTitle="Monthly revenue trends"/>
+            <x-admin-dashboard.charts.zig-zag-chart :data="$monthlyRevenue" title="Revenue Growth" subTitle="Monthly revenue trends"/>
 
             <!-- Properties by Category Chart -->
             {{-- <div class="dashboard-card rounded-2xl p-6">
@@ -110,7 +133,7 @@
                     <canvas id="categoryChart"></canvas>
                 </div>
             </div> --}}
-            <x-admin-dashboard.charts.bar-chart title="Properties by Category" subTitle="Sales distribution by property type"/>
+            <x-admin-dashboard.charts.bar-chart :data="$propertiesByCatagory" title="Properties by Category" subTitle="Sales distribution by property type"/>
         </div>
 
         <!-- Agent Performance & Market Share -->
@@ -132,7 +155,10 @@
                     <canvas id="agentChart"></canvas>
                 </div>
             </div> --}}
-            <x-admin-dashboard.charts.doghnut-chart title="Agent Market Share" subTitle="Top performing agents by sales volume"/>
+            <x-admin-dashboard.charts.doghnut-chart 
+                :data="$topAgents"
+                title="Agent Market Share" 
+                subTitle="Top performing agents by sales volume"/>
 
             <!-- Location Heatmap -->
             <div class="dashboard-card rounded-2xl p-6">
@@ -143,11 +169,28 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-4 gap-2">
-                    <div class="heatmap-cell bg-[#00ff88]/80 rounded p-3 text-center" data-value="45">
-                        <p class="text-xs font-medium text-[#12181f]">Bole</p>
-                        <p class="text-sm font-bold text-[#12181f]">45</p>
-                    </div>
-                    <div class="heatmap-cell bg-[#00ff88]/60 rounded p-3 text-center" data-value="32">
+                    @foreach ($propertiesByLocation as $item)
+
+                        @if ($item->count >= 30)
+                            <div class="heatmap-cell bg-[#00ff88]/80 rounded p-3 text-center" data-value="45">
+                                <p class="text-xs font-medium text-[#12181f]">{{ $item->address }}</p>
+                                <p class="text-sm font-bold text-[#12181f]">{{ $item->count }}</p>
+                            </div>
+                        @elseif ($item->count >= 20)
+                            <div class="heatmap-cell bg-[#00ff88]/40 rounded p-3 text-center" data-value="45">
+                                <p class="text-xs font-medium text-white">{{ $item->address }}</p>
+                                <p class="text-sm font-bold text-white">{{ $item->count }}</p>
+                            </div>
+                        @else
+                            <div class="heatmap-cell bg-[#00ff88]/30 rounded p-3 text-center" data-value="45">
+                                <p class="text-xs font-medium text-white">{{ $item->address }}</p>
+                                <p class="text-sm font-bold text-white">{{ $item->count }}</p>
+                            </div>
+                        @endif
+                        
+                    @endforeach
+                    
+                    {{-- <div class="heatmap-cell bg-[#00ff88]/60 rounded p-3 text-center" data-value="32">
                         <p class="text-xs font-medium text-white">CMC</p>
                         <p class="text-sm font-bold text-white">32</p>
                     </div>
@@ -174,7 +217,7 @@
                     <div class="heatmap-cell bg-[#00ff88]/25 rounded p-3 text-center" data-value="15">
                         <p class="text-xs font-medium text-white">Kirkos</p>
                         <p class="text-sm font-bold text-white">15</p>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -195,80 +238,36 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="agent-rank rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-3">
-                            <div class="rank-badge rank-1">1</div>
-                            <div>
-                                <p class="text-white font-semibold">Mike Johnson</p>
-                                <p class="text-gray-400 text-sm">Senior Agent</p>
+                @php
+                    $i = 1; 
+                @endphp
+                @foreach ($topAgents as $agent)
+                    <div class="agent-rank rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="rank-badge rank-1">{{ $i++ }}</div>
+                                <div>
+                                    <p class="text-white font-semibold">{{ $agent->agent_name}}</p>
+                                    <p class="text-gray-400 text-sm">Senior Agent</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[#00ff88] font-bold">₹1,250,000</p>
+                                <p class="text-gray-400 text-xs">{{ $agent->deals_closed }} sales</p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">₹1,250,000</p>
-                            <p class="text-gray-400 text-xs">45 sales</p>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Client Satisfaction</span>
-                            <span class="text-[#00ff88]">4.9/5</span>
-                        </div>
-                        <div class="progress-bar h-2">
-                            <div class="progress-fill" style="width: 98%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="agent-rank rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-3">
-                            <div class="rank-badge rank-2">2</div>
-                            <div>
-                                <p class="text-white font-semibold">Sarah Ahmed</p>
-                                <p class="text-gray-400 text-sm">Property Specialist</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Client Satisfaction</span>
+                                <span class="text-[#00ff88]">4.9/5</span>
+                            </div>
+                            <div class="progress-bar h-2">
+                                <div class="progress-fill" style="width: 98%"></div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">₹980,000</p>
-                            <p class="text-gray-400 text-xs">38 sales</p>
-                        </div>
                     </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Client Satisfaction</span>
-                            <span class="text-[#00ff88]">4.8/5</span>
-                        </div>
-                        <div class="progress-bar h-2">
-                            <div class="progress-fill" style="width: 96%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="agent-rank rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center space-x-3">
-                            <div class="rank-badge rank-3">3</div>
-                            <div>
-                                <p class="text-white font-semibold">David Wilson</p>
-                                <p class="text-gray-400 text-sm">Commercial Expert</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">₹875,000</p>
-                            <p class="text-gray-400 text-xs">32 sales</p>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Client Satisfaction</span>
-                            <span class="text-[#00ff88]">4.7/5</span>
-                        </div>
-                        <div class="progress-bar h-2">
-                            <div class="progress-fill" style="width: 94%"></div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+                
             </div>
         </div>
 
@@ -450,6 +449,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {{-- pdf button --}}
                 <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('pdf')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -463,13 +463,13 @@
                     </svg>
                     <span>Export as Excel</span>
                 </button>
-
-                <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('csv')">
+                {{-- csv button --}}
+                {{-- <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('csv')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                     </svg>
                     <span>Export as CSV</span>
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>

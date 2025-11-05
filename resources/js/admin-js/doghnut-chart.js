@@ -1,12 +1,19 @@
 import Chart from 'chart.js/auto';
 
+// console.log(dChartData);
+// console.log(others);
+
+const row = dChartData.map(item=>item.agent_name); 
+const col = dChartData.map(item=>item.deals_closed);
+
+// console.log(row);
 const agentPerformanceCtx = document.getElementById('doghnut').getContext('2d');
         new Chart(agentPerformanceCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Sara Tadesse', 'Michael Johnson', 'Aisha Mohammed', 'David Wilson', 'Others'],
+                labels: row,
                 datasets: [{
-                    data: [25, 20, 18, 15, 22],
+                    data: col,
                     backgroundColor: [
                         '#00ff88',
                         '#00cc6a',
