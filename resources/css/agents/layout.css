@@ -71,13 +71,18 @@ body { font-family: 'Inter', sans-serif; }
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.status-available {
+.status-approved {
     background: rgba(0, 255, 136, 0.2);
     color: #00ff88;
     border: 1px solid #00ff88;
 }
 
 .status-sold {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+.status-rejected {
     background: rgba(255, 68, 68, 0.2);
     color: #ff4444;
     border: 1px solid #ff4444;

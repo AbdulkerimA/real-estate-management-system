@@ -141,16 +141,20 @@ searchInput.addEventListener('input', function() {
 });
 
 // Initialize Chart
+// console.log(monthlyEarnings);
+const earned = monthlyEarnings.map(item=>item.earned);
+const months = monthlyEarnings.map(item=>item.month_name);
+
 const earningsChartElem = document.getElementById('dashboardChart');
 if (earningsChartElem) {
     const ctx = earningsChartElem.getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: months,
             datasets: [{
                 label: 'Monthly Earnings (ETB)',
-                data: [25000, 32000, 28000, 41000, 38000, 45000],
+                data: earned,
                 borderColor: '#00ff88',
                 backgroundColor: 'rgba(0, 255, 136, 0.1)',
                 borderWidth: 4,

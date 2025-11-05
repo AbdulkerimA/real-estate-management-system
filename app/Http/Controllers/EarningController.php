@@ -65,7 +65,7 @@ class EarningController extends Controller
         })->values();
 
 
-        // dd($weeklyReport,$earningsByWeek);   
+        // dd($weeklyReport,$earningsByWeek,$agent);   
 
         return view("agents.earning.index",[
             'agent' => $agent,

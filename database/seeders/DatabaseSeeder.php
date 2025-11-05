@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Agent;
+use App\Models\Balance;
 use App\Models\Document;
 use App\Models\Media;
 use App\Models\Property;
@@ -126,6 +127,13 @@ class DatabaseSeeder extends Seeder
             'address' => 'addis abeba furi',
             'speciality' => 'houses',
             'years_of_experience' => '3',
+        ]);
+
+        Balance::create([
+            'agent_id'=>'1'
+        ]);
+        Balance::create([
+            'agent_id'=>'2'
         ]);
 
         Setting::create([

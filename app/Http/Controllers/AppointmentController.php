@@ -13,7 +13,17 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(){
+        
+        $user = Auth::user();
+        $appointments = Appointment::with('property')->where('buyer_id',$user->id)->get();
+
+        return view('schedule.index',[
+            'appointments' => $appointments,
+        ]);
+    }
+
+    public function dashboardIndex()
     {
         // dd(request()->get('per_page'));
         $agent = Auth::user();        

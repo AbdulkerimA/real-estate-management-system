@@ -31,6 +31,11 @@ class Agent extends Model
         return $this->belongsTo(Document::class);
     }
 
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);

@@ -109,10 +109,17 @@
             </div> --}}
 
             <!-- Profile -->
+            @php
+                $user = Auth::user();
+                // dd($user->agentProfile->media->file_path);
+            @endphp
             <div class="relative">
                 <button class="flex items-center space-x-3 text-gray-300 hover:text-[#00ff88]" id="profileBtn">
-                    <div class="w-10 h-10 bg-gradient-to-br from-[#00ff88] to-green-600 rounded-full flex items-center justify-center text-[#12181f] font-bold">
-                        ST
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#00ff88] to-green-600 rounded-full flex items-center justify-center text-[#12181f] font-bold">
+                        <img src="{{ asset('storage/'.$user->agentProfile->media->file_path) }}" 
+                            alt="{{ $user->name[0] }}"
+                            class="w-full h-full object-cover rounded-full m-1"
+                            >
                     </div>
                     <div class="hidden md:block text-left">
                         <p class="text-sm font-semibold">Sara Tadesse</p>
@@ -149,12 +156,18 @@
                             Help & Support
                         </a>
                         <hr class="my-2 border-gray-600">
-                        <a href="#" class="block px-4 py-3 text-sm text-red-400 hover:bg-[#12181f] rounded-lg">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center px-3 py-2 text-red-400 hover:bg-gray-700 rounded">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
-                            Sign Out
-                        </a>
+                            <button type="submit" form="logout">
+                                Logout
+                            </button>
+                        </div>
+                        <form action="/logout" method="post" id="logout" class="hidden">
+                            @csrf
+                            @method('DELETE')
+                        </form>
                     </div>
                 </div>
             </div>

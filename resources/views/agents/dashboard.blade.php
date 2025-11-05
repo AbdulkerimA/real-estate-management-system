@@ -1,15 +1,20 @@
 <x-agent-dashboard.dashboard-layout >
-
+    <script>
+        const monthlyEarnings = @json($monthlyEarnings)
+    </script>
     <!-- Welcome Section -->
             <div class="mb-8">
-                <h1 class="text-4xl font-bold mb-2">Welcome back, Sara! 👋</h1>
+                <h1 class="text-4xl font-bold mb-2">Welcome back, {{Auth::User()->name}}! 👋</h1>
                 <p class="text-gray-400 text-lg">Here's what's happening with your properties today.</p>
             </div>
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Properties Listed -->
-                <x-agent-dashboard.status-card themeColor="green" statusNum="{{ 12 }}" notifier="+2 this week">
+                <x-agent-dashboard.status-card 
+                    themeColor="green" 
+                    statusNum="{{ Number::format($propertiesCount) }}" 
+                    notifier="+2 this week">
                     
                     <svg class="w-7 h-7 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -22,41 +27,50 @@
                 </x-agent-dashboard.status-card>
                 
                 <!-- Active Appointments -->
-                <x-agent-dashboard.status-card themeColor="blue" statusNum="{{ 8 }}" notifier="3 today">
+                <x-agent-dashboard.status-card 
+                    themeColor="blue" 
+                    statusNum="{{ Number::format($balance->current_balance) }}" 
+                    notifier="3 today">
                     
                     <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
 
                     @slot("statusText")
-                        Properties Listed
+                        current balacne
                     @endslot
 
                 </x-agent-dashboard.status-card>
 
                 <!-- Messages -->
-                <x-agent-dashboard.status-card themeColor="purple" statusNum="{{ 15 }}" notifier="5 unread">
+                <x-agent-dashboard.status-card 
+                    themeColor="purple" 
+                    statusNum="{{ Number::format($totalCheckout) }}" 
+                    notifier="5 unread">
                     
                     <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                     </svg>
 
                     @slot("statusText")
-                        messages
+                        total checkout
                     @endslot
 
                 </x-agent-dashboard.status-card>
                 
 
                  <!-- Earnings -->
-                <x-agent-dashboard.status-card themeColor="yellow" statusNum="{{ 45,000 }}" notifier="+15%">
+                <x-agent-dashboard.status-card 
+                    themeColor="yellow" 
+                    statusNum="{{ Number::format($pendingCheckout) }}" 
+                    notifier="+15%">
                     
                     <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
 
                     @slot("statusText")
-                        This Month
+                        pending checkouts
                     @endslot
 
                 </x-agent-dashboard.status-card>
@@ -86,90 +100,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors">
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="property-image w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-8 h-8 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                                    </svg>
+                                    @foreach ($latestProperties as $property)
+                                        <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors">
+                                            <td class="py-4 px-2">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="property-image w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
+                                                        <img src="" alt="image of {{ $property->title[0] }}">
+                                                    </div>
+                                                    <div>
+                                                        <p class="font-semibold text-lg">{{ $property->title }}</p>
+                                                        <p class="text-sm text-gray-400">
+                                                            {{ $property->location }} <br>
+                                                            • {{ $property->details->bed_rooms }} bed, 
+                                                            {{ $property->details->bath_rooms }} bath
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <p class="font-semibold text-lg">Luxury Apartment</p>
-                                                    <p class="text-sm text-gray-400">Bole, Addis Ababa • 3 bed, 2 bath</p>
+                                            </td>
+                                            <td class="py-4 px-2">
+                                                <span class="status-{{ $property->status  }} px-4 py-2 rounded-full text-sm font-semibold">
+                                                    {{ $property->status }}
+                                                </span>
+                                            </td>
+                                            <td class="py-4 px-2">
+                                                <span class="font-bold text-lg">ETB {{ Number::format($property->price) }}</span>
+                                            </td>
+                                            <td class="py-4 px-2">
+                                                <div class="flex space-x-3">
+                                                    <button class="text-[#00ff88] hover:text-green-400 font-medium">Edit</button>
+                                                    <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
+                                                    <button class="text-red-400 hover:text-red-300 font-medium">Delete</button>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="status-available px-4 py-2 rounded-full text-sm font-semibold">Available</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="font-bold text-lg">ETB 4,500,000</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <div class="flex space-x-3">
-                                                <button class="text-[#00ff88] hover:text-green-400 font-medium">Edit</button>
-                                                <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
-                                                <button class="text-red-400 hover:text-red-300 font-medium">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors">
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="property-image w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-8 h-8 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <p class="font-semibold text-lg">Modern Villa</p>
-                                                    <p class="text-sm text-gray-400">Kazanchis, Addis Ababa • 5 bed, 4 bath</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="status-sold px-4 py-2 rounded-full text-sm font-semibold">Sold</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="font-bold text-lg">ETB 8,200,000</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <div class="flex space-x-3">
-                                                <button class="text-[#00ff88] hover:text-green-400 font-medium">Edit</button>
-                                                <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
-                                                <button class="text-red-400 hover:text-red-300 font-medium">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors">
-                                        <td class="py-4 px-2">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="property-image w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                    <svg class="w-8 h-8 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <p class="font-semibold text-lg">Family House</p>
-                                                    <p class="text-sm text-gray-400">CMC, Addis Ababa • 4 bed, 3 bath</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="status-pending px-4 py-2 rounded-full text-sm font-semibold">Pending</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <span class="font-bold text-lg">ETB 3,800,000</span>
-                                        </td>
-                                        <td class="py-4 px-2">
-                                            <div class="flex space-x-3">
-                                                <button class="text-[#00ff88] hover:text-green-400 font-medium">Edit</button>
-                                                <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
-                                                <button class="text-red-400 hover:text-red-300 font-medium">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -287,6 +251,5 @@
                     </div> --}}
                 </div>
             </div>
-
 </x-agent-dashboard.dashboard-layout>
  
