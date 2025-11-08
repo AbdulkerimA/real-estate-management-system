@@ -38,11 +38,15 @@
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="stat-card rounded-xl p-4 text-center">
-                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ count($properties) }}">0</p>
+                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ count($properties) }}">
+                                {{ count($properties) }}
+                            </p>
                             <p class="text-gray-400 text-sm">Properties Listed</p>
                         </div>
                         <div class="stat-card rounded-xl p-4 text-center">
-                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ $user->agentProfile->deals_closed }}">0</p>
+                            <p class="text-2xl font-bold text-[#00ff88] counter" data-target="{{ $user->agentProfile->deals_closed }}">
+                                {{ $user->agentProfile->deals_closed }}
+                            </p>
                             <p class="text-gray-400 text-sm">Deals Closed</p>
                         </div>
                         <div class="stat-card rounded-xl p-4 text-center">

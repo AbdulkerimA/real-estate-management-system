@@ -16,10 +16,44 @@ class AppointmentController extends Controller
     public function index(){
         
         $user = Auth::user();
-        $appointments = Appointment::with('property')->where('buyer_id',$user->id)->get();
+        $appointmentsCollection = Appointment::with('property')->where('buyer_id',$user->id)->get();
+
+        $appointments = [];
+        foreach ($appointmentsCollection as $key => $value) {
+            $appointments[] = [
+                'id'        => $value->id,
+                'property'  => $value->property->title,
+                'icon'      =>json_decode( $value->property->media->file_path)[0],
+                'agent'     => $value->property->user->name,
+                'phone'     => $value->property->user->phone,
+                'email'     => $value->property->user->email,
+                'date'      => $value->scheduled_date,
+                'time'      => $value->scheduled_time,
+                'status'    => $value->status,
+                'price'     => "ETB ".$value->property->price,
+                'location'  => $value->property->location,
+            ];
+        }
+
+        $pendingAppointments = $appointmentsCollection->filter(function ($appointment){
+            return $appointment->status == 'pending';
+        });
+
+        $completedAppointments = $appointmentsCollection->filter(function ($appointment){
+            return $appointment->status == 'completed';
+        });
+
+        $cancelledAppointments = $appointmentsCollection->filter(function ($appointment){
+            return $appointment->status == 'cancelled';
+        });
+        // dd(count($cancelledAppointments));
 
         return view('schedule.index',[
             'appointments' => $appointments,
+            'allAp'=>count($appointmentsCollection),
+            'pendingAp' => count($pendingAppointments),
+            'completedAp'=>count($completedAppointments),
+            'cancelledAp' => count($cancelledAppointments),
         ]);
     }
 
@@ -76,7 +110,8 @@ class AppointmentController extends Controller
             'additional_note' => $validated['note'],
         ]);
 
-        return redirect("/property/".$validated['propertyId']."/success");
+        // return redirect("/property/".$validated['propertyId']."/success");
+        return redirect('/schedules');
     }
 
     /**
@@ -98,9 +133,18 @@ class AppointmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Appointment $appointment)
+    public function statusUpdate(Request $request, Appointment $appointment)
     {
         //
+        $validated = $request->validate([
+            'status' => 'required|in:completed,cancelled',
+        ]);
+
+        // $user = Auth::id();
+
+        $appointment->update([
+            'status'=> $validated['status'],
+        ]);
     }
 
     /**

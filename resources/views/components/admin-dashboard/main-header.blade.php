@@ -28,6 +28,10 @@
             'title' => 'Reports & Analytics',
             'subtitle' => 'View system performance and generate detailed reports'
         ],
+        'admin/analytics/pdf' => [
+            'title' => 'Reports & Analytics',
+            'subtitle' => 'View system performance and generate detailed reports'
+        ],
         'admin/profile/edit' => [
             'title' => 'Edit your Profile',
             'subtitle' => 'Manage your account and professional details'

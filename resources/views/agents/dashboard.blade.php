@@ -206,49 +206,6 @@
                             View All Appointments
                         </button>
                     </div>
-
-                    <!-- Messages Preview -->
-                    {{-- <div class="content-card rounded-2xl p-6">
-                        <h2 class="text-xl font-bold mb-6">Recent Messages</h2>
-                        <div class="space-y-4">
-                            <div class="flex items-start space-x-3 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    LT
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between">
-                                        <p class="font-semibold">Lemma Tadesse</p>
-                                        <div class="w-2 h-2 bg-[#00ff88] rounded-full"></div>
-                                    </div>
-                                    <p class="text-sm text-gray-400">Is the apartment still available for viewing?</p>
-                                    <p class="text-xs text-gray-500 mt-1">5 min ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    SB
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-semibold">Solomon Bekele</p>
-                                    <p class="text-sm text-gray-400">Can we schedule a viewing for this weekend?</p>
-                                    <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    HM
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-semibold">Helen Mulugeta</p>
-                                    <p class="text-sm text-gray-400">Thank you for the excellent tour today!</p>
-                                    <p class="text-xs text-gray-500 mt-1">3 hours ago</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="w-full mt-6 text-[#00ff88] hover:text-green-400 font-semibold py-2">
-                            View All Messages
-                        </button>
-                    </div> --}}
                 </div>
             </div>
 </x-agent-dashboard.dashboard-layout>

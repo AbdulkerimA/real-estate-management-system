@@ -142,8 +142,8 @@ searchInput.addEventListener('input', function() {
 
 // Initialize Chart
 // console.log(monthlyEarnings);
-const earned = monthlyEarnings.map(item=>item.earned);
-const months = monthlyEarnings.map(item=>item.month_name);
+const earned = monthlyEarnings?monthlyEarnings.map(item=>item.earned):[];
+const months = monthlyEarnings?monthlyEarnings.map(item=>item.month_name):[];
 
 const earningsChartElem = document.getElementById('dashboardChart');
 if (earningsChartElem) {

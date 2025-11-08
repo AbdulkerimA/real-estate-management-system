@@ -12,9 +12,9 @@
     @endslot
 
     @slot("testimonials")
-        <x-testimonial.testimonial-card>
-            
-        </x-testimonial.testimonial-card>
+        <x-testimonial.testimonial-card />
+        <x-testimonial.testimonial-card />
+        <x-testimonial.testimonial-card />
     @endslot
 
     @slot("footer")

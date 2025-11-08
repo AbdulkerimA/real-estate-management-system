@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AgentDashboardController;
 use App\Http\Controllers\AgentProfileConttroller;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AppointmentController;
@@ -83,10 +84,12 @@ Route::controller(DashboardPropertyController::class)->group(function(){
 
 Route::controller(AppointmentController::class)->group(function(){
     // Route::get('')
+    Route::get('/schedules','index')->middleware(['auth']);
     Route::get('/schedule/{property}','create')->middleware(['auth'])->can('view','property','App\Models\Property');
-    Route::get('/dashboard/appointments','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::get('/dashboard/appointments','dashboardIndex')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
     Route::post('/schedule','store')->middleware(['auth']);
+    Route::put('/schedules/{Appointment}','statusUpdate');//->middleware(['auth']);
 });
  
 Route::controller(SettingController::class)->group(function () {
@@ -113,10 +116,13 @@ Route::controller(TransactionController::class)->group(function () {
 
 Route::controller(AnalyticsController::class)->group(function () {
     Route::get('/admin/analytics','index');
+    Route::get('/admin/analytics/pdf','generatePdf');
 });
 
-Route::view('/dashboard','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
-Route::view('/dashboard/home','agents.dashboard')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+Route::controller(AgentDashboardController::class)->group(function(){
+    Route::get('/dashboard','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::get('/dashboard/home','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+});
 
 
 

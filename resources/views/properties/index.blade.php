@@ -127,9 +127,7 @@
             {{-- <x-pagination /> --}}
         </div>
     </div>
-
-    <div class="w-full">
-        <x-footer />
-    </div>
+    
+    <x-footer />
 </body>
 </html>

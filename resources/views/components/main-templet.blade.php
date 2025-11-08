@@ -28,12 +28,11 @@
                 
                 <!-- Search Bar -->
                 <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 max-w-4xl mx-auto mb-8">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Location</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2 flex flex-col items-baseline">
                             <input type="text" placeholder="Enter city or area" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-[#00ff88]">
                         </div>
-                        <div>
+                        {{-- <div>
                             <label class="block text-sm font-medium mb-2">Type</label>
                             <select class="w-full px-4 py-3 rounded-lg bg-white/20 border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]">
                                 <option value="">Property Type</option>
@@ -50,9 +49,9 @@
                                 <option value="500k-1m">$500K - $1M</option>
                                 <option value="1m+">$1M+</option>
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="flex items-end">
-                            <button class="w-full bg-[#00ff88] text-[#12181f] py-3 px-6 rounded-lg font-semibold hover:bg-green-400 transition-colors">
+                            <button class="w-full bg-[#00ff88] text-[#12181f] py-3 px-6 rounded-lg font-semibold hover:bg-green-400 transition-colors cursor-pointer">
                                 Search
                             </button>
                         </div>
@@ -60,7 +59,7 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                {{-- <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <button class="bg-[#00ff88] text-[#12181f] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-400 transition-colors">
                         Buy
                     </button>
@@ -70,7 +69,7 @@
                     <button class="border-2 border-gray-400 text-gray-300 px-8 py-4 rounded-lg font-semibold text-lg hover:border-[#00ff88] hover:text-[#00ff88] transition-colors">
                         Rent
                     </button>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -136,7 +135,9 @@
             <p class="text-xl text-[#12181f]/80 mb-8 max-w-2xl mx-auto">
                 Join thousands of satisfied customers who have found their dream properties through our platform
             </p>
-            <button class="bg-[#12181f] text-[#00ff88] px-12 py-4 rounded-lg font-bold text-xl hover:bg-gray-800 transition-colors">
+            <button
+                onclick="window.location='/signup'" 
+                class="bg-[#12181f] text-[#00ff88] px-12 py-4 rounded-lg font-bold text-xl hover:bg-gray-800 transition-colors">
                 Get Started
             </button>
         </div>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->time('scheduled_time');
             $table->string('contact_method')->default('call');
             $table->text('additional_note')->nullable();
-            $table->enum('status', ['pending','scheduled','completed','cancelled'])->default('pending');
+            $table->enum('status', ['pending','confirmed','completed','cancelled'])->default('pending');
             $table->timestamps();
         });
     }
