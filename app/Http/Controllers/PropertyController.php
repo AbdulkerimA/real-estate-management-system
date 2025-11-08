@@ -111,7 +111,7 @@ class PropertyController extends Controller
         $scheduled = optional($appointment->first())->buyer_id == Auth::user()->id;
         // dd();
 
-        return view('properties.show',[
+        return view('properties.show',[ 
             'property'=>$property, 
             'properties' => $relatedProperties,
             'agent'=>$agent,

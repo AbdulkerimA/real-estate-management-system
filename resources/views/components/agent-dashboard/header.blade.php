@@ -36,9 +36,19 @@
             'title' => 'Add New Property',
             'subtitle' => 'Enter property details to create a new listing'
         ],
+        'dashboard/property/edit/'  => [
+            'title' => 'Edit Your Property',
+            'subtitle' => ''
+        ],
         
     ];
-    $path = request()->path();
+
+    // dd(request()->is('dashboard/property/edit/*'));
+    if(request()->is('dashboard/property/edit/*'))
+        $path = 'dashboard/property/edit/';
+    else {
+        $path = request()->path();
+    }
     // 
 @endphp
 

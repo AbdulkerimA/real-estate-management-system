@@ -61,24 +61,33 @@
             <button 
                 class="text-blue-400 hover:text-blue-300 font-medium property-action" 
                 data-action="view"
+                onclick="viewData({{ $data->id }})"
             >
-                <i class="fas fa-eye">view</i>
+                view
+                <i class="fas fa-eye"></i>
             </button>
 
             <button 
                 class="text-[#00ff88] hover:text-green-400 font-medium property-action" 
                 data-action="edit"
+                onclick="window.location='property/edit/{{ $data->id }}'"
             >
-                <i class="fas fa-edit">edit</i>
+                edit
+                <i class="fas fa-edit"></i>
             </button>
 
             <button 
                 class="text-red-400 hover:text-red-300 font-medium property-action" 
                 data-action="delete"
+                form="delete-{{ $data->id }}"
             >
                 delete
             <i class="fas fa-trash-alt"></i>
             </button>
+            <form action="/dashbord/property/delete/{{ $data->id }}" method="post" class="hidden" id="delete-{{ $data->id }}">
+                @csrf
+                @method('DELETE')
+            </form>
         </div>
     </td>
 </tr>

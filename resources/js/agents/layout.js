@@ -142,6 +142,7 @@ searchInput.addEventListener('input', function() {
 
 // Initialize Chart
 // console.log(monthlyEarnings);
+let monthlyEarnings = []; // fix this 
 const earned = monthlyEarnings?monthlyEarnings.map(item=>item.earned):[];
 const months = monthlyEarnings?monthlyEarnings.map(item=>item.month_name):[];
 
@@ -373,37 +374,6 @@ document.querySelectorAll('.property-card').forEach(card => {
 let uploadedImages = [];
 let mainImageIndex = 0;
 
-// Form progress tracking
-// function updateProgress() {
-//     const form = document.getElementById('propertyForm');
-//     const inputs = form?form.querySelectorAll('input[required], select[required], textarea[required]'):"";
-//     let filledInputs = 0;
-
-//     inputs?inputs.forEach(input => {
-//         if (input.value.trim() !== '') {
-//             filledInputs++;
-//         }
-//     }):'';
-
-//     // const progress = Math.round((filledInputs / inputs.length) * 100);
-//     // // document.getElementById('progressFill').style.width = progress + '%';
-//     // // document.getElementById('progressText').textContent = progress + '%';
-// }
-
-// Add event listeners to form inputs
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('propertyForm');
-    const inputs = form?form.querySelectorAll('input, select, textarea'):'';
-
-    inputs?inputs.forEach(input => {
-        input.addEventListener('input', updateProgress);
-        input.addEventListener('change', updateProgress);
-    }):'';
-
-    // Initial progress update
-    // updateProgress();
-});
-
 // Image upload functionality
 const uploadArea = document.getElementById('uploadArea');
 const imageInput = document.getElementById('imageInput');
@@ -522,12 +492,6 @@ propertyForm?propertyForm.addEventListener('submit', function(e) {
     if (!isValid) {
         e.preventDefault();
         alert('Please fill in all required fields.');
-        return;
-    }
-
-    if (uploadedImages.length === 0) {
-        e.preventDefault();
-        alert('Please upload at least one property image.');
         return;
     }
 
@@ -1191,7 +1155,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 });
 
 // Initialize bio counter
-updateBioCounter();
+// updateBioCounter();
 
 // settings page script
 // Account form validation

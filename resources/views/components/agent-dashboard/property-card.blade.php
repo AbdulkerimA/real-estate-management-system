@@ -49,6 +49,7 @@
             <button 
                 class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors property-action" 
                 data-action="view"
+                onclick="viewData({{ $data->id }})"
             >
                 <i class="fas fa-eye"></i> 
             </button>
@@ -56,6 +57,7 @@
             <button 
                 class="flex-1 bg-[#00ff88] hover:bg-green-400 text-[#12181f] py-2 px-4 rounded-lg font-medium transition-colors property-action" 
                 data-action="edit"
+                onclick="window.location='property/edit/{{ $data->id }}'"    
             >
                 <i class="fas fa-edit"></i>
             </button>
@@ -63,9 +65,16 @@
             <button 
                 class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors property-action" 
                 data-action="delete"
+                type="submit"
+                form="delete-{{ $data->id }}"
             >
                 <i class="fas fa-trash-alt w-5 h-5"></i>
             </button>
+
+            <form action="/dashbord/property/delete/{{ $data->id }}" method="post" class="hidden" id="delete-{{ $data->id }}">
+                @csrf
+                @method('DELETE')
+            </form>
         </div>
     </div>
 </div>

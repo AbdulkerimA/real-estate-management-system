@@ -134,6 +134,9 @@ class DashboardPropertyController extends Controller
     public function edit(Property $property)
     {
         //
+        return view('agents.properties.update',[
+            'property'=>$property
+        ]);
     }
 
     /**
@@ -141,7 +144,90 @@ class DashboardPropertyController extends Controller
      */
     public function update(Request $request, Property $property)
     {
-        //
+        // dd($property,$request->all(),$request->hasFile('images'));
+        
+        //validation 
+        $validated = $request->validate([
+            // Property Information
+            'title'       => 'required|string|max:255',
+            'type'        => 'required|in:house,apartment,land,commercial,villa,condominium',
+            'price'       => 'required|numeric|min:0',
+            'location'    => 'required|string|max:255',
+            'longitude'   => 'required|numeric|between:-180,180',
+            'latitude'    => 'required|numeric|between:-90,90',
+            'description' => 'required|string',
+
+            // Property Details
+            'bedrooms'    => 'nullable|integer|min:0|max:20',
+            'bathrooms'   => 'nullable|numeric|min:0|max:20',
+            'area'        => 'nullable|numeric|min:0',
+            'yearBuilt'   => 'nullable|integer|min:1900|max:' . date('Y'),
+
+            // Amenities (array of multiple checkboxes)
+            'amenities'   => 'nullable|array',
+            'amenities.*' => 'in:parking,balcony,pool,security,garden,gym',
+
+            // Property Images (multiple)
+            'images'      => '',
+            'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
+
+            // Availability & Status
+            // 'featured'    => 'nullable|boolean',
+        ]);
+
+        // dd($validated['amenities']);
+        
+        // $agent = Auth::user();
+        $amenities = $validated['amenities'] ?? [];
+        $paths = [];
+        $fileTypes = [];
+
+        // dd($agent->id);
+        //file store
+        if($request->hasFile('images')){
+            foreach (request()->file('images') as $file) {
+                //store the file
+                $paths[] = $file->store('properties','public');
+                $fileTypes[] = $file->getClientMimeType();
+            }
+        }
+
+        // dd($paths != [],$paths);
+        //store to db
+        if($paths != []){
+            $property->media->update([
+                'file_path' => json_encode($paths),
+                'file_type' => json_encode($fileTypes)
+            ]);
+        }
+        
+
+        $property->update([
+            'title' => $validated['title'],
+            'type' => $validated['type'],
+            'price' => $validated['price'],
+            'location' => $validated['location'],
+            'longitude' => $validated['longitude'],
+            'latitude' => $validated['latitude'],
+            'description' => $validated['description'],
+            // 'is_hignlighted' => $validated['featured']
+        ]);
+
+        $property->details->update([
+            'bed_rooms' => $validated['bedrooms'], 
+            'bath_rooms' => $validated['bathrooms'], 
+            'area_size' => $validated['area'], 
+            'year_built' => $validated['yearBuilt'], 
+            'parking' => in_array('parking',$amenities),
+            'balcony' => in_array('balcony',$amenities),
+            'swimming_pool' => in_array('pool',$amenities),
+            'security' => in_array('security',$amenities),
+            'garden' => in_array('garden',$amenities),
+            'gym' => in_array('gym',$amenities),
+        ]);
+
+        //redirct to properties page
+        return redirect('/dashboard/properties');
     }
 
     /**
@@ -149,6 +235,10 @@ class DashboardPropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        // dd($property,request()->all());
+
+        $property->delete();
+        
+        return redirect('/dashboard/properties');
     }
 }

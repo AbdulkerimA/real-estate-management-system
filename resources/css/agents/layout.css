@@ -1035,3 +1035,34 @@ input:checked + .toggle-slider:before {
 .modal.active .modal-content {
     transform: scale(1);
 }
+
+.propertyModal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    scrollbar-color: transparent;
+    scrollbar-width: 0;
+}
+
+.propertyModal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.propertyModal-content {
+    background: #1c252e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}

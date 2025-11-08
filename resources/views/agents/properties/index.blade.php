@@ -84,7 +84,7 @@
             </thead>
             <tbody id="propertiesTableBody">
                 @foreach ($properties as $property)
-                    <x-agent-dashboard.table-row  :data="$property"/>
+                    <x-agent-dashboard.table-row  :data="$property" />
                 @endforeach
             </tbody>
         </table>
@@ -100,5 +100,78 @@
 
 <!-- Pagination -->
 {{ $properties->links('vendor.pagination.dashboard-pagination') }}
+
+{{-- property view modal --}}
+<div class="propertyModal flex justify-center items-center" id="propertyModal">
+    <div class="propertyModal-content p-6 w-full max-w-4xl mx-4">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">Property Details</h2>
+            <button class="text-gray-400 hover:text-white" id="closeModal">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Property Image -->
+            <div class="space-y-4 keen-slider zoom-out" id="my-keen-slider">
+                {{-- the images will be populated here --}}
+            </div>
+
+            <!-- Property Info -->
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2" id="modalTitle"></h3>
+                    <p class="text-gray-400" id="modalDescription"></p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-gray-400 text-sm">Location</p>
+                        <p class="text-white font-medium" id="modalLocation"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Price</p>
+                        <p class="text-[#00ff88] font-bold text-xl" id="modalPrice">
+                            ETB
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Property Type</p>
+                        <p class="text-white font-medium" id="modalType"></p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 text-sm">Status</p>
+                        <span class="status-badge px-1 py-0.5 rounded-md" id="modalStatus"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-gray-400 text-sm">Agent Information</p>
+                    <div class="flex items-center space-x-3 mt-2">
+                        <div class="w-10 h-10 bg-[#00ff88] rounded-full flex items-center justify-center text-[#12181f] font-bold">
+                            {{-- agent profile here --}}
+                            <img src="" alt="" class="w-full h-full rounded-full object-cover agent-image">
+                        </div>
+                        <div>
+                            <p class="text-white font-medium" id="modalAgent"></p>
+                            <p class="text-gray-400 text-sm">Licensed Real Estate Agent</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <div class="flex items-center space-x-3 pt-4">
+                    <button class="px-6 py-2 rounded-lg text-[#12181f] font-semibold bg-green-400 hover:bg-green-400/50 hover:cursor-pointer" id="modalApprove">
+                        Approve Property
+                    </button>
+                    <button class="btn-reject action-btn px-6 py-2 bg-red-600 rounded-lg hover:bg-red-600/50 hover:cursor-pointer" id="modalReject">
+                        Reject Property
+                    </button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+</div>
 
 </x-agent-dashboard.dashboard-layout>
