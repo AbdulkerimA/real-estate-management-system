@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Pest\Laravel\json;
+
 class AppointmentController extends Controller
 {
     /**
@@ -63,14 +65,35 @@ class AppointmentController extends Controller
         $agent = Auth::user();        
         $propertIds = Property::where('agent_id',$agent->id);
         $perPage = request()->get('per_page') ?? 5;
-        $appointments = Appointment::whereIn('property_id',$propertIds->pluck('id'))
+        $appointmentsCollection = Appointment::whereIn('property_id',$propertIds->pluck('id'))
                                      ->orderBy('scheduled_date', 'desc')
                                      ->orderBy('scheduled_time', 'desc')
                                      ->paginate($perPage);
         // dd($appointments);
+        
+        $appointments = [];
+        foreach ($appointmentsCollection as $key => $value) {
+            $appointments[] = [
+                'id'        => $value->id,
+                'property'  => $value->property->title,
+                'icon'      =>json_decode( $value->property->media->file_path)[0],
+                'agent'     => $value->property->user->name,
+                'phone'     => $value->property->user->phone,
+                'email'     => $value->property->user->email,
+                'date'      => $value->scheduled_date,
+                'time'      => $value->scheduled_time,
+                'status'    => $value->status,
+                'price'     => "ETB ".$value->property->price,
+                'location'  => $value->property->location,
+            ];
+        }
 
         if($agent->role == 'agent'){
-            return view('agents.appointments.index',['appointments' => $appointments]);
+            return view('agents.appointments.index',
+            [
+                'appointments' => $appointmentsCollection,
+                'appointments_' => $appointments,
+            ]);
         }else{
         }
     }
@@ -119,7 +142,9 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        //
+        // 
+        dd($appointment);
+        return json_encode($appointment);
     }
 
     /**
@@ -135,16 +160,20 @@ class AppointmentController extends Controller
      */
     public function statusUpdate(Request $request, Appointment $appointment)
     {
-        //
-        $validated = $request->validate([
-            'status' => 'required|in:completed,cancelled',
+        dd($request->all());
+
+        $validated = $request->validate([ 
+            'status' => 'required|in:confirmed,completed,cancelled',
         ]);
 
+        // dd($validated);
         // $user = Auth::id();
 
         $appointment->update([
             'status'=> $validated['status'],
         ]);
+
+        return redirect()->back();
     }
 
     /**

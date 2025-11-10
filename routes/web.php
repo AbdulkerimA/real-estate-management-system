@@ -92,10 +92,14 @@ Route::controller(AppointmentController::class)->group(function(){
     // Route::get('')
     Route::get('/schedules','index')->middleware(['auth']);
     Route::get('/schedule/{property}','create')->middleware(['auth'])->can('view','property','App\Models\Property');
-    Route::get('/dashboard/appointments','dashboardIndex')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
     Route::post('/schedule','store')->middleware(['auth']);
-    Route::put('/schedules/{Appointment}','statusUpdate');//->middleware(['auth']);
+    Route::put('/schedules/{Appointment}','statusUpdate')->middleware(['auth']);
+
+    // dashboards appointment page
+    Route::get('/dashboard/appointments','dashboardIndex')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::get('/dashboard/appointments/{appointment}','show')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::put('/dashboard/appointment/{appointment}','statusUpdate')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 });
  
 Route::controller(SettingController::class)->group(function () {

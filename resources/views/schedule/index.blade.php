@@ -144,11 +144,12 @@
           </div>
           <div class="modal-actions">
             <button class="btn btn-primary">Contact Agent</button>
-            <button class="btn btn-secondary">Mark as Completed</button>
+            <button class="btn btn-secondary" onclick="changeStatusToComplete()">Mark as Completed</button>
           </div>
         </div>
       </div>
     </div>
+
     {{-- {{ dd($appointments) }} --}}
     <script>
         const appointments = @json($appointments);

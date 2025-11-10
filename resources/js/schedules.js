@@ -176,6 +176,13 @@ function reschedule(id) {
     setTimeout(() => messageDiv.remove(), 3000);
 }
 
+function changeStatusToComplete(id){
+    const apt = appointments.find((a) => a.id === id);
+    if (apt) {
+        // change  request to completed 
+    }
+}
+
 function cancelAppointment(id) {
     const apt = appointments.find((a) => a.id === id);
     if (!apt) return;
@@ -195,6 +202,7 @@ function cancelAppointment(id) {
 function confirmCancel(id) {
     const apt = appointments.find((a) => a.id === id);
     if (apt) {
+        // send the canclation request here 
         apt.status = "cancelled";
         renderAppointments();
 
@@ -320,91 +328,6 @@ async function onConfigChange(config) {
         config.footer_copyright || defaultConfig.footer_copyright;
 }
 
-if (window.elementSdk) {
-    window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities: (config) => ({
-        recolorables: [
-            {
-            get: () =>
-                config.background_color || defaultConfig.background_color,
-            set: (value) => {
-                config.background_color = value;
-                window.elementSdk.setConfig({ background_color: value });
-            },
-            },
-            {
-            get: () => config.surface_color || defaultConfig.surface_color,
-            set: (value) => {
-                config.surface_color = value;
-                window.elementSdk.setConfig({ surface_color: value });
-            },
-            },
-            {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-                config.text_color = value;
-                window.elementSdk.setConfig({ text_color: value });
-            },
-            },
-            {
-            get: () => config.primary_color || defaultConfig.primary_color,
-            set: (value) => {
-                config.primary_color = value;
-                window.elementSdk.setConfig({ primary_color: value });
-            },
-            },
-            {
-            get: () =>
-                config.secondary_action_color ||
-                defaultConfig.secondary_action_color,
-            set: (value) => {
-                config.secondary_action_color = value;
-                window.elementSdk.setConfig({
-                secondary_action_color: value,
-                });
-            },
-            },
-        ],
-        borderables: [],
-        fontEditable: {
-            get: () => config.font_family || defaultConfig.font_family,
-            set: (value) => {
-            config.font_family = value;
-            window.elementSdk.setConfig({ font_family: value });
-            },
-        },
-        fontSizeable: {
-            get: () => config.font_size || defaultConfig.font_size,
-            set: (value) => {
-            config.font_size = value;
-            window.elementSdk.setConfig({ font_size: value });
-            },
-        },
-        }),
-        mapToEditPanelValues: (config) =>
-        new Map([
-            ["page_title", config.page_title || defaultConfig.page_title],
-            [
-            "page_subtitle",
-            config.page_subtitle || defaultConfig.page_subtitle,
-            ],
-            [
-            "empty_state_message",
-            config.empty_state_message || defaultConfig.empty_state_message,
-            ],
-            [
-            "empty_state_button",
-            config.empty_state_button || defaultConfig.empty_state_button,
-            ],
-            [
-            "footer_copyright",
-            config.footer_copyright || defaultConfig.footer_copyright,
-            ],
-        ]),
-    });
-}
 
 renderAppointments();
 

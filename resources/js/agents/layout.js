@@ -71,6 +71,7 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 
 
 // Property actions
+// remove me
 document.querySelectorAll('table button').forEach(button => {
     button.addEventListener('click', function() {
         const action = this.textContent;
@@ -618,7 +619,7 @@ document.querySelectorAll('.appointment-action').forEach(button => {
         
         switch(action) {
             case 'view':
-                window.location = `/dashboard/appointment/${appointmentId}`
+                // window.location = `/dashboard/appointment/${appointmentId}`
                 break;
             case 'confirm':
                 if (confirm(`Confirm appointment with ${clientName} for ${propertyName}?`)) {

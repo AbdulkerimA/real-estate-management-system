@@ -66,23 +66,49 @@
     <td class="py-4 px-2">
         <div class="flex space-x-3">
             <button
-                {{-- onclick="window.location = '{{ $appointment->id }}'"  --}}
+                onclick="showDetails({{ $appointment->id }})"
                 class="text-[#60a5fa] hover:text-[#93c5fd] font-medium appointment-action" data-action="view">
                 View
             </button>
-            <button 
-                {{-- onclick="window.location = '{{ $appointment->id }}'" --}}
-                class="text-[#22c55e] hover:text-[#22c55e] font-medium appointment-action" data-action="confirm">
-                Confirm
-            </button>
-            <button
-                {{-- onclick="window.location = '{{ $appointment->id }}'"  --}}
-                class="text-[#f87171] hover:text-[#fca5a5] font-medium appointment-action" data-action="cancel">
-                Cancel
-            </button>
+            @if ($appointment->status == 'pending')
+                <button 
+                    type="submit"
+                    form="confirm-form"
+                    class="text-[#22c55e] hover:text-[#22c55e] font-medium appointment-action" data-action="confirm">
+                    Confirm
+                </button>
+                <button
+                    type="submit"
+                    form="cancel-form"
+                    class="text-[#f87171] hover:text-[#fca5a5] font-medium appointment-action" data-action="cancel">
+                    Cancel
+                </button>   
+            @elseif ($appointment->status == 'confirmed')
+                <button
+                    type="submit"
+                    form="cancel-form"
+                    class="text-[#f87171] hover:text-[#fca5a5] font-medium appointment-action" data-action="cancel">
+                    Cancel
+                </button>
+            @else
+                
+            @endif
         </div>
     </td>
 </tr>
+
+<form action="/dashboard/appointment/{{ $appointment->id }}" method="POST" id="confirm-form">
+    @csrf
+    @method('PUT')
+    <input type="text" name="status" value="confirmed">
+</form>
+
+<form action="/dashboard/appointment/{{ $appointment->id }}" method="post" id="cancel-form">
+    @csrf
+    @method('PUT')
+    <input type="text" name="status" value="cancelled">
+</form>
+
 <script>
     
 </script>

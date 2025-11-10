@@ -39,6 +39,11 @@ function remainingTime($scheduledTime, $scheduledDate) {
 
 
 @endphp
+@vite(['resources/js/agents/appointments'])
+<script>
+    let appointments = @json($appointments_); 
+</script>
+
 <x-agent-dashboard.dashboard-layout>
 
 <!-- Upcoming Appointments Highlight -->
@@ -141,6 +146,55 @@ function remainingTime($scheduledTime, $scheduledDate) {
             {{ $appointments->links('vendor.pagination.dashboard-pagination') }}
         </div>
     </div>
+</div>
+{{-- display an appointment modla --}}
+<div class="modal" id="apmodal">
+    <div class="apmodal-content">
+    <div class="apmodal-header">
+        <h2 id="modalTitle">Appointment Details</h2>
+        <button class="close-btn" id="closeModal">×</button>
+    </div>
+    <div class="apmodal-body">
+        <div class="property-carousel" >
+        <img src="" alt="" id="modalImage">
+        </div>
+        <div class="apmodal-details">
+        <div class="detail-section">
+            <h3>Property Information</h3>
+            <p>
+            <strong>Property:</strong> <span id="modalPropertyName"></span>
+            </p>
+            <p><strong>Price:</strong> <span id="modalPrice"></span></p>
+            <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+        </div>
+        <div class="detail-section">
+            <h3>Agent Contact</h3>
+            <p><strong>Agent:</strong> <span id="modalAgent"></span></p>
+            <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+        </div>
+        <div class="detail-section">
+            <h3>Appointment Details</h3>
+            <p>
+            <strong>Date &amp; Time:</strong>
+            <span id="modalDateTime"></span>
+            </p>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+        </div>
+        <div class="detail-section">
+            <h3>Notes</h3>
+            <p id="modalNotes">
+            Please arrive 5 minutes early. Bring valid ID for verification.
+            </p>
+        </div>
+        </div>
+        <div class="apmodal-actions">
+        <button class="btn btn-primary">Contact Agent</button>
+        <button class="btn btn-secondary">Mark as Completed</button>
+        </div>
+    </div>
+    </div>
+</div>
 </div>
 </x-agent-dashboard.dashboard-layout>
             
