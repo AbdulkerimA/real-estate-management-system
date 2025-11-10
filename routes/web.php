@@ -116,8 +116,11 @@ Route::controller(MediaController::class)->group(function () {
 Route::controller(EarningController::class)->group(function (){
     Route::get('/dashboard/earnings','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
-    Route::post('/dashboard/earnings','store');
     // ->middleware(['auth'])->can('isAgent','App\Models\Agent');
+
+    // checkout request
+    Route::post('/dashboard/earnings','store');
+    Route::delete('/checkout/delete/{checkoutRequest}','cancelCheckOutReq');//->middleware(['auth']);
 });
 
 Route::controller(TransactionController::class)->group(function () {

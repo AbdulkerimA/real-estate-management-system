@@ -6,6 +6,7 @@ use App\Models\Agent;
 use App\Models\Balance;
 use App\Models\CheckoutRequest;
 use App\Models\Earning;
+use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -19,18 +20,18 @@ class EarningController extends Controller
     public function index (){
         $user = Auth::id();
         
-            $agent = Agent::with(
-                    [
-                        'earnings',
-                        'balance',
-                        'checkoutRequest'=>function ($query) {
-                            $query->select('agent_id','requested_amount')
-                                    ->where('request_status','pending');
-                        },
+        $agent = Agent::with(
+                [
+                    'earnings',
+                    'balance',
+                    'checkoutRequest'=>function ($query) {
+                        $query->select('agent_id','requested_amount')
+                                ->where('request_status','pending');
+                    },
 
-                    ])
-                        ->where('user_id',$user)
-                        ->firstOrFail();
+                ])
+                    ->where('user_id',$user)
+                    ->firstOrFail();
 
         // total pending checkout amount
         $pendingTotoal =  $agent->checkoutRequest->sum('requested_amount');
@@ -65,13 +66,18 @@ class EarningController extends Controller
         })->values();
 
 
-        // dd($weeklyReport,$earningsByWeek,$agent);   
+        $checkoutReq = CheckoutRequest::where('agent_id',$agent->id)->paginate(5);
+        $transactions = Transaction::where('agent_id',$agent->user_id)->paginate(5);
+
+        // dd($transactions,$weeklyReport,$earningsByWeek,$agent,$checkoutReq);   
 
         return view("agents.earning.index",[
             'agent' => $agent,
             'pendingTotal'=>$pendingTotoal,
             'thisMonthTotal' => $thisMonthTotal,
             'weeklyReport' => $weeklyReport,
+            'transactions' => $transactions,
+            'checkOutReq' => $checkoutReq,
         ]);
     }
 
@@ -112,6 +118,14 @@ class EarningController extends Controller
         }
 
         return response()->json(['res'=>'success','message'=>'your request will proccessed in 2-5 working days']);
+    }
+
+    public function cancelCheckOutReq(Request $request,CheckoutRequest $checkoutRequest){
+        // dd($request->all(),$checkoutRequest);
+
+        $checkoutRequest->delete();
+
+        return redirect('/dashboard/earnings')->with("message","request successfuly deleted");
     }
 
 }
