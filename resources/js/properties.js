@@ -138,19 +138,19 @@ document.querySelector('select').addEventListener('change', function() {
     alert(`Sorting by: ${this.value}`);
 });
 
-const bookMarks = document.querySelectorAll('.bookMark');
+// const bookMarks = document.querySelectorAll('.bookMark');
 
-bookMarks.forEach((bookMarkEl) => {
-    let bookMarked = false; // Separate state for each icon
+// bookMarks.forEach((bookMarkEl) => {
+//     let bookMarked = false; // Separate state for each icon
 
-    // send fetch request to update the book mark table 
-    bookMarkEl.addEventListener('click', () => {
-        bookMarked = !bookMarked;
+//     // send fetch request to update the book mark table 
+//     bookMarkEl.addEventListener('click', () => {
+//         bookMarked = !bookMarked;
 
-        bookMarkEl.innerHTML = bookMarked
-            ? '<i class="fas fa-bookmark" aria-hidden="true"></i>'
-            : '<i class="far fa-bookmark" aria-hidden="true"></i>';
-    });
-});
+//         bookMarkEl.innerHTML = bookMarked
+//             ? '<i class="fas fa-bookmark" aria-hidden="true"></i>'
+//             : '<i class="far fa-bookmark" aria-hidden="true"></i>';
+//     });
+// });
 
 window.searchSetUp = searchSetUp;

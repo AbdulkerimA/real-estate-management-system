@@ -5,6 +5,7 @@ use App\Http\Controllers\AgentDashboardController;
 use App\Http\Controllers\AgentProfileConttroller;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\BookMarkController;
 use App\Http\Controllers\DashboardPropertyController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\MediaController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\BookMark;
 use App\Models\Earning;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +28,8 @@ Route::get('/home', function(){
     $properties = Property::latest()->paginate(5);
     return view('home.index',['properties'=>$properties]);
 });
+
+Route::Post('/bookmark/{property}',[BookMarkController::class,'store'])->middleware('auth');
 
 Route::view('/about','home.about');
 

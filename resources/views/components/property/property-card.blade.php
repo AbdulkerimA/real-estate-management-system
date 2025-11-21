@@ -1,8 +1,8 @@
 @props(['property'])
-
+@vite(['resources/js/bookmark'])
 @php
     $images = json_decode($property->media->file_path, true);
-
+     $isBookmarked = $property->bookmarks()->where('user_id', auth()->id())->exists();
     // dd($property->details->area_size);
 @endphp
 
@@ -20,8 +20,14 @@
             {{ $property->status }}
         </x-property.tag>
 
-        <div class = "absolute top-0 right-0 px-4 py-2 bg-green-400/30 text-green-600 font-bold rounded-full text-3xl bookMark" >
-            <i class="far fa-bookmark" aria-hidden="true"></i> <!-- outline version -->
+        <div 
+            data-id="{{ $property->id }}"
+            class = "absolute top-0 right-0 px-4 py-2 bg-green-400/30 text-green-600 font-bold rounded-full text-3xl bookMark" >
+            @if ($isBookmarked)
+                <i class="fas fa-bookmark"></i>
+            @else
+                <i class="far fa-bookmark" aria-hidden="true"></i> <!-- outline version -->
+            @endif
         </div>
 
     </div>

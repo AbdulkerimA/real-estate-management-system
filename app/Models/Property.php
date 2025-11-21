@@ -46,4 +46,8 @@ class Property extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function bookMarks(){
+        return $this->hasMany(BookMark::class);
+    }
 }
