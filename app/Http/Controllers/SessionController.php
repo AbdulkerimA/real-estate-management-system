@@ -60,7 +60,7 @@ class SessionController extends Controller
                 return redirect('/dashboard');
                 break;
             default:
-                return redirect('/properties');
+                return redirect()->intended();
                 break;
         }
         
