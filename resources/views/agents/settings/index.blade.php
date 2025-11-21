@@ -149,7 +149,7 @@
                         <div>
                             <p class="text-white font-medium">Deactivate Account</p>
                             <p class="text-gray-400 text-sm">Temporarily disable your account (can be reactivated)</p>
-                        </div>
+                        </div> 
                         <button class="danger-button px-6 py-3 rounded-lg text-white font-semibold" id="deactivateBtn">
                             Deactivate
                         </button>

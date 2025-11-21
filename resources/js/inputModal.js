@@ -76,4 +76,4 @@ if (deleteAccountBtn) {
             }
         );
     });
-}
+} 

@@ -18,7 +18,7 @@ class SettingController extends Controller
 
     public function Update(Request $request){
 
-        // return json_encode($request->all()); // for js requests debuging
+        // return json_encode($request->all()); // for js requests debuging    
         
         $user = Auth::user();
         
@@ -26,6 +26,8 @@ class SettingController extends Controller
             'setting' => 'required|string',
             'value' => 'required|boolean',
         ]);
+
+        // return json_encode($validatedOption);
 
         // update setting option
         if($validatedOption){
@@ -35,6 +37,15 @@ class SettingController extends Controller
                 ]);
             }
 
+            if($validatedOption['setting'] == "deactivated"){
+                $user->settings->update([
+                    $validatedOption['setting'] => $validatedOption['value'],
+                ]);
+                 return response()->json([
+                    'message' => 'logout',
+                    'status' => $validatedOption['value'],
+                ]);
+            }
             $response = $user->settings->update([
                 $validatedOption['setting'] => $validatedOption['value'],
             ]);

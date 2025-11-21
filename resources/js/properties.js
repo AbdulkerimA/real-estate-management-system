@@ -8,16 +8,56 @@
 //     priceDisplay.textContent = value.toLocaleString();
 // });
 
+// filter drop down
+document.getElementById('location-filter').value = sessionStorage.getItem('location-filter') || "";
+document.getElementById('type-filter').value = sessionStorage.getItem('type-filter') || "";
+document.getElementById('price-filter').value = sessionStorage.getItem('price-filter') || "";
+document.getElementById('bedroom-filter').value = sessionStorage.getItem('bedroom-filter') || "";
+
+ // setup the search form
+document.getElementById('location-inp').value = sessionStorage.getItem('location-filter') || "all";
+document.getElementById('type-inp').value = sessionStorage.getItem('type-filter') || "all";
+document.getElementById('price-range-inp').value = sessionStorage.getItem('price-filter') || "any";
+document.getElementById('bed-rooms-inp').value = sessionStorage.getItem('bedroom-filter') || "any";
+
+
 // Search functionality
-document.getElementById('search-btn').addEventListener('click', function() {
+function searchSetUp (){
     const location = document.getElementById('location-filter').value;
     const type = document.getElementById('type-filter').value;
-    // const price = document.getElementById('price-filter').value;
+    const price = document.getElementById('price-filter').value;
     const bedrooms = document.getElementById('bedroom-filter').value;
     
-    // Simulate search
-    alert(`Searching properties...\nLocation: ${location || 'All'}\nType: ${type || 'All'}\nPrice: ${price || 'Any'}\nBedrooms: ${bedrooms || 'Any'}`);
-});
+    // store to the session
+    sessionStorage.setItem('location-filter',location);
+    sessionStorage.setItem('type-filter',type);
+    sessionStorage.setItem('price-filter',price);
+    sessionStorage.setItem('bedroom-filter',bedrooms);
+
+    // setup the form
+    document.getElementById('location-inp').value = location;
+    document.getElementById('type-inp').value = type;
+    document.getElementById('price-range-inp').value = price;
+    document.getElementById('bed-rooms-inp').value = bedrooms;
+    // console.log(
+    //     `${location || 'All'}\n
+    //     Type: ${type || 'All'}\n
+    //     Price: ${price || 'Any'}\n
+    //     Bedrooms: ${bedrooms || 'Any'}`
+    // );
+
+    document.getElementById('search-form').submit();
+}
+
+// document.getElementById('search-btn').addEventListener('click', function() {
+//     const location = document.getElementById('location-filter').value;
+//     const type = document.getElementById('type-filter').value;
+//     // const price = document.getElementById('price-filter').value;
+//     const bedrooms = document.getElementById('bedroom-filter').value;
+    
+//     // Simulate search
+//     alert(`Searching properties...\nLocation: ${location || 'All'}\nType: ${type || 'All'}\nPrice: ${price || 'Any'}\nBedrooms: ${bedrooms || 'Any'}`);
+// });
 
 // // Reset filters
 // document.getElementById('reset-btn').addEventListener('click', function() {
@@ -112,3 +152,5 @@ bookMarks.forEach((bookMarkEl) => {
             : '<i class="far fa-bookmark" aria-hidden="true"></i>';
     });
 });
+
+window.searchSetUp = searchSetUp;

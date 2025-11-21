@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Property;
+use App\Models\PropertyDetail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Calculation\Financial\Securities\Price;
+use PhpOffice\PhpSpreadsheet\Chart\Properties;
 
 use function Pest\Laravel\get;
 
@@ -19,15 +23,171 @@ class PropertyController extends Controller
         // $this->authorize('update', );
 
         $agent_id = $request->get('id');
-        if($agent_id == null)
+        if($agent_id == null){
             $properties = Property::with('details')->where('status','approved')->paginate(10);
-        else
+        }
+        else{
             $properties = Property::with('details')->where('agent_id',$agent_id)->paginate(10);
-        
-        // dd($properties);
-        return view('properties.index',['properties'=>$properties]);
+        }
+
+        $totalDisplayedProperties =  $properties->perPage() * $properties->currentPage();
+        $firstElement = $properties->currentPage() > 1 ? $properties->perPage() + 1 : 1;
+
+        // dd($properties->total());
+        return view('properties.index',[
+            'properties'=>$properties,
+            'displayedPropertisInfo' => $firstElement . "-" . $totalDisplayedProperties,
+            "sortedBy" => "newest",
+        ]);
     }
 
+    /**
+     * search general types of propertyies
+     */
+
+    private function searchByLocation($location, $properties)
+    {
+        $properties = $properties->where('location',$location);
+        return $properties;
+    }
+
+    // filter by type
+    private function searchByType($type, $properties)
+    {
+        $properties = $properties->where('type',$type);
+        return $properties;
+    }
+
+    // filter by price range
+    private function searchByPrice($price, $properties)
+    {   
+        if($price != '5000000+'){
+            $priceRange = explode('-',$price);
+            $properties = $properties->whereBetween('price', [$priceRange[0], $priceRange[1]]);
+        }
+        else{      
+            $properties = Property::with('details')->where('price','>','5000000');
+        }
+
+        // dd($properties->get());
+        return $properties;
+    }
+    private function searchByBedRooms($bedRooms, Builder $properties)
+    {
+        if($bedRooms == "5+"){
+            $propertyIds = PropertyDetail::where('bed_rooms', '>=', 5)->pluck('property_id');
+        }
+        else{
+            $propertyIds = PropertyDetail::where('bed_rooms', $bedRooms)->pluck('property_id');
+        }
+
+        return $properties->whereIn('id',$propertyIds);
+    }
+
+    private function validateSearchRequests(Request $request){
+
+        // dd($request->post());
+        $validated = $request->validate([
+            'location' => "nullable|min:3",
+            'type' => "nullable",
+            'price_range' => "nullable",
+            'bed_rooms' => "nullable",
+        ]); 
+
+        return $validated;
+    }
+
+    public function search(Request $request) {
+
+        // dd($request->post());
+        $propertiesBase = Property::with('details');
+        $validated = $this->validateSearchRequests($request);
+        $SearchFlag = true;
+
+        foreach($validated as $key=>$value){
+            if($value != null){
+                $SearchFlag = true;
+                break;
+            }    
+            else
+                $SearchFlag = false;
+        }
+
+        if($SearchFlag)
+        {
+            foreach($validated as $key=>$value)
+            {
+                if($key == 'location' && $value != null){
+                    $properties = $this->searchByLocation($value,$propertiesBase);
+                }
+                else if($key == 'type' && $value != null){
+                    $properties = $this->searchByType($value,$propertiesBase);
+                }
+                else if($key == 'price_range' && $value != null){
+                    $properties = $this->searchByPrice($value,$propertiesBase);
+                }
+                else if($key == 'bed_rooms' && $value != null){
+                    $properties = $this->searchByBedRooms($value,$propertiesBase);
+                }
+            }
+        }
+        else
+            $properties = $propertiesBase;
+        
+        
+        // dd($properties->paginate(10));
+        
+
+        $properties = $properties->paginate(10);
+        $totalDisplayedProperties =  $properties->perPage() * $properties->currentPage();
+        $firstElement = $properties->currentPage() > 1 ? $properties->perPage() + 1 : 1;
+
+        // dd($properties);
+
+        return view('properties.index',[
+            'properties' => $properties,
+            'displayedPropertisInfo' => $firstElement . "-" . $totalDisplayedProperties,
+            'sortedBy' => "newest",
+        ]);
+    }
+
+    public function sortProperties(Request $request){
+        // dd($request->post());
+
+        $validated = $request->validate([
+            'sortBy' => 'required | in:latest,priceHigh,priceLow,popular',
+        ]);
+
+        $sortedBy = "newest";
+
+        switch ($validated['sortBy']) {
+            case 'latest':
+                $properties = Property::latest()->paginate(10);
+                break;
+            case 'priceHigh':
+                $properties = Property::orderBy('price','asc')->paginate(10);
+                $sortedBy="Low to High";
+                break;
+            case 'priceLow':
+                $properties = Property::orderByDesc('price')->paginate(10);
+                $sortedBy=" High to Low";
+                break;
+            default:
+                $properties = Property::latest()->paginate(10);
+                break;
+        }
+
+        $totalDisplayedProperties =  $properties->perPage() * $properties->currentPage();
+        $firstElement = $properties->currentPage() > 1 ? $properties->perPage() + 1 : 1;
+
+        // dd($properties);
+
+        return view('properties.index',[
+            'properties' => $properties,
+            'displayedPropertisInfo' => $firstElement . "-" . $totalDisplayedProperties,
+            'sortedBy' => $sortedBy,
+        ]);
+    }
     /**
      * display propertis in the admin page
      */

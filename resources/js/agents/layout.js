@@ -319,8 +319,7 @@ document.querySelectorAll('.property-action').forEach(button => {
                 break;
             case 'delete':
                 if (confirm(`Are you sure you want to delete: ${propertyName}?`)) {
-                    alert(`Property deleted: ${propertyId}`);
-                    // In a real app, you would remove the element and update the backend
+                    // send a delete request
                 }
                 break;
         }

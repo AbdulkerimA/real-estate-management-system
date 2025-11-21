@@ -18,7 +18,7 @@ use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
-    $properties = Property::latest()->paginate(5);
+    $properties = Property::latest()->where('status','approved')->paginate(5);
     return view('home.index',['properties'=>$properties]);
 });
 
@@ -41,6 +41,7 @@ Route::controller(SessionController::class)->group(function () {
     Route::get('/login','create')->name('login');
     Route::post('/login','store');
     Route::delete('/logout','destroy');
+    Route::post('/logout','destroy');
 });
 
 Route::controller(AgentController::class)->group(function (){
@@ -69,6 +70,9 @@ Route::controller(PropertyController::class)->group(function (){
     Route::get('/property/{property}','show')->middleware(['auth','can:view,property']);
     Route::get('/property/{property}/{message}','show')->middleware(['auth','can:view,property']);
 
+    Route::post('/properties','search');
+    Route::post('/property/sort','sortProperties');
+
     // agents dashboard
     Route::get('/dashboard/property/{porperty}','getPropertyInfo')->middleware(['auth','can:create,App\Models\Property']);
 
@@ -85,7 +89,7 @@ Route::controller(DashboardPropertyController::class)->group(function(){
     
     Route::post('/dashboard/property/create','store')->middleware(['auth','can:create,App\Models\Property']);
     Route::put('/dashboard/property/update/{property}','update')->middleware(['auth','can:create,App\Models\Property']);
-    Route::delete('/dashbord/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
+    Route::delete('/dashboard/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
 });
 
 Route::controller(AppointmentController::class)->group(function(){

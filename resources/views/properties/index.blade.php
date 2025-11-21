@@ -27,7 +27,10 @@
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium mb-2">Location</label>
-                    <select class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="location-filter">
+                    <select 
+                            value = 'all'
+                            onchange="searchSetUp()"
+                            class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="location-filter">
                         <option value="">All Locations</option>
                         <option value="bole">Bole</option>
                         <option value="kirkos">Kirkos</option>
@@ -43,7 +46,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Property Type</label>
-                    <select class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="type-filter">
+                    <select 
+                            value = 'all'
+                            onchange="searchSetUp()"
+                            class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="type-filter">
                         <option value="">All Types</option>
                         <option value="house">House</option>
                         <option value="apartment">Apartment</option>
@@ -55,7 +61,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Price Range</label>
-                    <select class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="price-filter">
+                    <select 
+                            value = 'any'
+                            onchange="searchSetUp()"
+                            class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="price-filter">
                         <option value="">Any Price</option>
                         <option value="0-500000">Under 500K ETB</option>
                         <option value="500000-1000000">500K - 1M ETB</option>
@@ -66,7 +75,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Bedrooms</label>
-                    <select class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="bedroom-filter">
+                    <select 
+                            value = 'any'
+                            onchange="searchSetUp()"
+                            class="w-full px-4 py-3 rounded-lg bg-[#12181f] border border-gray-600 text-white focus:outline-none focus:border-[#00ff88]" id="bedroom-filter">
                         <option value="">Any</option>
                         <option value="1">1 Bedroom</option>
                         <option value="2">2 Bedrooms</option>
@@ -83,6 +95,13 @@
                         Reset Filters
                     </button> --}}
                 </div>
+                <form action="/properties" method="post" id="search-form" class="hidden" >
+                    @csrf
+                    <input type="text" name="location" id="location-inp" value="all">
+                    <input type="text" name="type" id="type-inp" value="all">
+                    <input type="text" name="price_range" id="price-range-inp" value="any">
+                    <input type="text" name="bed_rooms" id="bed-rooms-inp" value="any">
+                </form>
             </div>
         </div>
 
@@ -103,14 +122,22 @@
                 <!-- Sort Options -->
                 <div class="flex justify-between items-center mb-6">
                     <div class="text-gray-400">
-                        Showing <span class="text-white font-semibold">1-24</span> of <span class="text-white font-semibold">156</span> properties
+                        Showing <span class="text-white font-semibold">{{ $displayedPropertisInfo }}</span> of <span class="text-white font-semibold">{{ $properties->total() }}</span> properties
                     </div>
-                    <select class="bg-[#1c252e] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff88]">
-                        <option>Sort by: Newest</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Most Popular</option>
-                    </select>
+                    <form action="/property/sort" method="post" id="sortform">
+                        @csrf
+                        {{-- sort properties --}}
+                        <select 
+                            name="sortBy"
+                            onchange="document.getElementById('sortform').submit()"
+                            class="bg-[#1c252e] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00ff88]">
+                            <option value="latest">Sort by: {{ $sortedBy }}</option>
+                            <option value="latest">Sort by: Newest</option>
+                            <option value="priceHigh">Price: Low to High</option>
+                            <option value="priceLow">Price: High to Low</option>
+                            {{-- <option value="popular">Most Popular</option> --}}
+                        </select>
+                    </form>
                 </div>
 
                 <!-- Property Grid -->

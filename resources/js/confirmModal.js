@@ -47,6 +47,22 @@ if (deactivateBtn) {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Preference updated:", data);
+                        if(data.message == 'logout'){
+                            fetch('/logout',{
+                                method:'POST',
+                                headers:{
+                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                                }
+                            })
+                            .then(response =>{
+                                if (!response.ok) {
+                                    throw new Error('Failed to delete the item');
+                                }
+                                window.location = '/';  
+                            }).catch(error => {
+                                console.error('Error:', error);
+                            });
+                        }
 
                         // // Optionally show a message or redirect
                         // alert("Your account has been deactivated. Logging out...");
