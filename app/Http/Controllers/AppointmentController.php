@@ -240,6 +240,34 @@ class AppointmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function complete(Appointment $appointment)
+    {
+        $user = Auth::user();
+
+        // Only agent who owns the property can complete
+        // if ($user->role !== 'agent' || $appointment->property->agent_id !== $user->id) {
+        //     abort(403, 'Unauthorized');
+        // }
+
+        if (in_array($appointment->status, ['completed', 'cancelled'])) {
+            return response()->json([
+                'message' => 'This appointment cannot be completed'
+            ], 422);
+        }
+
+        $appointment->update([
+            'status' => 'completed',
+        ]);
+
+        return response()->json([
+            'message' => 'Appointment marked as completed',
+            'status'  => 'completed',
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Appointment $appointment)
     {
         //

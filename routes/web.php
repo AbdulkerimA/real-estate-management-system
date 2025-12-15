@@ -105,6 +105,9 @@ Route::controller(AppointmentController::class)->group(function(){
                 ->middleware('auth')->name('appointments.cancel');
     Route::patch('/appointments/{appointment}/reschedule', 'reschedule')
                 ->middleware('auth')->name('appointments.reschedule');
+    Route::patch('/appointments/{appointment}/complete', 'complete')
+            ->middleware('auth')->name('appointments.complete');
+
 
 
     // dashboards appointment page

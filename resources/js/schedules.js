@@ -16,6 +16,8 @@ const defaultConfig = {
 
 
 let activeAppointmentId = null;
+let activeAppointment = null;
+
 
 // Sample appointment data
 // const appointments = [
@@ -167,8 +169,58 @@ function showDetails(id) {
         "modalStatus"
     ).innerHTML = `<span class="status-badge status-${apt.status}">${apt.status}</span>`;
 
+    activeAppointmentId = id;
+    activeAppointment = apt;
+
+    const markBtn = document.getElementById("markCompletedBtn");
+
+    // Show button only if agent + valid status
+    if (
+        !["completed", "cancelled"].includes(apt.status)
+    ) {
+        markBtn.style.display = "inline-block";
+    } else {
+        markBtn.style.display = "none";
+    }
     document.getElementById("detailsModal").classList.add("active");
 }
+
+async function markAsCompleted() {
+    if (!activeAppointmentId) return;
+
+    try {
+        const response = await fetch(
+            `/appointments/${activeAppointmentId}/complete`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to complete appointment");
+        }
+
+        // Update local data
+        activeAppointment.status = "completed";
+
+        renderAppointments();
+        document.getElementById("detailsModal").classList.remove("active");
+
+        showToast("Appointment marked as completed");
+
+    } catch (error) {
+        console.log(error.message);
+        showToast(error.message, "danger");
+    }
+}
+
 
 function reschedule(id) {
     const apt = appointments.find(a => a.id === id);
@@ -440,3 +492,4 @@ window.renderAppointments = renderAppointments;
 window.reschedule = reschedule;
 window.submitReschedule = submitReschedule;
 window.closeRescheduleModal = closeRescheduleModal;
+window.markAsCompleted = markAsCompleted;
