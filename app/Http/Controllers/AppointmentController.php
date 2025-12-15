@@ -34,6 +34,7 @@ class AppointmentController extends Controller
                 'status'    => $value->status,
                 'price'     => "ETB ".$value->property->price,
                 'location'  => $value->property->location,
+                'note'      => $value->additional_note,
             ];
         }
 

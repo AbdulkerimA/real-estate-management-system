@@ -110,7 +110,7 @@
         </div>
         <div class="modal-body">
           <div class="property-carousel" >
-            <img src="" alt="" id="modalImage">
+            <img src="" alt="" id="modalImage" class="w-full h-full object-cover rounded-2xl">
           </div>
           <div class="modal-details">
             <div class="detail-section">

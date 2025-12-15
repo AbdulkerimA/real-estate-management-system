@@ -162,6 +162,7 @@ function showDetails(id) {
     document.getElementById("modalAgent").textContent = apt.agent;
     document.getElementById("modalPhone").textContent = apt.phone;
     document.getElementById("modalEmail").textContent = apt.email;
+    document.getElementById("modalNotes").textContent = apt.note ?? 'There is No Extra Note';
     document.getElementById(
         "modalDateTime"
     ).textContent = `${apt.date} at ${apt.time}`;
