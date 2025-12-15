@@ -103,6 +103,9 @@ Route::controller(AppointmentController::class)->group(function(){
     Route::put('/schedules/{Appointment}','statusUpdate')->middleware(['auth']);
     Route::patch('/appointments/{appointment}/cancel', 'cancel')
                 ->middleware('auth')->name('appointments.cancel');
+    Route::patch('/appointments/{appointment}/reschedule', 'reschedule')
+                ->middleware('auth')->name('appointments.reschedule');
+
 
     // dashboards appointment page
     Route::get('/dashboard/appointments','dashboardIndex')->middleware(['auth'])->can('isAgent','App\Models\Agent');

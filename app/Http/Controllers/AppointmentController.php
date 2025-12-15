@@ -176,6 +176,44 @@ class AppointmentController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * update the schedule time and date of the specified resource in DB
+     */
+    public function reschedule(Request $request, Appointment $appointment)
+    {
+        // Only buyer can reschedule
+        if ($appointment->buyer_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Cannot reschedule cancelled or completed
+        if (in_array($appointment->status, ['completed', 'cancelled'])) {
+            return response()->json([
+                'message' => 'This appointment cannot be rescheduled'
+            ], 422);
+        }
+
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'time' => 'required|date_format:H:i',
+        ]);
+
+        $appointment->update([
+            'scheduled_date' => $validated['date'],
+            'scheduled_time' => $validated['time'],
+            'status' => 'pending', // optional: reset status
+        ]);
+
+        return response()->json([
+            'message' => 'Appointment rescheduled successfully',
+            'date' => $validated['date'],
+            'time' => $validated['time'],
+        ]);
+    }
+
+    /**
+     * update the status of the specified resource to cancel in DB
+     */
     public function cancel(Appointment $appointment)
     {
         // Authorization: only the buyer can cancel

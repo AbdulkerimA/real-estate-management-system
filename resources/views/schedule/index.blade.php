@@ -149,6 +149,36 @@
         </div>
       </div>
     </div>
+    <!-- Reschedule Modal -->
+    <div class="modal" id="rescheduleModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Reschedule Appointment</h2>
+          <button class="close-btn" onclick="closeRescheduleModal()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label>New Date</label>
+            <input type="date" id="rescheduleDate" class="input-field">
+          </div>
+
+          <div class="form-group">
+            <label>New Time</label>
+            <input type="time" id="rescheduleTime" class="input-field">
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeRescheduleModal()">
+              Cancel
+            </button>
+            <button class="btn btn-primary" onclick="submitReschedule()">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {{-- {{ dd($appointments) }} --}}
     <script>

@@ -14,6 +14,9 @@ const defaultConfig = {
     font_size: 16,
 };
 
+
+let activeAppointmentId = null;
+
 // Sample appointment data
 // const appointments = [
 // {
@@ -168,12 +171,65 @@ function showDetails(id) {
 }
 
 function reschedule(id) {
-    const messageDiv = document.createElement("div");
-    messageDiv.style.cssText =
-        "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #00ff88; color: #12181f; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; z-index: 2000; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);";
-    messageDiv.textContent = "Reschedule feature coming soon!";
-    document.body.appendChild(messageDiv);
-    setTimeout(() => messageDiv.remove(), 3000);
+    const apt = appointments.find(a => a.id === id);
+    if (!apt) return;
+
+    activeAppointmentId = id;
+
+    document.getElementById("rescheduleDate").value = apt.date;
+    document.getElementById("rescheduleTime").value = apt.time;
+
+    document.getElementById("rescheduleModal").classList.add("active");
+}
+
+async function submitReschedule() {
+    const date = document.getElementById("rescheduleDate").value;
+    const time = document.getElementById("rescheduleTime").value;
+
+    if (!date || !time) {
+        showToast("Please select date and time", "danger");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/appointments/${activeAppointmentId}/reschedule`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+                body: JSON.stringify({ date, time }),
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to reschedule");
+        }
+
+        // Update local data
+        const apt = appointments.find(a => a.id === activeAppointmentId);
+        apt.date = date;
+        apt.time = time;
+        apt.status = "pending";
+
+        renderAppointments();
+        closeRescheduleModal();
+        showToast("Appointment rescheduled successfully");
+
+    } catch (error) {
+        showToast(error.message, "danger");
+    }
+}
+
+//close modal function
+function closeRescheduleModal() {
+    document.getElementById("rescheduleModal").classList.remove("active");
+    activeAppointmentId = null;
 }
 
 function changeStatusToComplete(id){
@@ -203,7 +259,7 @@ async function confirmCancel(id) {
     try {
         const btn = event?.target;
         if (btn) btn.disabled = true;
-        
+
         const response = await fetch(`/appointments/${id}/cancel`, {
             method: "PATCH",
             headers: {
@@ -381,3 +437,6 @@ window.cancelAppointment = cancelAppointment;
 window.confirmCancel = confirmCancel;
 window.showDetails = showDetails;
 window.renderAppointments = renderAppointments;
+window.reschedule = reschedule;
+window.submitReschedule = submitReschedule;
+window.closeRescheduleModal = closeRescheduleModal;
