@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>My Appointments - Property Sales System</title>
     @vite(['resources/css/schedules.css','resources/js/schedules.js'])
+    {{-- for some reson if this script is removed tailwind will not work --}}
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   </head>
   <body>
     <!-- Page Header -->
