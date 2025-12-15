@@ -14,8 +14,6 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-use App\Models\BookMark;
-use App\Models\Earning;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
@@ -103,6 +101,8 @@ Route::controller(AppointmentController::class)->group(function(){
 
     Route::post('/schedule','store')->middleware(['auth']);
     Route::put('/schedules/{Appointment}','statusUpdate')->middleware(['auth']);
+    Route::patch('/appointments/{appointment}/cancel', 'cancel')
+                ->middleware('auth')->name('appointments.cancel');
 
     // dashboards appointment page
     Route::get('/dashboard/appointments','dashboardIndex')->middleware(['auth'])->can('isAgent','App\Models\Agent');

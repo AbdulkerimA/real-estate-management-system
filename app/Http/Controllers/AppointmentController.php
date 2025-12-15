@@ -48,7 +48,7 @@ class AppointmentController extends Controller
         $cancelledAppointments = $appointmentsCollection->filter(function ($appointment){
             return $appointment->status == 'cancelled';
         });
-        // dd(count($cancelledAppointments));
+        // dd(count($cancelledAppointments ));
 
         return view('schedule.index',[
             'appointments' => $appointments,
@@ -176,6 +176,29 @@ class AppointmentController extends Controller
         return redirect()->back();
     }
 
+    public function cancel(Appointment $appointment)
+    {
+        // Authorization: only the buyer can cancel
+        if ($appointment->buyer_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Prevent cancelling completed appointments
+        if ($appointment->status === 'completed') {
+            return response()->json([
+                'message' => 'Completed appointments cannot be cancelled'
+            ], 422);
+        }
+
+        $appointment->update([
+            'status' => 'cancelled',
+        ]);
+
+        return response()->json([
+            'message' => 'Appointment cancelled successfully',
+            'status'  => 'cancelled',
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      */

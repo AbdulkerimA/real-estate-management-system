@@ -199,21 +199,41 @@ function cancelAppointment(id) {
     `;
 }
 
-function confirmCancel(id) {
-    const apt = appointments.find((a) => a.id === id);
-    if (apt) {
-        // send the canclation request here 
-        apt.status = "cancelled";
+async function confirmCancel(id) {
+    try {
+        const btn = event?.target;
+        if (btn) btn.disabled = true;
+        
+        const response = await fetch(`/appointments/${id}/cancel`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to cancel");
+        }
+
+        // Update local data after success
+        const apt = appointments.find((a) => a.id === id);
+        if (apt) {
+            apt.status = "cancelled";
+        }
+
         renderAppointments();
 
-        const messageDiv = document.createElement("div");
-        messageDiv.style.cssText =
-        "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #f44336; color: white; padding: 1rem 2rem; border-radius: 8px; font-weight: 600; z-index: 2000; box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);";
-        messageDiv.textContent = "Appointment cancelled successfully";
-        document.body.appendChild(messageDiv);
-        setTimeout(() => messageDiv.remove(), 3000);
+        showToast("Appointment cancelled successfully", "danger");
+
+    } catch (error) {
+        showToast(error.message, "danger");
     }
 }
+
 
 function filterAppointments() {
     const searchTerm = document
@@ -239,9 +259,6 @@ document
 .addEventListener("input", filterAppointments);
 document
 .getElementById("statusFilter")
-.addEventListener("change", filterAppointments);
-document
-.getElementById("dateFilter")
 .addEventListener("change", filterAppointments);
 
 document.getElementById("closeModal").addEventListener("click", () => {
@@ -328,9 +345,36 @@ async function onConfigChange(config) {
         config.footer_copyright || defaultConfig.footer_copyright;
 }
 
+function showToast(message, type = "success") {
+    const colors = {
+        success: "#00ff88",
+        danger: "#f44336",
+        info: "#2196f3",
+    };
+
+    const toast = document.createElement("div");
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${colors[type]};
+        color: ${type === "success" ? "#12181f" : "white"};
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        z-index: 2000;
+        box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    `;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
 
 renderAppointments();
 
+window.showToast = showToast;
 window.cancelAppointment  = cancelAppointment;
 window.reschedule = reschedule;
 window.cancelAppointment = cancelAppointment;

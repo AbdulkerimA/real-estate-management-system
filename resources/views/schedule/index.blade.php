@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>My Appointments - Property Sales System</title>
     @vite(['resources/css/schedules.css','resources/js/schedules.js'])
-    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   </head>
   <body>
     <!-- Page Header -->
@@ -45,7 +45,7 @@
         </div>
       </div>
       <!-- Reminder Card -->
-      <div class="reminder-card">
+      {{-- <div class="reminder-card">
         <div class="reminder-icon">⏰</div>
         <div class="reminder-content">
           <h3>Upcoming Reminder</h3>
@@ -54,7 +54,7 @@
             Sarbet.
           </p>
         </div>
-      </div>
+      </div> --}}
       <!-- Search and Filter Bar -->
       <div class="filter-bar">
         <div class="search-box">
@@ -72,13 +72,13 @@
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
-          <select class="filter-select" id="dateFilter">
+          {{-- <select class="filter-select" id="dateFilter">
             <option value="all">All Dates</option>
             <option value="today">Today</option>
             <option value="week">This Week</option>
             <option value="month">This Month</option>
-          </select>
-        </div>
+          </select> --}}
+        </div> 
       </div>
       <!-- Appointments List -->
       <section class="appointments-section">
