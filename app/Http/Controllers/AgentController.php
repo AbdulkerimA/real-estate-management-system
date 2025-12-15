@@ -48,7 +48,7 @@ class AgentController extends Controller
         // Filter by Ratings (if rating column exists)
         if ($request->filled('rating') && $request->rating != 'All Ratings') {
             $ratingFilter = $request->rating;
-            if ($ratingFilter === '5 Stars') $query->where('rating', 5);
+            if ($ratingFilter === '5 Stars') $query->getRelation('reviews')->where('rating', 5);
             if ($ratingFilter === '4+ Stars') $query->where('rating','>=',4);
             if ($ratingFilter === '3+ Stars') $query->where('rating','>=',3);
         }

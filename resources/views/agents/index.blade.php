@@ -38,7 +38,7 @@
 
         
 
-        <!-- Featured Agents Section -->
+        {{-- <!-- Featured Agents Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
             <h2 class="text-3xl font-bold mb-8 text-center">Featured Agents</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Search & Filter Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
@@ -158,7 +158,7 @@
                 </form>
             </div>
         </div>
-        
+
         <!-- All Agents Grid -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
             <div class="flex justify-between items-center mb-8">
@@ -168,7 +168,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="agents-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="agents-grid">
                 <!-- Agent Card 1 -->
                 @foreach ($agents as $agent)
                     <x-agent.agnet-card :agent="$agent"/>

@@ -60,4 +60,14 @@ class Agent extends Model
                     ->where('request_status', 'approved')
                     ->latest('created_at');
     } 
+
+    // helper functions
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating');
+    }
+    public function totalRating()
+    {
+        return $this->reviews()->get('id')->count();
+    }
 }

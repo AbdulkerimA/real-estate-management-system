@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardPropertyController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransactionController;
@@ -151,6 +152,8 @@ Route::controller(AgentDashboardController::class)->group(function(){
     Route::get('/dashboard/home','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 });
 
+
+Route::post('/agent/rate', [ReviewController::class, 'store'])->name('agent.rate')->middleware('auth');
 
 
 
