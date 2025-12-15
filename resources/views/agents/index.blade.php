@@ -11,7 +11,7 @@
 
 <body class="bg-[#12181f] text-white">
     <!-- Navigation -->
-    <x-nav.nav-layout />
+    <x-nav.nav-layout /> 
 
     <!-- Floating Background Shapes -->
     <div class="floating-shapes fixed inset-0">
@@ -36,60 +36,7 @@
             </div>
         </div>
 
-        <!-- Search & Filter Section -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-            <div class="search-bar rounded-2xl p-6">
-                <div class="flex flex-col lg:flex-row gap-4">
-                    <!-- Search Bar -->
-                    <div class="flex-1">
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                placeholder="Search agents by name or location..."
-                                class="w-full px-6 py-4 bg-[#12181f] border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#00ff88] focus:ring-2 focus:ring-[#00ff88]/20"
-                                id="agent-search"
-                                >
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Filter Buttons -->
-                    <div class="flex flex-wrap gap-3">
-                        <select class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#00ff88]">
-                            <option>All Locations</option>
-                            <option>Bole</option>
-                            <option>Kirkos</option>
-                            <option>Yeka</option>
-                            <option>Arada</option>
-                            <option>Gulele</option>
-                        </select>
-                        
-                        <select class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#00ff88]">
-                            <option>Experience</option>
-                            <option>1-3 years</option>
-                            <option>3-5 years</option>
-                            <option>5-10 years</option>
-                            <option>10+ years</option>
-                        </select>
-                        
-                        <select class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white focus:outline-none focus:border-[#00ff88]">
-                            <option>All Ratings</option>
-                            <option>5 Stars</option>
-                            <option>4+ Stars</option>
-                            <option>3+ Stars</option>
-                        </select>
-                        
-                        <button class="bg-[#00ff88] text-[#12181f] px-6 py-3 rounded-lg font-semibold hover:bg-green-400 transition-colors">
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Featured Agents Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
@@ -169,6 +116,49 @@
             </div>
         </div>
 
+        <!-- Search & Filter Section -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="search-bar rounded-2xl p-6">
+                <form method="GET" action="{{ route('agents.index') }}" class="flex flex-col lg:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Search agents by name or location..."
+                        value="{{ request('search') }}"
+                        class="w-full px-6 py-4 bg-[#12181f] border border-gray-600 rounded-xl text-white placeholder-gray-400"
+                    >
+
+                    <select name="location" class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white">
+                        <option>All Locations</option>
+                        <option value="Bole" {{ request('location')=='Bole'?'selected':'' }}>Bole</option>
+                        <option value="Kirkos" {{ request('location')=='Kirkos'?'selected':'' }}>Kirkos</option>
+                        <option value="Yeka" {{ request('location')=='Yeka'?'selected':'' }}>Yeka</option>
+                        <option value="Arada" {{ request('location')=='Arada'?'selected':'' }}>Arada</option>
+                        <option value="Gulele" {{ request('location')=='Gulele'?'selected':'' }}>Gulele</option>
+                    </select>
+
+                    <select name="experience" class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white">
+                        <option>Experience</option>
+                        <option value="1-3 years" {{ request('experience')=='1-3 years'?'selected':'' }}>1-3 years</option>
+                        <option value="3-5 years" {{ request('experience')=='3-5 years'?'selected':'' }}>3-5 years</option>
+                        <option value="5-10 years" {{ request('experience')=='5-10 years'?'selected':'' }}>5-10 years</option>
+                        <option value="10+ years" {{ request('experience')=='10+ years'?'selected':'' }}>10+ years</option>
+                    </select>
+
+                    <select name="rating" class="filter-btn px-4 py-3 bg-[#12181f] border border-gray-600 rounded-lg text-white">
+                        <option>All Ratings</option>
+                        <option value="5 Stars" {{ request('rating')=='5 Stars'?'selected':'' }}>5 Stars</option>
+                        <option value="4+ Stars" {{ request('rating')=='4+ Stars'?'selected':'' }}>4+ Stars</option>
+                        <option value="3+ Stars" {{ request('rating')=='3+ Stars'?'selected':'' }}>3+ Stars</option>
+                    </select>
+
+                    <button type="submit" class="bg-[#00ff88] text-[#12181f] px-6 py-3 rounded-lg font-semibold hover:bg-green-400">
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
+        
         <!-- All Agents Grid -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
             <div class="flex justify-between items-center mb-8">

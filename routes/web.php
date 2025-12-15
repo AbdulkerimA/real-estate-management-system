@@ -47,7 +47,7 @@ Route::controller(SessionController::class)->group(function () {
 });
 
 Route::controller(AgentController::class)->group(function (){
-    Route::get('/agents','index');
+    Route::get('/agents','index')->name('agents.index');
     Route::get('/agent/register','create');
     Route::get('/agent/{agent}','show');
     // Route::get('/dashboard/profile/edit','edit')->middleware('auth')->can('isAgent','App\Models\Agent');

@@ -12,7 +12,7 @@ document.getElementById('agent-search').addEventListener('input', function() {
 // Filter functionality
 document.querySelectorAll('select').forEach(select => {
     select.addEventListener('change', function() {
-        console.log('Filter changed:', this.value);
+        console.log('Filter changed:', this.value); 
         // In a real application, this would filter the agents
     });
 });

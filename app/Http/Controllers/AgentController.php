@@ -18,12 +18,46 @@ class AgentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $agents = Agent::with('user')->paginate(20);
-        // dd();
-        return view('agents.index',['agents'=>$agents]);
+        $query = Agent::with('user');
+
+        // Search by name or address
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+            })->orWhere('address', 'like', "%{$search}%");
+        }
+
+        // Filter by Location
+        if ($request->filled('location') && $request->location != 'All Locations') {
+            $query->where('address', $request->location);
+        }
+
+        // Filter by Experience
+        if ($request->filled('experience') && $request->experience != 'Experience') {
+            $expFilter = $request->experience;
+            if ($expFilter === '1-3 years') $query->whereBetween('years_of_experience',[1,3]);
+            if ($expFilter === '3-5 years') $query->whereBetween('years_of_experience',[3,5]);
+            if ($expFilter === '5-10 years') $query->whereBetween('years_of_experience',[5,10]);
+            if ($expFilter === '10+ years') $query->where('years_of_experience','>=',10);
+        }
+
+        // Filter by Ratings (if rating column exists)
+        if ($request->filled('rating') && $request->rating != 'All Ratings') {
+            $ratingFilter = $request->rating;
+            if ($ratingFilter === '5 Stars') $query->where('rating', 5);
+            if ($ratingFilter === '4+ Stars') $query->where('rating','>=',4);
+            if ($ratingFilter === '3+ Stars') $query->where('rating','>=',3);
+        }
+
+        $agents = $query->paginate(20)->withQueryString(); // keep filters on pagination
+
+        return view('agents.index', compact('agents'));
     }
+
 
     // export users data in excel format
     public function export(){
