@@ -7,6 +7,7 @@ use App\Models\Agent;
 use App\Models\Document;
 use App\Models\Media;
 use App\Models\Property;
+use App\Models\Review;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -150,9 +151,10 @@ class AgentController extends Controller
      */
     public function show(Agent $agent)
     {
-        
+        // dd($agent);
         $properties = Property::where('agent_id',$agent->user_id)->get();
-        // dd($properties[0]);
+        $comments = Review::where('agent_id',$agent->id)->groupBy('user_id')->get('user_id');
+        // dd($comments);
         return view('agents.show',['agent'=>$agent,'properties'=>$properties]);
     }
 

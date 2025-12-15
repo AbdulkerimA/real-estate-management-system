@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}" >
     <title>Sara Tadesse - AnchorHomes</title>
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -80,9 +81,11 @@
 
                             <!-- CTA Buttons -->
                             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <button class="contact-btn bg-[#00ff88] text-[#12181f] px-8 py-3 rounded-xl font-bold hover:bg-green-400 transition-colors">
-                                    Contact Agent
-                                </button>
+                                <a href="tel:+{{ $agent->user->phone }}">
+                                    <button class="contact-btn bg-[#00ff88] text-[#12181f] px-8 py-3 rounded-xl font-bold hover:bg-green-400 transition-colors">
+                                        Contact Agent
+                                    </button>
+                                </a>
                                 <button class="message-btn border-2 border-gray-600 text-white px-8 py-3 rounded-xl font-bold hover:border-[#00ff88] transition-colors">
                                     Send Message
                                 </button>
@@ -113,11 +116,11 @@
                 <!-- Customer Rating -->
                 <div class="stat-card rounded-2xl p-6 text-center">
                     <div class="flex justify-center items-center mb-2">
-                        <span class="text-4xl font-bold text-[#00ff88] mr-2">4.8</span>
+                        <span class="text-4xl font-bold text-[#00ff88] mr-2">{{number_format($agent->averageRating() ?? 1 ,1)}}</span>
                         <div class="star-rating text-2xl">⭐</div>
                     </div>
                     <div class="text-gray-300 font-semibold">Customer Rating</div>
-                    <div class="text-sm text-gray-400 mt-1">98 reviews</div>
+                    <div class="text-sm text-gray-400 mt-1">{{ $agent->totalRating() }} reviews</div>
                 </div>
             </div>
         </div>
@@ -162,8 +165,10 @@
                 @endforeach
             </div>
             <div class="w-full flex justify-center">
-                <button class="w-fit bg-[#00ff88] text-gray-900 text-xl py-4 px-8 mt-6 rounded-lg font-semibold hover:bg-green-400 transition-colors">
-                    view more <i class="fa fa-arrow-right " aria-hidden="true"></i> 
+                <button class="w-fit bg-[#00ff88] text-gray-900 text-xl py-4 px-8 mt-6 rounded-lg font-semibold hover:bg-green-400 transition-colors"
+                        onclick="window.location = '/properties?id={{ $agent->user_id }}'">
+                    view more
+                    <i class="fa fa-arrow-right " aria-hidden="true"></i> 
                 </button>
             </div>
         </div>
@@ -173,13 +178,13 @@
             <h2 class="text-3xl font-bold mb-8 text-center">What Clients Say</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               @for ($i = 0; $i < 6; $i++ )
-                   <x-customer-review />
-               @endfor
+               @foreach ($agent->reviews as $review )
+                   <x-customer-review :comment="$review" />
+               @endforeach
             </div>
         </div>
 
-        <!-- Call-to-Action Section -->
+        {{-- <!-- Call-to-Action Section -->
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
             <div class="cta-section rounded-3xl p-8 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Interested in working with Sara Tadesse?</h2>
@@ -193,7 +198,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Footer -->
         {{-- <footer class="bg-[#1c252e] border-t border-gray-700 py-12">

@@ -1,12 +1,9 @@
 @props([
-    'comment'=>[
-        'profile' => '',
-        'userName' => 'abebe kebede',
-        'stars' => 5,
-        'content' => "Working with Sara was a pleasure. She understood our needs perfectly and found us exactly what we were looking for."
-    ]
+    'comment',
 ])
-
+@php
+    // dump($comment);
+@endphp
 <div class="review-card rounded-2xl p-6">
     <div class="flex items-center mb-4">
         
@@ -15,9 +12,9 @@
         </div>
 
         <div>
-            <h4 class="font-semibold">{{ $comment['userName'] }}</h4>
+            <h4 class="font-semibold">{{ $comment->user->name }}</h4>
             <div class="star-rating text-sm">
-                @for ($i = 0; $i < $comment['stars']; $i++)
+                @for ($i = 0; $i < number_format($comment->agent->averageRating() ?? 1 ,0); $i++)
                     ⭐
                 @endfor    
             </div>
@@ -25,6 +22,6 @@
     </div>
 
     <p class="text-gray-300 italic">
-        {{ $comment['content'] }}
+        {{ $comment->comment ?? "just rating with no comment" }}
     </p>
 </div>

@@ -1,5 +1,5 @@
 @props(['property'])
-@vite(['resources/js/bookmark'])
+@vite(['resources/js/bookmark.js'])
 @php
     $images = json_decode($property->media->file_path, true);
      $isBookmarked = $property->bookmarks()->where('user_id', auth()->id())->exists();
