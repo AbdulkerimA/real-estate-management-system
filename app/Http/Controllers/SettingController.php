@@ -32,12 +32,14 @@ class SettingController extends Controller
         // update setting option
         if($validatedOption){
             if($validatedOption['setting'] == 'email_authentication'){
+                $user->settings()->firstOrCreate(['user_id' => $user->id]);
                 $user->settings->update([
                     'two_factor_authentication' => $validatedOption['value'],
                 ]);
             }
 
             if($validatedOption['setting'] == "deactivated"){
+                $user->settings()->firstOrCreate(['user_id' => $user->id]);
                 $user->settings->update([
                     $validatedOption['setting'] => $validatedOption['value'],
                 ]);
@@ -54,6 +56,19 @@ class SettingController extends Controller
                 'message' => 'Preference updated successfully.',
                 'status' => $validatedOption['value'],
             ]);
+
+
+            // user preference
+            if ($user->settings) {
+                $user->settings->update([
+                    $validatedOption['setting'] => $validatedOption['value'],
+                ]);
+
+                return response()->json([
+                    'message' => ucfirst(str_replace('_', ' ', $validatedOption['setting'])) . ' updated successfully.',
+                    'status' => $validatedOption['value'],
+                ]);
+            }
         }
     }
 

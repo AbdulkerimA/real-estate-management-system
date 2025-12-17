@@ -31,7 +31,11 @@ class MediaController extends Controller
         $mime = $request->file('profilePic')->getClientMimeType();
 
         $user = Auth::user();
-        $mediaId = $user->agentProfile->media->id;
+
+        if($user->role == 'agent')
+            $mediaId = $user->agentProfile->media->id;
+        else
+            $mediaId = $user->customer->media->id;
         
         if (!$mediaId) {
             return response()->json(['error' => 'Media record not found'], 404);
@@ -42,6 +46,6 @@ class MediaController extends Controller
             'file_type' => $mime,
         ]);
 
-        return response()->json(['success' => 'Profile successfully updated']);
+        return response()->json(['message' => 'Profile successfully updated']);
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
+use App\Models\Customer;
+use App\Models\Media;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,6 +108,17 @@ class UserController extends Controller
             'phone' => ltrim($validated['phone'], '+'),
             'password' => $validated['password'],
             'role'=>'customer',
+        ]);
+        
+        $settings = Setting::create(['user_id'=>$user->id]);
+        $media = Media::create([
+            'file_path' => '',
+            'file_type' => '',
+        ]);
+        $profile = Customer::create([
+            'user_id'   => $user->id,
+            'media_id'  => $media->id,
+            'address'   => '',
         ]);
 
         //login the user

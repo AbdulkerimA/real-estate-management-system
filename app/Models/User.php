@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasOne(Agent::class);
     }
 
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class);

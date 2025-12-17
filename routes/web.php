@@ -15,6 +15,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
@@ -155,12 +156,22 @@ Route::controller(AgentDashboardController::class)->group(function(){
 
 Route::post('/agent/rate', [ReviewController::class, 'store'])->name('agent.rate')->middleware('auth');
 
+// user profile page
+Route::get('/profile',[UserProfileController::class,'index'])->middleware('auth')->name('user.profile');
+Route::put('/profile/update', [UserProfileController::class, 'update'])->middleware('auth');
+Route::post('/profile/photo', [MediaController::class, 'update'])->middleware('auth');
+Route::put('/profile/security/password', [UserProfileController::class, 'updatePassword'])->middleware('auth');
+Route::put('/profile/security/2fa', [SettingController::class, 'update']);
+Route::put('/profile/preferences', [SettingController::class, 'update'])->middleware('auth');
+Route::middleware('auth')->delete('/profile/delete', [SettingController::class, 'destroy']);
 
 
 // admin dashboard navigations
 Route::view('/admin','admin.dashboard');
 Route::view('/admin/settings','admin.settings');
 Route::view('/admin/profile','admin.profile.index');
+
+
 
 
 // test routes
