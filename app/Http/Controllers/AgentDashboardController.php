@@ -35,7 +35,7 @@ class AgentDashboardController extends Controller
             $totalCheckOut += $checkout->requested_amount;
         }
 
-        // this month earnings (pending checkouts)
+        // this month earnings (pending checkouts) 
         $pendingCheckOuts = CheckoutRequest::select('requested_amount')
                                         ->where(['request_status'=>'pending','agent_id'=>$agent->id])
                                         ->get();
@@ -47,13 +47,15 @@ class AgentDashboardController extends Controller
                                     ->limit(3)
                                     ->get();
 
-        // $latestAppointments = Appointment::where(['property_id'=>function($query){
-        //                                 $query->
-        //                             }])
-        //                             ->with('details')
-        //                             ->orderByDesc('created_at')
-        //                             ->limit(3)
-        //                             ->get();
+        $latestAppointments = Appointment::whereIn('property_id',function($query){
+                                        $query->select('id')
+                                              ->from('properties')
+                                              ->where('agent_id',Auth::id());
+                                    })
+                                    // ->with('details')
+                                    ->orderByDesc('created_at')
+                                    ->limit(3)
+                                    ->get();
 
         
         $monthlyEarnings = Earning::select(
@@ -66,21 +68,24 @@ class AgentDashboardController extends Controller
                             ->groupBy('month')
                             ->get();
 
+
         $monthlyEarnings->transform(function($item) {
             $item->month_name = date('M', mktime(0, 0, 0, $item->month, 10));
             return $item;
         });
 
         // dd(count($properties),$balance,$totalCheckOut,$checkOuts);
-        // dd($user->properties->find(1));
+        // dd($latestProperties->first()->getFirstImage(),$monthlyEarnings);
+        // dd($latestAppointments->first()->property->title);
 
         return view('agents.dashboard',[
-            'propertiesCount' => count($properties),
-            'balance' => $balance,
-            'totalCheckout' => $totalCheckOut,
-            'pendingCheckout' => count($pendingCheckOuts),
-            'latestProperties' => $latestProperties,
-            'monthlyEarnings' => $monthlyEarnings,
+            'propertiesCount'   => count($properties),
+            'balance'           => $balance,
+            'totalCheckout'     => $totalCheckOut,
+            'pendingCheckout'   => count($pendingCheckOuts),
+            'latestProperties'  => $latestProperties,
+            'monthlyEarnings'   => $monthlyEarnings,
+            'appointments'      => $latestAppointments,
         ]);
     }
 }

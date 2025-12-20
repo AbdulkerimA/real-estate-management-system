@@ -142,8 +142,8 @@ searchInput.addEventListener('input', function() {
 });
 
 // Initialize Chart
-// console.log(monthlyEarnings);
-let monthlyEarnings = []; // fix this 
+console.log(monthlyEarnings);
+// let monthlyEarnings = []; // fix this 
 const earned = monthlyEarnings?monthlyEarnings.map(item=>item.earned):[];
 const months = monthlyEarnings?monthlyEarnings.map(item=>item.month_name):[];
 

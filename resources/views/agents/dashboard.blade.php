@@ -29,7 +29,8 @@
                 <!-- Active Appointments -->
                 <x-agent-dashboard.status-card 
                     themeColor="blue" 
-                    statusNum="{{ Number::format($balance->current_balance) }}" 
+                    statusNum="{{ $balance->current_balance }}" 
+                    currency="ETB"
                     notifier="3 today">
                     
                     <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +97,6 @@
                                         <th class="text-left py-4 px-2 font-semibold">Property</th>
                                         <th class="text-left py-4 px-2 font-semibold">Status</th>
                                         <th class="text-left py-4 px-2 font-semibold">Price</th>
-                                        <th class="text-left py-4 px-2 font-semibold">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,12 +105,13 @@
                                             <td class="py-4 px-2">
                                                 <div class="flex items-center space-x-4">
                                                     <div class="property-image w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                                                        <img src="" alt="image of {{ $property->title[0] }}">
+                                                        <img src="{{ asset('storage/'.$property->getFirstImage()) }}" 
+                                                             alt="image of {{ $property->title[0] }}" />
                                                     </div>
                                                     <div>
                                                         <p class="font-semibold text-lg">{{ $property->title }}</p>
                                                         <p class="text-sm text-gray-400">
-                                                            {{ $property->location }} <br>
+                                                            {{ $property->location }} <br />
                                                             • {{ $property->details->bed_rooms }} bed, 
                                                             {{ $property->details->bath_rooms }} bath
                                                         </p>
@@ -124,13 +125,6 @@
                                             </td>
                                             <td class="py-4 px-2">
                                                 <span class="font-bold text-lg">ETB {{ Number::format($property->price) }}</span>
-                                            </td>
-                                            <td class="py-4 px-2">
-                                                <div class="flex space-x-3">
-                                                    <button class="text-[#00ff88] hover:text-green-400 font-medium">Edit</button>
-                                                    <button class="text-blue-400 hover:text-blue-300 font-medium">View</button>
-                                                    <button class="text-red-400 hover:text-red-300 font-medium">Delete</button>
-                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -156,51 +150,26 @@
                     <div class="content-card rounded-2xl p-6">
                         <h2 class="text-xl font-bold mb-6">Upcoming Appointments</h2>
                         <div class="space-y-4">
-                            <div class="flex items-center space-x-4 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    AM
+                            @foreach ($appointments as $ap )
+                                <div class="flex items-center space-x-4 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-sm font-bold">
+                                        <image src="{{ asset('storage/'.$ap->property->getFirstImage()) }}"
+                                                alt="PI" 
+                                                class="w-full h-full object-cover rounded-full"/>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-semibold">{{ $ap->buyer->name }}</p>
+                                        <p class="text-sm text-gray-400">{{ $ap->property?->title }} - {{ $ap->property?->location }}</p>
+                                        <p class="text-sm text-[#00ff88] font-medium">{{ $ap->scheduled_date }}, {{ $ap->scheduled_time }}</p>
+                                    </div>
+                                    <button class="text-[#00ff88] hover:text-green-400 p-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div class="flex-1">
-                                    <p class="font-semibold">Abebe Mekuria</p>
-                                    <p class="text-sm text-gray-400">Luxury Apartment - Bole</p>
-                                    <p class="text-sm text-[#00ff88] font-medium">Today, 2:00 PM</p>
-                                </div>
-                                <button class="text-[#00ff88] hover:text-green-400 p-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="flex items-center space-x-4 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    MH
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-semibold">Meron Haile</p>
-                                    <p class="text-sm text-gray-400">Modern Villa - Kazanchis</p>
-                                    <p class="text-sm text-gray-400">Tomorrow, 10:00 AM</p>
-                                </div>
-                                <button class="text-[#00ff88] hover:text-green-400 p-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="flex items-center space-x-4 p-4 bg-[#12181f] rounded-xl hover:bg-opacity-80 transition-colors cursor-pointer">
-                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-sm font-bold">
-                                    DG
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-semibold">Daniel Getachew</p>
-                                    <p class="text-sm text-gray-400">Family House - CMC</p>
-                                    <p class="text-sm text-gray-400">Friday, 3:30 PM</p>
-                                </div>
-                                <button class="text-[#00ff88] hover:text-green-400 p-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                    </svg>
-                                </button>
-                            </div>
+                            @endforeach
+                            
                         </div>
                         <button class="w-full mt-6 text-[#00ff88] hover:text-green-400 font-semibold py-2">
                             View All Appointments
