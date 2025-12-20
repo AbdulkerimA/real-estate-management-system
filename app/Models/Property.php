@@ -50,4 +50,11 @@ class Property extends Model
     public function bookMarks(){
         return $this->hasMany(BookMark::class);
     }
+
+    // helper functions
+    public function getFirstImage(){
+        // dd($this);
+        $images = json_decode($this->media->file_path, true);
+        return $images[0];
+    }
 }
