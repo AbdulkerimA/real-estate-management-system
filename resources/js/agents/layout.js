@@ -78,7 +78,7 @@ document.querySelectorAll('table button').forEach(button => {
         const row = this.closest('tr');
         const propertyName = row.querySelector('p.font-semibold').textContent;
         
-        alert(`${action} action for: ${propertyName}`);
+        // alert(`${action} action for: ${propertyName}`);
     });
 });
 
@@ -142,7 +142,7 @@ searchInput.addEventListener('input', function() {
 });
 
 // Initialize Chart
-console.log(monthlyEarnings);
+// console.log(monthlyEarnings);
 // let monthlyEarnings = []; // fix this 
 const earned = monthlyEarnings?monthlyEarnings.map(item=>item.earned):[];
 const months = monthlyEarnings?monthlyEarnings.map(item=>item.month_name):[];
@@ -686,12 +686,40 @@ document.querySelectorAll('.sidebar-item').forEach(item => {
 });
 
 // Search functionality
-const appointmentSearchInput = document.querySelector('input[placeholder*="Search appointments"]');
-appointmentSearchInput?appointmentSearchInput.addEventListener('input', function() {
-    if (this.value.length > 2) {
-        console.log(`Searching for: ${this.value}`);
-    }
-}):'';
+const apstatusFilter = document.getElementById('apstatusFilter');
+const apstartDate = document.getElementById('startDate');
+const apendDate = document.getElementById('endDate');
+const apsearchInput = document.getElementById('appointmentSearch');
+const tableBody = document.getElementById('appointmentsTableBody');
+
+let debounceTimer = null;
+
+function fetchAppointments() {
+    axios.get('/agent/appointments/search', {
+        params: {
+            q: searchInput.value,
+            status: apstatusFilter.value,
+            start_date: apstartDate.value,
+            end_date: apendDate.value,
+        }
+    })
+    .then(res => {
+        tableBody.innerHTML = res.data;
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+
+// Debounce typing
+searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(fetchAppointments, 400);
+});
+
+apstatusFilter.addEventListener('change', fetchAppointments);
+apstartDate.addEventListener('change', fetchAppointments);
+apendDate.addEventListener('change', fetchAppointments);
 
 // Upcoming appointments interactions
 document.querySelectorAll('.appointment-card button').forEach(button => {

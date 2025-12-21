@@ -3,8 +3,8 @@
 @php
     $images = json_decode($appointment->property->media->file_path, true);
     $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
-   
-//    dd($appointment->buyer)
+    $remainingDays = remainingTime($appointment->scheduled_time,$appointment->scheduled_date);
+//    dd($appointment->buyer,$remainingDays);
 @endphp
 
 {{-- {{ 
@@ -22,8 +22,8 @@
             </div> --}}
             <img src="{{ asset('storage/'.$firstImage) }}" alt="" class="w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#9333ea] rounded-full flex items-center justify-center">
             <div>
-                <p class="font-semibold">{{ $appointment->buyer->name }}</p>
-                <p class="text-sm text-[#9ca3af]">+{{ $appointment->buyer->phone }}</p>
+                <p class="font-semibold">{{ $appointment->buyer?->name }}</p>
+                <p class="text-sm text-[#9ca3af]">+{{ $appointment->buyer?->phone }}</p>
             </div>
         </div>
     </td>
@@ -71,12 +71,14 @@
                 View
             </button>
             @if ($appointment->status == 'pending')
-                <button 
-                    type="submit"
-                    form="confirm-form"
-                    class="text-[#22c55e] hover:text-[#22c55e] font-medium appointment-action" data-action="confirm">
-                    Confirm
-                </button>
+                @if ($remainingDays != 'passed')
+                    <button 
+                        type="submit"
+                        form="confirm-form"
+                        class="text-[#22c55e] hover:text-[#22c55e] font-medium appointment-action" data-action="confirm">
+                        Confirm
+                    </button>
+                @endif
                 <button
                     type="submit"
                     form="cancel-form"

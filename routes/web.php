@@ -88,12 +88,22 @@ Route::controller(PropertyController::class)->group(function (){
 Route::controller(DashboardPropertyController::class)->group(function(){
 
     Route::get('/dashboard/properties','index')->middleware(['auth','can:manages,App\Models\Property']);
-    Route::get('/dashboard/property/create','create')->middleware(['auth','can:create,App\Models\Property']);
+    Route::get('/dashboard/property/create','create')->middleware(['auth']);
     Route::get('/dashboard/property/edit/{property}','edit')->middleware(['auth','can:create,App\Models\Property']);
     
-    Route::post('/dashboard/property/create','store')->middleware(['auth','can:create,App\Models\Property']);
-    Route::put('/dashboard/property/update/{property}','update')->middleware(['auth','can:create,App\Models\Property']);
-    Route::delete('/dashboard/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
+    Route::post('/dashboard/property/create','store')
+            ->middleware(['auth','can:create,App\Models\Property']);
+
+    Route::put('/dashboard/property/update/{property}','update')
+            ->middleware(['auth','can:create,App\Models\Property']);
+
+    Route::delete('/dashboard/property/delete/{property}','destroy')
+            ->middleware(['auth','can:create,App\Models\Property']);
+            
+    Route::get('/agent/appointments/search','search')
+            ->name('agent.appointments.search');
+
+
 });
 
 Route::controller(AppointmentController::class)->group(function(){

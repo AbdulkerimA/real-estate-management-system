@@ -18,7 +18,7 @@ function remainingTime($scheduledTime, $scheduledDate) {
 
     // Check if the scheduled date is in the past
     if ($scheduledDate < date('Y-m-d')) {
-        return "Day passed";
+        return "passed";
     }
 
     // Check if the scheduled date is today
@@ -76,7 +76,7 @@ function remainingTime($scheduledTime, $scheduledDate) {
 <div class="">
     <!-- Mini Calendar -->
         <!-- Filters -->
-    <div class="">
+    {{-- <div class="">
         <div class="content-card rounded-2xl p-6">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -111,7 +111,7 @@ function remainingTime($scheduledTime, $scheduledDate) {
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <!-- Appointments Table -->
@@ -156,7 +156,7 @@ function remainingTime($scheduledTime, $scheduledDate) {
     </div>
     <div class="apmodal-body">
         <div class="property-carousel" >
-        <img src="" alt="" id="modalImage">
+        <img src="" alt="" id="modalImage" class="w-full h-full object-cover rounded-2xl">
         </div>
         <div class="apmodal-details">
         <div class="detail-section">
@@ -189,8 +189,8 @@ function remainingTime($scheduledTime, $scheduledDate) {
         </div>
         </div>
         <div class="apmodal-actions">
-        <button class="btn btn-primary">Contact Agent</button>
-        <button class="btn btn-secondary">Mark as Completed</button>
+        <button class="btn btn-primary py-2 px-4 rounded-lg font-semibold">Contact Agent</button>
+        <button class="btn btn-secondary py-2 px-4 rounded-lg font-semibold">Mark as Completed</button>
         </div>
     </div>
     </div>

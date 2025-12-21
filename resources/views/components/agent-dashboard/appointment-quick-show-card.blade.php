@@ -1,13 +1,18 @@
 @props(['action'=>'view details', 'status'=>'Scheduled','appointment'=>[],])
 
-
-
-<div class="appointment-card rounded-xl p-6 border-l-4" style="border-color: #00ff88;">
+@php
+    $remainingDays = remainingTime($appointment->scheduled_time,$appointment->scheduled_date);
+@endphp
+<div @class([
+    'appointment-card rounded-xl p-6 border-l-4',
+    'border-red-600' => trim($remainingDays) === 'passed',
+    'border-[#00ff88]' => trim($remainingDays) !== 'passed',
+])>
     <div class="flex items-center justify-between mb-4">
         <span class="{{$status != 'Pending' ?'status-scheduled':'status-pending' }} px-3 py-1 rounded-full text-xs font-semibold">{{ $status }}</span>
         <span class="countdown-timer text-lg font-bold">
             {{-- In {{ }} hours --}}
-            {{ remainingTime($appointment->scheduled_time,$appointment->scheduled_date) }}
+            {{ $remainingDays }}
         </span>
     </div>
 
@@ -17,7 +22,7 @@
         </div>
         <div>
             <p class="font-semibold">{{ $appointment->property->title }}</p>
-            <p class="text-sm" style="color: #9ca3af;">Client: {{ $appointment->buyer->name }}</p>
+            <p class="text-sm" style="color: #9ca3af;">Client: {{ $appointment->buyer?->name }}</p>
         </div>
     </div>
 

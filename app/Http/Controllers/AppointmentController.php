@@ -22,7 +22,7 @@ class AppointmentController extends Controller
 
         $appointments = [];
         foreach ($appointmentsCollection as $key => $value) {
-            $appointments[] = [
+            $appointments[] = [ 
                 'id'        => $value->id,
                 'property'  => $value->property->title,
                 'icon'      =>json_decode( $value->property->media->file_path)[0],
@@ -58,6 +58,52 @@ class AppointmentController extends Controller
             'completedAp'=>count($completedAppointments),
             'cancelledAp' => count($cancelledAppointments),
         ]);
+    }
+
+    /**
+     * search specific types of appointments
+     */
+    public function search(Request $request)
+    {
+        $query = Appointment::query()
+            ->with(['client', 'property.media']);
+
+        // 🔍 Text search
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function ($sub) use ($q) {
+                $sub->whereHas('client', fn ($c) =>
+                        $c->where('name', 'like', "%{$q}%")
+                    )
+                    ->orWhereHas('property', fn ($p) =>
+                        $p->where('title', 'like', "%{$q}%")
+                    );
+            });
+        }
+
+        // 📌 Status filter
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // 📅 Date range
+        if ($request->filled('start_date')) {
+            $query->whereDate('scheduled_date', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('scheduled_date', '<=', $request->end_date);
+        }
+
+        $appointments = $query
+            ->latest()
+            ->paginate(10);
+
+        // Return ONLY table rows
+        return view(
+            'agent.appointments.partials.table-rows',
+            compact('appointments')
+        );
     }
 
     public function dashboardIndex()
@@ -161,7 +207,7 @@ class AppointmentController extends Controller
      */
     public function statusUpdate(Request $request, Appointment $appointment)
     {
-        dd($request->all());
+        // dd($request->all(),$appointment);
 
         $validated = $request->validate([ 
             'status' => 'required|in:confirmed,completed,cancelled',
@@ -174,7 +220,7 @@ class AppointmentController extends Controller
             'status'=> $validated['status'],
         ]);
 
-        return redirect()->back();
+        return redirect("/dashboard/appointments")->with('message','appointment cancelled');
     }
 
     /**

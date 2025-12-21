@@ -158,7 +158,7 @@
                                                 class="w-full h-full object-cover rounded-full"/>
                                     </div>
                                     <div class="flex-1">
-                                        <p class="font-semibold">{{ $ap->buyer->name }}</p>
+                                        <p class="font-semibold">{{ $ap->buyer?->name }}</p>
                                         <p class="text-sm text-gray-400">{{ $ap->property?->title }} - {{ $ap->property?->location }}</p>
                                         <p class="text-sm text-[#00ff88] font-medium">{{ $ap->scheduled_date }}, {{ $ap->scheduled_time }}</p>
                                     </div>

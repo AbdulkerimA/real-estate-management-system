@@ -4,7 +4,7 @@ function showDetails(id) {
     const apt = appointments.find((a) => a.id === id);
     if (!apt) return;
 
-    document.getElementById("modalImage").src = `storage/${apt.icon}`;
+    document.getElementById("modalImage").src = `/storage/${apt.icon}`;
     document.getElementById("modalPropertyName").textContent = apt.property;
     document.getElementById("modalPrice").textContent = apt.price;
     document.getElementById("modalLocation").textContent = apt.location;
@@ -16,7 +16,7 @@ function showDetails(id) {
     ).textContent = `${apt.date} at ${apt.time}`;
     document.getElementById(
         "modalStatus"
-    ).innerHTML = `<span class="status-badge status-${apt.status}">${apt.status}</span>`;
+    ).innerHTML = `<span class="status-badge rounded-lg px-2 py-1 status-${apt.status}">${apt.status}</span>`;
 
     document.getElementById("apmodal").classList.add("active");
 }
