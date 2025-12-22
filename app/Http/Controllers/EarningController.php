@@ -74,7 +74,7 @@ class EarningController extends Controller
         return view("agents.earning.index",[
             'agent' => $agent,
             'pendingTotal'=>$pendingTotoal,
-            'thisMonthTotal' => $thisMonthTotal,
+            'thisMonthTotal' => $thisMonthTotal, 
             'weeklyReport' => $weeklyReport,
             'transactions' => $transactions,
             'checkOutReq' => $checkoutReq,
@@ -122,7 +122,17 @@ class EarningController extends Controller
 
     public function cancelCheckOutReq(Request $request,CheckoutRequest $checkoutRequest){
         // dd($request->all(),$checkoutRequest);
+        // add to balace
+        $balance = Balance::where('agent_id', $checkoutRequest->agent_id)->first();
 
+        if (!$balance) {
+            abort(404, 'Balance not found');
+        }
+
+        $balance->current_balance += $checkoutRequest->requested_amount;
+        $balance->save();
+
+        // dd($balance->current_balance);
         $checkoutRequest->delete();
 
         return redirect('/dashboard/earnings')->with("message","request successfuly deleted");

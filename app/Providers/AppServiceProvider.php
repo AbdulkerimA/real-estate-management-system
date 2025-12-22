@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\View\Components\agent_dashboard\CheckOutRequestTable;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        Blade::component(
+            'agent_dashboard.check-out-request-table',
+            CheckOutRequestTable::class
+        );
     }
 }

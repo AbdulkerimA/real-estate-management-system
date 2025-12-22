@@ -18,7 +18,7 @@
     
     <h3 class="text-3xl font-bold text-{{ $themeColor }}-400 mb-2">
         {{ 
-             Number::abbreviate($statusNum)
+             Number::format($statusNum)
         }}
         {{ $currency }}
     </h3>

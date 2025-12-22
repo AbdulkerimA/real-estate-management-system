@@ -133,82 +133,9 @@
             </div>
         </div>
 
-        {{-- checkout reqest table --}}
-        <div class="transaction-table rounded-2xl p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold">Check Out Request History</h2>
-                <div class="flex items-center space-x-4">
-                    <!-- Search -->
-                    <div class="relative">
-                        <input type="text" placeholder="Search transactions..." class="bg-[#12181f] border border-gray-600 rounded-lg px-4 py-2 pl-10 text-white placeholder-gray-400 focus:border-[#00ff88] focus:outline-none" id="transactionSearch">
-                        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                    </div>
-                    
-                    <!-- Status Filter -->
-                    <select class="bg-[#12181f] border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-[#00ff88] focus:outline-none" id="statusFilter">
-                        <option value="all">All Status</option>
-                        <option value="paid">Paid</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-            </div>
-            <!-- Table -->
-            <div class="overflow-x-auto mb-8">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-gray-600">
-                            <th class="text-left py-3 px-4 text-gray-400 font-medium">Date</th>
-                            <th class="text-left py-3 px-4 text-gray-400 font-medium">request amount</th>
-                            <th class="text-left py-3 px-4 text-gray-400 font-medium">status</th>
-                            <th class="text-left py-3 px-4 text-gray-400 font-medium">actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionTableBody">
-                        @foreach ($checkOutReq as $req)
-                            <tr class="transaction-row border-b border-gray-700" data-status="paid">
-                                <td class="py-4 px-4 text-white">{{ date('M d, Y',strtotime($req->crated_at)) }}</td>
-                                <td class="py-4 px-4 text-white">
-                                    {{ Number::format($req->requested_amount)  }} ETB
-                                </td>
-                                <td class="py-4 px-4">
-                                    <span class="status-paid px-3 py-1 rounded-full text-xs font-medium">
-                                        {{ $req->request_status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <button type="submit" form="cancel-form-{{$req->id}}" class="px-4 py-2 rounded-lg bg-red-500/20 border border-red-600 hover:bg-red-500/40">
-                                        <span class="text-red-500 font-semibold">
-                                            cancel request
-                                        </span>
-                                    </button>
-                                </td>
-                            </tr>
-                            {{-- {{ dd($req) }} --}}
-                            <form action="/checkout/delete/{{$req->id}}" method="POST" id="cancel-form-{{$req->id}}" class="hidden">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="flex items-center justify-between mt-6">
-                <p class="text-gray-400 text-sm">Showing 1-7 of 18 transactions</p>
-                <div class="flex items-center space-x-2">
-                    <button class="pagination-button px-3 py-2 rounded-lg text-sm font-medium bg-gray-600 text-gray-300">Previous</button>
-                    <button class="pagination-button active px-3 py-2 rounded-lg text-sm font-medium">1</button>
-                    <button class="pagination-button px-3 py-2 rounded-lg text-sm font-medium bg-gray-600 text-gray-300">2</button>
-                    <button class="pagination-button px-3 py-2 rounded-lg text-sm font-medium bg-gray-600 text-gray-300">3</button>
-                    <button class="pagination-button px-3 py-2 rounded-lg text-sm font-medium bg-gray-600 text-gray-300">Next</button>
-                </div>
-            </div>
-        </div>
+        {{-- checkout reqest table --}} 
+        <x-agent_dashboard.check-out-request-table />
             
-
         <!-- Transactions Table -->
         <div class="transaction-table rounded-2xl p-6">
             <div class="flex items-center justify-between mb-6">
