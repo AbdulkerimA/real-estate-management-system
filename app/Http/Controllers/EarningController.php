@@ -67,16 +67,17 @@ class EarningController extends Controller
 
 
         $checkoutReq = CheckoutRequest::where('agent_id',$agent->id)->paginate(5);
-        $transactions = Transaction::where('agent_id',$agent->user_id)->paginate(5);
+        // $transactions = Transaction::where('agent_id',$agent->user_id)->paginate(5);
+        $earnings = Earning::where('agent_id',$agent->id)->paginate(5);
 
-        // dd($transactions,$weeklyReport,$earningsByWeek,$agent,$checkoutReq);   
+        // dd($earnings->first()->property,$weeklyReport,$earningsByWeek,$agent,$checkoutReq);   
 
         return view("agents.earning.index",[
             'agent' => $agent,
             'pendingTotal'=>$pendingTotoal,
             'thisMonthTotal' => $thisMonthTotal, 
             'weeklyReport' => $weeklyReport,
-            'transactions' => $transactions,
+            'earnings' => $earnings,
             'checkOutReq' => $checkoutReq,
         ]);
     }

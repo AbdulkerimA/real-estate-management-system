@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Components\agent_dashboard\CheckOutRequestTable;
+use App\View\Components\agent_dashboard\TransactionTable;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
         Blade::component(
             'agent_dashboard.check-out-request-table',
             CheckOutRequestTable::class
+        );
+        Blade::component(
+            'agent-dashboard.transaction-table', 
+            TransactionTable::class
         );
     }
 }
