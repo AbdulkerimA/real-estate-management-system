@@ -79,6 +79,7 @@ Route::controller(PropertyController::class)->group(function (){
 
     // agents dashboard
     Route::get('/dashboard/property/{porperty}','getPropertyInfo')->middleware(['auth','can:create,App\Models\Property']);
+    Route::delete('/dashbord/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
 
     // admin page 
     Route::get('/admin/properties','adminPropertyIndex');
@@ -87,9 +88,12 @@ Route::controller(PropertyController::class)->group(function (){
 
 Route::controller(DashboardPropertyController::class)->group(function(){
 
-    Route::get('/dashboard/properties','index')->middleware(['auth','can:manages,App\Models\Property']);
-    Route::get('/dashboard/property/create','create')->middleware(['auth']);
+    Route::get('/dashboard/properties','index')
+        ->middleware(['auth','can:manages,App\Models\Property'])
+        ->name('agent.properties.index');
+        
     Route::get('/dashboard/property/edit/{property}','edit')->middleware(['auth','can:create,App\Models\Property']);
+    Route::get('/dashboard/properties/create','create')->middleware('auth');
     
     Route::post('/dashboard/property/create','store')
             ->middleware(['auth','can:create,App\Models\Property']);
@@ -99,7 +103,7 @@ Route::controller(DashboardPropertyController::class)->group(function(){
 
     Route::delete('/dashboard/property/delete/{property}','destroy')
             ->middleware(['auth','can:create,App\Models\Property']);
-            
+
     Route::get('/agent/appointments/search','search')
             ->name('agent.appointments.search');
 

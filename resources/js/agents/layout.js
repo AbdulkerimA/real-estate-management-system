@@ -124,14 +124,14 @@ document.querySelectorAll('button').forEach(button => {
 });
 
 // Add Property button
-document.querySelectorAll('button').forEach(button => {
-    if (button.textContent.includes('Add Property')) {
-        button.addEventListener('click', function() {
-            alert('Opening Add Property form...');
-            window.location = '/dashboard/property/create';
-        });
-    }
-});
+// document.querySelectorAll('button').forEach(button => {
+//     if (button.textContent.includes('Add Property')) {
+//         button.addEventListener('click', function() {
+//             alert('Opening Add Property form...');
+//             window.location = '/dashboard//create';
+//         });
+//     }
+// });
 
 // Search functionality
 const searchInput = document.querySelector('input[placeholder*="Search"]');

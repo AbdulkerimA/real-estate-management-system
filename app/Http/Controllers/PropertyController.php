@@ -298,8 +298,10 @@ class PropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Property $property)
+    public function destroy(Property $property,Request $r)
     {
-        //
+        // dd($r->all(),$property);
+        $property->delete();
+        return redirect('/dashboard/properties');
     }
 }

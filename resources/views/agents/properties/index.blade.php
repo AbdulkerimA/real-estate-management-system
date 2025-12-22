@@ -6,7 +6,8 @@
         <h1 class="text-4xl font-bold mb-2">Search and filter properties</h1>
         {{-- <p class="text-gray-400 text-lg">Manage all the properties you have listed</p> --}}
     </div>
-    <button class="bg-[#00ff88] text-[#12181f] px-8 py-4 rounded-xl font-semibold hover:bg-green-400 transition-all duration-300 shadow-lg hover:shadow-xl mt-4 md:mt-0">
+    <button class="bg-[#00ff88] text-[#12181f] px-8 py-4 rounded-xl font-semibold hover:bg-green-400 transition-all duration-300 shadow-lg hover:shadow-xl mt-4 md:mt-0"
+            onclick="window.location = 'properties/create'">
         <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
         </svg>
@@ -18,37 +19,54 @@
 <div class="content-card rounded-2xl p-6 mb-8">
     <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
         <!-- Filters -->
-        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <!-- Status Filter -->
-            <div class="filter-dropdown">
-                <select class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 text-white focus:border-[#00ff88] focus:outline-none focus:ring-2 focus:ring-[#00ff88] focus:ring-opacity-20" id="apStatusFilter">
-                    <option value="all">All Status</option>
-                    <option value="approved">Approved</option>
-                    <option value="pending">Pending</option>
-                    <option value="rejected">rejected</option>
-                    <option value="sold">Sold</option>
-                </select>
-            </div>
+        <form method="GET" action="{{ route('agent.properties.index') }}">
+            <div class="content-card rounded-2xl">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
 
-            <!-- Type Filter -->
-            <div class="filter-dropdown">
-                <select class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 text-white focus:border-[#00ff88] focus:outline-none focus:ring-2 focus:ring-[#00ff88] focus:ring-opacity-20" id="typeFilter">
-                    <option value="all">All Types</option>
-                    <option value="house">House</option>
-                    <option value="apartment">Apartment</option>
-                    <option value="land">Land</option>
-                    <option value="commercial">Commercial</option>
-                </select>
-            </div>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
 
-            <!-- Search -->
-            <div class="relative">
-                <input type="text" placeholder="Search properties..." class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 pl-12 text-white placeholder-gray-400 focus:border-[#00ff88] focus:outline-none focus:ring-2 focus:ring-[#00ff88] focus:ring-opacity-20 w-full sm:w-64" id="propertySearch">
-                <svg class="w-5 h-5 text-gray-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
+                        <!-- Status -->
+                        <select name="status"
+                            class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 text-white">
+                            <option value="all">All Status</option>
+                            @foreach (['approved', 'pending', 'rejected', 'sold'] as $status)
+                                <option value="{{ $status }}" @selected(request('status') === $status)>
+                                    {{ ucfirst($status) }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <!-- Type -->
+                        <select name="type"
+                            class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 text-white">
+                            <option value="all">All Types</option>
+                            @foreach (['house', 'apartment', 'land', 'commercial'] as $type)
+                                <option value="{{ $type }}" @selected(request('type') === $type)>
+                                    {{ ucfirst($type) }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <!-- Search -->
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search properties..."
+                            class="bg-[#12181f] border border-gray-600 rounded-xl px-4 py-3 text-white w-full sm:w-64"
+                        />
+                    </div>
+
+                    <!-- Submit -->
+                    <button
+                        type="submit"
+                        class="bg-[#00ff88] text-[#12181f] px-6 py-3 ml-2 rounded-xl font-semibold hover:bg-green-400">
+                        Filter
+                    </button>
+
+                </div>
             </div>
-        </div>
+        </form>
 
         <!-- View Toggle -->
         <div class="flex items-center space-x-2 bg-[#12181f] rounded-xl p-1">
@@ -84,7 +102,7 @@
             </thead>
             <tbody id="propertiesTableBody">
                 @foreach ($properties as $property)
-                    <x-agent-dashboard.table-row  :data="$property" />
+                    <x-agent_dashboard.property-row :data="$property" />
                 @endforeach
             </tbody>
         </table>

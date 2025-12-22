@@ -57,4 +57,21 @@ class Property extends Model
         $images = json_decode($this->media->file_path, true);
         return $images[0];
     }
+
+    public function scopeFilter($query, $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($q, $search) {
+            $q->where('title', 'like', "%{$search}%")
+            ->orWhere('location', 'like', "%{$search}%");
+        });
+
+        $query->when($filters['status'] ?? null, fn ($q, $status) =>
+            $status !== 'all' ? $q->where('status', $status) : null
+        );
+
+        $query->when($filters['type'] ?? null, fn ($q, $type) =>
+            $type !== 'all' ? $q->where('type', $type) : null
+        );
+    }
+
 }

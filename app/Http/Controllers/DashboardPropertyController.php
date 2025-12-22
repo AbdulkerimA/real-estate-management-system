@@ -16,8 +16,12 @@ class DashboardPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::where('agent_id',Auth::id())
-                                ->paginate(10);
+        $properties = Property::with('media')
+                                ->where('agent_id',Auth::id())
+                                ->filter(request()->only(['search', 'status', 'type']))
+                                ->paginate(10)
+                                ->withQueryString();
+                                
         return view('agents.properties.index',['properties'=>$properties]);
     }
 

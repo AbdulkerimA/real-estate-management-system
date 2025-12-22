@@ -1,24 +1,22 @@
-@props(['data'])
-@php
-    
-    $images = json_decode($data->media->file_path);
-    $firstImage = (is_array($images) && count($images) > 0) ? $images[0] : 'default.jpg';
-
-    // dd($data->media->file_path);
-@endphp
 <tr 
     class="border-b border-gray-700 hover:bg-[#12181f] hover:bg-opacity-50 transition-colors"
     data-status="{{ $data->status }}"
     data-type="{{ $data->type ?? 'apartment' }}"
 >
-    {{-- Property Info --}}
+    {{-- Property ID (hidden) --}}
     <td class="pid hidden">
         {{ $data->id }}
     </td>
+
+    {{-- Property Info --}}
     <td class="py-4 px-2">
         <div class="flex items-center space-x-4">
             <div class="property-image w-20 h-16 rounded-xl flex items-center justify-center flex-shrink-0 bg-gray-800">
-                <img src="{{ asset('storage/'.$firstImage) }}" alt="{{ $data->title }}" class="rounded-lg object-cover w-full h-full">
+                <img 
+                    src="{{ asset('storage/' . $data->getFirstImage()) }}" 
+                    alt="{{ $data->title }}" 
+                    class="rounded-lg object-cover w-full h-full"
+                >
             </div>
             <div>
                 <p class="font-semibold text-md">{{ $data->title }}</p>
@@ -30,14 +28,12 @@
     {{-- Location --}}
     <td class="py-4 px-2">
         <p class="font-medium">{{ $data->location }}</p>
-        {{-- <p class="text-sm text-gray-400">Near Bole Airport</p> --}}
     </td>
 
     {{-- Price --}}
     <td class="py-4 px-2">
         <span class="font-bold text-md">
             ETB {{ number_format($data->price, 2) }}
-            {{-- Or short format: ETB {{ short_number($data->price) }} --}}
         </span>
     </td>
 
@@ -45,10 +41,11 @@
     <td class="py-4 px-2">
         <span 
             class="px-4 py-2 rounded-full text-sm font-semibold
-                @if(in_array($data->status, ['available', 'approved'])) status-available
-                @elseif($data->status === 'pending') status-pending
-                @else status-sold
-                @endif
+                @class([
+                    'status-available' => in_array($data->status, ['available', 'approved']),
+                    'status-pending' => $data->status === 'pending',
+                    'status-sold' => !in_array($data->status, ['available', 'approved', 'pending']),
+                ])
             "
         >
             {{ ucfirst($data->status) }}
@@ -58,36 +55,38 @@
     {{-- Actions --}}
     <td class="py-4 px-2">
         <div class="flex space-x-3">
+
             <button 
-                class="text-blue-400 hover:text-blue-300 font-medium property-action" 
-                data-action="view"
+                class="text-blue-400 hover:text-blue-300 font-medium"
                 onclick="viewData({{ $data->id }})"
             >
-                view
-                <i class="fas fa-eye"></i>
+                view <i class="fas fa-eye"></i>
             </button>
 
-            <button 
-                class="text-[#00ff88] hover:text-green-400 font-medium property-action" 
-                data-action="edit"
-                onclick="window.location='property/edit/{{ $data->id }}'"
+            <a 
+                href="{{ url('dashboard/property/edit/' . $data->id) }}"
+                class="text-[#00ff88] hover:text-green-400 font-medium"
             >
-                edit
-                <i class="fas fa-edit"></i>
-            </button>
+                edit <i class="fas fa-edit"></i>
+            </a>
 
             <button 
-                class="text-red-400 hover:text-red-300 font-medium property-action" 
-                data-action="delete"
+                class="text-red-400 hover:text-red-300 font-medium"
                 form="delete-{{ $data->id }}"
             >
-                delete
-            <i class="fas fa-trash-alt"></i>
+                delete <i class="fas fa-trash-alt"></i>
             </button>
-            <form action="/dashbord/property/delete/{{ $data->id }}" method="post" class="hidden" id="delete-{{ $data->id }}">
+
+            <form 
+                action="{{ url('/dashbord/property/delete/' . $data->id) }}" 
+                method="POST" 
+                id="delete-{{ $data->id }}" 
+                class="hidden"
+            >
                 @csrf
                 @method('DELETE')
             </form>
+
         </div>
     </td>
 </tr>

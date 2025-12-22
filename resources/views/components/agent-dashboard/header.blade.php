@@ -32,7 +32,7 @@
             'title' => 'Settings',
             'subtitle' => 'Manage your account and system preferences'
         ],
-        'dashboard/property/create' => [
+        'dashboard/properties/create' => [
             'title' => 'Add New Property',
             'subtitle' => 'Enter property details to create a new listing'
         ],
