@@ -144,10 +144,8 @@
                     {{-- bio --}}
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Bio / About Me</label>
-                        <textarea name="bio" class="form-input w-full rounded-lg px-4 py-3 text-white row-2 resize-none" maxlength="500" id="bio" placeholder="Tell clients about yourself and your expertise...">
-                            {{-- Experienced real estate agent specializing in luxury properties and commercial real estate in Addis Ababa. I have successfully helped over 100 families find their dream homes and assisted numerous businesses in securing prime commercial locations. --}}
-                            {{ trim($user->agentProfile->bio,'') }}
-                        </textarea>
+                        <textarea name="bio" class="form-input w-full rounded-lg px-4 py-3 text-white row-2 resize-none" maxlength="500" id="bio" placeholder="Tell clients about yourself and your expertise..."
+                        >{{ trim($user->agentProfile->bio,'') }}</textarea>
                         <x-form-input-error fildName="bio" />
                         <div class="flex justify-between items-center mt-1">
                             <div class="text-red-400 text-xs hidden" id="bioError">bio is too long</div>
@@ -160,9 +158,8 @@
                     {{-- // about me --}}
                     <div>
                         <label class="block text-gray-400 text-sm font-medium mb-2">Bio / About Me</label>
-                        <textarea name="about_me" class="form-input w-full rounded-lg px-4 py-3 text-white h-44 resize-none" maxlength="500" id="about_me" placeholder="Tell clients about yourself and your expertise...">
-                            {{-- Experienced real estate agent specializing in luxury properties and commercial real estate in Addis Ababa. I have successfully helped over 100 families find their dream homes and assisted numerous businesses in securing prime commercial locations. --}}
-                            {{ $user->agentProfile->about_me }}
+                        <textarea name="about_me" class="form-input w-full rounded-lg px-4 py-3 text-white h-44 resize-none" maxlength="500" id="about_me" placeholder="Tell clients about yourself and your expertise..."
+                        >{{ $user->agentProfile->about_me }}
                         </textarea>
                         <x-form-input-error fildName="about_me" />
                         <div class="flex justify-between items-center mt-1">
