@@ -116,7 +116,7 @@
                                 </td>
                                 <td class="py-3 px-4">
                                     <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <img src="{{ asset('storage/'.$firstImage) }}" alt="{{ 'image of '.$property->title}}" class="w-full h-full object-cover rounded-xl">
+                                        <img src="{{ asset('storage/'.$firstImage) }}" alt="{{ 'image of '.$property->title}}" class="w-full h-full object-cover rounded-lg">
                                     </div>
                                 </td>
                                 <td class="py-3 px-4">
@@ -365,14 +365,14 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-3 pt-4">
+                    {{-- <div class="flex items-center space-x-3 pt-4">
                         <button class="action-button px-6 py-2 rounded-lg text-[#12181f] font-semibold" id="modalApprove">
                             Approve Property
                         </button>
                         <button class="btn-reject action-btn px-6 py-2" id="modalReject">
                             Reject Property
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

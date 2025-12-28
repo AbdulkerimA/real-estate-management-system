@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminPropertyController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentDashboardController;
 use App\Http\Controllers\AgentProfileConttroller;
@@ -83,8 +84,17 @@ Route::controller(PropertyController::class)->group(function (){
     Route::delete('/dashbord/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
 
     // admin page 
-    Route::get('/admin/properties','adminPropertyIndex');
+    Route::get('/admin/properties','adminPropertyIndex')->middleware('auth')->name('admin.properties');
     Route::get('/admin/properties/{property}','getPropertyInfo');
+});
+
+Route::prefix('admin/properties')->group(function () {
+    // Route::get('/', [AdminPropertyController::class, 'index'])->name('admin.properties.index');
+    Route::get('/{id}', [AdminPropertyController::class, 'show'])->name('admin.properties.show');
+    Route::post('/{id}/approve', [AdminPropertyController::class, 'approve'])->name('admin.properties.approve');
+    Route::post('/{id}/reject', [AdminPropertyController::class, 'reject'])->name('admin.properties.reject');
+    Route::delete('/{id}', [AdminPropertyController::class, 'destroy'])->name('admin.properties.destroy');
+    Route::post('/bulk-action', [AdminPropertyController::class, 'bulkAction'])->name('admin.properties.bulkAction');
 });
 
 Route::controller(DashboardPropertyController::class)->group(function(){

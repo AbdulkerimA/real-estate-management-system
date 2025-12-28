@@ -1,29 +1,7 @@
 import KeenSlider from 'keen-slider';
 import 'keen-slider/keen-slider.min.css';
 
-// Create a new slider instance
-document.addEventListener('DOMContentLoaded', () => {
-    var slider = new KeenSlider("#my-keen-slider", {
-        loop: true,
-        detailsChanged: (s) => {
-            const slides = s.track.details.slides
-            s.slides.forEach((element, idx) => {
-                scaleElement(element.querySelector("div"), slides[idx].portion)
-            })
-        },
-        initial: 2,
-    });
-
-    function scaleElement(element, portion) {
-        var scale_size = 0.7;
-        var scale = 1 - (scale_size - scale_size * portion);
-        var style = `scale(${scale})`;
-        element.style.transform = style;
-        element.style["-webkit-transform"] = style;
-    }
-});
-
-// Checkbox functionality
+// ---------------- Checkbox & Bulk Actions ----------------
 const selectAllCheckbox = document.getElementById('selectAll');
 const propertyCheckboxes = document.querySelectorAll('.property-checkbox');
 const bulkActions = document.getElementById('bulkActions');
@@ -42,35 +20,33 @@ function updateBulkActions() {
     }
 }
 
-selectAllCheckbox.addEventListener('change', function() {
-    propertyCheckboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
+if (selectAllCheckbox) {
+    selectAllCheckbox.addEventListener('change', function() {
+        propertyCheckboxes.forEach(cb => cb.checked = this.checked);
+        updateBulkActions();
     });
-    updateBulkActions();
-});
+}
 
-propertyCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const allChecked = Array.from(propertyCheckboxes).every(cb => cb.checked);
-        const someChecked = Array.from(propertyCheckboxes).some(cb => cb.checked);
-        
+propertyCheckboxes.forEach(cb => {
+    cb.addEventListener('change', function() {
+        const allChecked = Array.from(propertyCheckboxes).every(c => c.checked);
+        const someChecked = Array.from(propertyCheckboxes).some(c => c.checked);
+
         selectAllCheckbox.checked = allChecked;
         selectAllCheckbox.indeterminate = someChecked && !allChecked;
-        
+
         updateBulkActions();
     });
 });
 
 // Clear selection
-document.getElementById('clearSelection').addEventListener('click', function() {
+document.getElementById('clearSelection')?.addEventListener('click', function() {
     selectAllCheckbox.checked = false;
-    propertyCheckboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
+    propertyCheckboxes.forEach(cb => cb.checked = false);
     updateBulkActions();
 });
 
-// Modal functionality
+// ---------------- Modal ----------------
 const propertyModal = document.getElementById('modal');
 const closeModal = document.getElementById('closeModal');
 
@@ -101,11 +77,7 @@ async function openModal(propertyId) {
         property.images.forEach(imagePath => {
             const slide = document.createElement('div');
             slide.classList.add('keen-slider__slide', 'zoom-out__slide', 'w-full', 'h-64', 'rounded-lg', 'flex', 'items-center', 'justify-center');
-            slide.innerHTML = `
-                <div>
-                    <img src="/storage/${imagePath}" alt="property image" class="rounded-lg object-cover w-full h-full">
-                </div>
-            `;
+            slide.innerHTML = `<div><img src="/storage/${imagePath}" alt="property image" class="rounded-lg object-cover w-full h-full"></div>`;
             sliderContainer.appendChild(slide);
         });
 
@@ -129,100 +101,161 @@ function closeModalFunc() {
 }
 
 closeModal.addEventListener('click', closeModalFunc);
-propertyModal.addEventListener('click', function(e) {
-    if (e.target === propertyModal) {
-        closeModalFunc();
-    }
+propertyModal.addEventListener('click', e => {
+    if (e.target === propertyModal) closeModalFunc();
 });
 
-// Property action functions
+// ---------------- Property Actions ----------------
 function viewData(id) {
     console.log('Viewing property:', id);
     openModal(id);
 }
-function approve(id) {
-    if (confirm('Are you sure you want to approve this property?')) {
-        console.log('Approving property:', id);
+
+async function approve(id) {
+    // if (!confirm('Are you sure you want to approve this property?')) return;
+
+    // console.log(id);
+    await fetch(`/admin/properties/${id}/approve`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'approved' })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to approve property');
+        return response.json();
+    })
+    .then(data => {
         alert('Property approved successfully!');
-        // Update status in the table
+        // Update status in the table dynamically
         const row = document.querySelector(`[data-property-id="${id}"]`);
-        const statusBadge = row.querySelector('.status-badge');
-        statusBadge.className = 'status-badge status-approved';
-        statusBadge.textContent = 'Approved';
-    }
+        if (row) {
+            const statusBadge = row.querySelector('.status-badge');
+            statusBadge.className = 'status-badge status-approved';
+            statusBadge.textContent = 'Approved';
+        }else{
+            window.location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to approve property. Please try again.');
+    });
 }
 
+
 function reject(id) {
-    if (confirm('Are you sure you want to reject this property?')) {
-        console.log('Rejecting property:', id);
+    // if (!confirm('Are you sure you want to reject this property?')) return;
+
+    fetch(`/admin/properties/${id}/reject`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'rejected' })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to reject property');
+        return response.json();
+    })
+    .then(data => {
         alert('Property rejected successfully!');
-        // Update status in the table
+        // Update status in the table dynamically
         const row = document.querySelector(`[data-property-id="${id}"]`);
-        const statusBadge = row.querySelector('.status-badge');
-        statusBadge.className = 'status-badge status-rejected';
-        statusBadge.textContent = 'Rejected';
-    }
+        if (row) {
+            const statusBadge = row.querySelector('.status-badge');
+            statusBadge.className = 'status-badge status-rejected';
+            statusBadge.textContent = 'Rejected';
+        }else{
+            window.location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to reject property. Please try again.');
+    });
 }
+
 
 function edit(id) {
     console.log('Editing property:', id);
-    alert('Edit property functionality would open here.');
+    // alert('Edit property functionality would open here.');
 }
 
 function deleteAction(id) {
-    if (confirm('Are you sure you want to delete this property? This action cannot be undone.')) {
-        console.log('Deleting property:', id);
+    if (!confirm('Are you sure you want to delete this property? This action cannot be undone.')) return;
+
+    fetch(`/admin/properties/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to delete property');
+        return response.json();
+    })
+    .then(data => {
         alert('Property deleted successfully!');
-        // Remove row from table
         const row = document.querySelector(`[data-property-id="${id}"]`);
-        row.remove();
-    }
+        if (row) row.remove();
+        else window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete property. Please try again.');
+    });
 }
 
-// Bulk actions
-document.getElementById('bulkApprove').addEventListener('click', function() {
-    const checkedBoxes = document.querySelectorAll('.property-checkbox:checked');
-    if (checkedBoxes.length > 0 && confirm(`Approve ${checkedBoxes.length} selected properties?`)) {
-        checkedBoxes.forEach(checkbox => {
-            approve(checkbox.value);
-        });
+
+// ---------------- Bulk Actions ----------------
+// Bulk Approve
+document.getElementById('bulkApprove')?.addEventListener('click', async function() {
+    const checkedBoxes = Array.from(document.querySelectorAll('.property-checkbox:checked'));
+    if (checkedBoxes.length === 0) return;
+
+    if (!confirm(`Approve ${checkedBoxes.length} selected properties?`)) return;
+
+    for (let cb of checkedBoxes) {
+        await approve(cb.value); // make approve async and return fetch promise
     }
-});
-// Modal actions
-document.getElementById('modalApprove').addEventListener('click', function() {
-    alert('Property approved from modal!');
-    closeModalFunc();
+    alert('Selected properties approved!');
 });
 
-document.getElementById('modalReject').addEventListener('click', function() {
-    alert('Property rejected from modal!');
-    closeModalFunc();
-});
+// Bulk Reject
+document.getElementById('bulkReject')?.addEventListener('click', async function() {
+    const checkedBoxes = Array.from(document.querySelectorAll('.property-checkbox:checked'));
+    if (checkedBoxes.length === 0) return;
 
-document.getElementById('bulkReject').addEventListener('click', function() {
-    const checkedBoxes = document.querySelectorAll('.property-checkbox:checked');
-    if (checkedBoxes.length > 0 && confirm(`Reject ${checkedBoxes.length} selected properties?`)) {
-        checkedBoxes.forEach(checkbox => {
-            reject(checkbox.value);
-        });
+    if (!confirm(`Reject ${checkedBoxes.length} selected properties?`)) return;
+
+    for (let cb of checkedBoxes) {
+        await reject(cb.value); // make reject async and return fetch promise
     }
+    alert('Selected properties rejected!');
 });
 
-document.getElementById('bulkDelete').addEventListener('click', function() {
-    const checkedBoxes = document.querySelectorAll('.property-checkbox:checked');
-    if (checkedBoxes.length > 0 && confirm(`Delete ${checkedBoxes.length} selected properties? This action cannot be undone.`)) {
-        checkedBoxes.forEach(checkbox => {
-            deleteAction(checkbox.value);
-        });
+// Bulk Delete
+document.getElementById('bulkDelete')?.addEventListener('click', async function() {
+    const checkedBoxes = Array.from(document.querySelectorAll('.property-checkbox:checked'));
+    if (checkedBoxes.length === 0) return;
+
+    if (!confirm(`Delete ${checkedBoxes.length} selected properties? This action cannot be undone.`)) return;
+
+    for (let cb of checkedBoxes) {
+        await deleteAction(cb.value); // make deleteAction async and return fetch promise
     }
+    alert('Selected properties deleted!');
 });
 
 
-
-
-
-// making globaly scoped
+// ---------------- Expose globally ----------------
 window.viewData = viewData;
+window.openModal = openModal;
 window.approve = approve;
 window.reject = reject;
 window.edit = edit;
