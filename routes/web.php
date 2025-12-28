@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentDashboardController;
 use App\Http\Controllers\AgentProfileConttroller;
@@ -154,7 +155,9 @@ Route::controller(EarningController::class)->group(function (){
 });
 
 Route::controller(TransactionController::class)->group(function () {
-    Route::get('/admin/transactions','index');
+    Route::get('/admin/transactions','index')
+        ->middleware('auth')
+        ->name('admin.transactions.show');
 });
 
 Route::controller(AnalyticsController::class)->group(function () {
@@ -181,7 +184,10 @@ Route::middleware('auth')->delete('/profile/delete', [SettingController::class, 
 
 
 // admin dashboard navigations
-Route::view('/admin','admin.dashboard');
+Route::get('/admin',[AdminDashboardController::class,'index'])
+    ->middleware('auth')
+    ->name('admin.dashboard');
+
 Route::view('/admin/settings','admin.settings');
 Route::view('/admin/profile','admin.profile.index');
 

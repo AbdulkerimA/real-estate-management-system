@@ -4,7 +4,11 @@
     'title'=>'',
     'subTitle'=>'',
     'checkBox' => false,
+    'recenttransaction'=>[]
 ])
+@php
+    dd()
+@endphp
 @vite(['resources/css/admin-style/transaction.css','resources/js/admin-js/transaction.js'])
 
 <div class="dashboard-card rounded-2xl p-6">
@@ -34,45 +38,30 @@
                     @endforeach
             </thead>
 
-            <tbody id="transactionsTableBody">
+            <tbody>
+                @foreach($recenttransaction as $transaction)
                 <tr class="table-row border-b border-gray-700">
-                    @if ($checkBox)
-                        <td class="py-3 px-4">
-                            <input type="checkbox" class="checkbox-custom property-checkbox" value="1">
-                        </td>
-                    @endif
-                    <td class="py-3 px-4 text-gray-300">Jan 15, 2025</td>
+                    <td class="py-3 px-4 text-white">{{ $transaction->created_at->format('M d, Y') }}</td>
+                    <td class="py-3 px-4 text-white">{{ $transaction->buyer->name }}</td>
+                    <td class="py-3 px-4 text-white">{{ $transaction->property->title }}</td>
+                    <td class="py-3 px-4 text-white">₹{{ number_format($transaction->offer_amount, 2) }}</td>
                     <td class="py-3 px-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-white">John Doe</span>
-                        </div>
+                        <span class="status-badge 
+                            @if($transaction->status == 'approved') status-paid
+                            @elseif($transaction->status == 'pending') status-pending
+                            @else status-failed
+                            @endif
+                        ">
+                            {{ ucfirst($transaction->status) }}
+                        </span>
                     </td>
                     <td class="py-3 px-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-white">Mike Johnson</span>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4">
-                        <div>
-                            <p class="text-white text-sm">Luxury 3BR Apartment</p>
-                            <p class="text-gray-400 text-xs">Bole, Addis Ababa</p>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4 text-accent-green font-semibold">₹2,50,000</td>
-                    <td class="py-3 px-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-gray-300 text-sm">Credit Card</span>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4"><span class="status-badge status-completed">Completed</span></td>
-                    <td class="py-3 px-4">
-                        <div class="flex items-center space-x-2">
-                            <button class="action-btn btn-view" onclick="viewTransaction('tx-1')">View</button>
-                            {{-- <button class="action-btn btn-refund" onclick="refundTransaction('tx-1')">Refund</button> --}}
-                        </div>
+                        <button class="text-[#00ff88] hover:text-green-400 text-sm">View</button>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
+
         </table>
     </div>
 </div>
