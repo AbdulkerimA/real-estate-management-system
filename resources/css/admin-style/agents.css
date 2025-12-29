@@ -5,19 +5,19 @@
     font-weight: 600;
 }
 
-.status-pending {
+.status-Pending {
     background: rgba(251, 191, 36, 0.2);
     color: #fbbf24;
     border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-.status-verified {
+.status-Verified {
     background: rgba(34, 197, 94, 0.2);
     color: #22c55e;
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-.status-suspended {
+.status-Suspended {
     background: rgba(239, 68, 68, 0.2);
     color: #ef4444;
     border: 1px solid rgba(239, 68, 68, 0.3);
@@ -208,4 +208,28 @@
 
 .property-card:hover {
     border-color: rgba(0, 255, 136, 0.3);
+}
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: #1f2937;
+    color: #fff;
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    animation: slideIn 0.3s ease;
+}
+
+.toast.success { background: #16a34a; }
+.toast.error { background: #dc2626; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
 }

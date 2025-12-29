@@ -12,7 +12,7 @@ class Review extends Model
 
     protected $fillable = ['user_id','agent_id','rating','comment'];
     
-     public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -20,5 +20,11 @@ class Review extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class);
+    }
+
+    // helper functions
+    public function getReviewer(){
+        // $user = User::find($this->user_id);
+        return $this->user_id;
     }
 }

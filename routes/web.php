@@ -69,6 +69,9 @@ Route::controller(AgentProfileConttroller::class)->group(function(){
     // display agents for admin page
     Route::get('/admin/agents', 'adminAgentsIndex');
     Route::get('/admin/agents/{agent}', 'getAgentInfo');
+    Route::post('/admin/agents/{agent}/verify','verify');
+    Route::post('/admin/agents/{agent}/suspend','suspend');
+    Route::delete('/admin/agents/{agent}','destroy');
 });
 
 Route::controller(PropertyController::class)->group(function (){

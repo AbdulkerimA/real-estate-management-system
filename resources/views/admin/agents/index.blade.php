@@ -1,7 +1,7 @@
 <x-admin-dashboard.main-layout>
     @vite(['resources/css/admin-style/agents.css','resources/js/admin-js/agents.js']) 
     <!-- Page Content -->
-    <div class="p-6 space-y-6">
+    <div class="p-6 space-y-6"> 
         <!-- Quick Stats -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {{-- Total Agents --}}
@@ -107,9 +107,13 @@
                     </thead>
                     <tbody id="agentsTableBody">
                         @foreach ($agents as $agent)
-                            <tr class="table-row border-b border-gray-700" data-agent-id="1">
+                            <tr class="table-row border-b border-gray-700" data-agent-id="{{ $agent->id }}">
                                 <td class="py-3 px-4">
-                                    <input type="checkbox" class="checkbox-custom agent-checkbox" value="1">
+                                    <input 
+                                        type="checkbox"
+                                        class="checkbox-custom agent-checkbox"
+                                        value="{{ $agent->id }}"
+                                    >
                                 </td>
                                 <td class="py-3 px-4">
                                     <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -129,7 +133,7 @@
                                 <td class="py-3 px-4 text-white">{{ $agent->user->email }}</td>
                                 <td class="py-3 px-4 text-white">+{{ $agent->user->phone}}</td>
                                 <td class="py-3 px-4 text-[#00ff88] font-semibold">23</td>
-                                <td class="py-3 px-4"><span class="status-badge status-verified">{{ $agent->user->status }}</span></td>
+                                <td class="py-3 px-4"><span class="status-badge status-{{ $agent->user->status  }}">{{ $agent->user->status }}</span></td>
                                 <td class="py-3 px-4">
                                     <div class="flex w-40 items-center flex-wrap space-x-2 gap-2">
                                         <button class="action-btn btn-view" onclick="viewAgent({{ $agent->id }})">
@@ -137,24 +141,35 @@
                                         </button>
                                             @if ($agent->user->status == 'suspended')
                                                 <button class="action-btn btn-suspend bg-green-400/40 text-green-800" 
-                                                        onclick="suspendAgent({{ $agent->user_id }})"
+                                                        onclick="suspendAgent({{ $agent->id }})"
                                                 >
                                                     unsuspend
                                                 </button>
                                             @elseif ($agent->user->status == 'pending')
-                                                <button class="action-btn btn-suspend bg-green-400/40 text-green-800" 
-                                                        onclick="suspendAgent({{ $agent->user_id }})"
+                                                <button class="action-btn btn-verify" 
+                                                        onclick="verifyAgent({{ $agent->id }})"
                                                 >
                                                     verifie
                                                 </button>
                                             @else
-                                                <button class="action-btn btn-suspend" 
-                                                        onclick="suspendAgent({{ $agent->user_id }})"
-                                                >
-                                                    suspend
-                                                </button>
+                                                @if ($agent->user->status != 'Suspended')
+                                                    <button class="action-btn btn-suspend" 
+                                                            onclick="suspendAgent({{ $agent->id }})"
+                                                    >
+                                                        suspend
+                                                    </button>
+                                                @else
+                                                    <button class="action-btn btn-verify" 
+                                                            onclick="suspendAgent({{ $agent->id }})"
+                                                    >
+                                                        unsuspend
+                                                    </button>
+                                                @endif
                                             @endif
-                                        <button class="action-btn btn-delete" onclick="deleteAgent({{ $agent->user_id}})">Delete</button>
+                                        <button class="action-btn btn-delete" 
+                                                onclick="deleteAgent({{ $agent->id}})">
+                                                Delete
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -168,7 +183,8 @@
             {{ $agents->links('vendor.pagination.dashboard-pagination') }}
         </div>
     </div>
-
+    <div id="toastContainer" class="toast-container"></div>
+    
     <!-- Agent Profile Preview Modal -->
     <x-admin-dashboard.profile-modal />
 

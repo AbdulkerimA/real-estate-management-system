@@ -25,14 +25,15 @@ class AgentProfileConttroller extends Controller
         
         $numOfAgents = count($agents->all());
         $pendingAgents = $agents->all()->filter(function ($agent){
-            return $agent->user->status == 'pending';
+            return $agent->user->status == 'Pending';
         });
         $verifiedAgents = $agents->all()->filter(function ($agent){
-            return $agent->user->status == 'verfied';
+            return $agent->user->status == 'Verified';
         });
         $suspendedAgents = $agents->all()->filter(function ($agent){
-            return $agent->user->status == 'suspended';
+            return $agent->user->status == 'Suspended';
         });
+
 
         // dd($numOfAgents,$pendingAgents,$verifiedAgents,$suspendedAgents);
 
@@ -47,7 +48,9 @@ class AgentProfileConttroller extends Controller
 
     public function getAgentInfo ($id){
 
-        $agent = Agent::with(['user', 'media'])->where('id',$id)->first();
+        $agent = Agent::with(['user', 'media'])
+            ->where('id',$id)
+            ->first();
 
         
 
@@ -55,7 +58,45 @@ class AgentProfileConttroller extends Controller
             return response()->json(['error' => 'Agent not found'], 404);
         }
 
-        // dd($agent);
+         $recentProperties = $agent->user->properties
+            ->sortByDesc('created_at')
+            ->take(3)
+            ->map(function ($property) {
+            return [
+                'id' => $property->id,
+                'title' => $property->title,
+                'location' => $property->location,
+                'price' => $property->price,
+                'propertyImage' => $property->media?->first()
+                    ? asset('storage/' . $property->getFirstImage())
+                    : null,
+            ];
+        });
+
+        // reviews
+        $recentReviews = $agent->reviews()
+            ->latest()
+            ->take(3)
+            ->get()
+            ->map(function ($review) {
+                // dd($review->getReviewer());
+                return [
+                    'id' => $review->id,
+                    'reviewer_name' => $review->user->name ?? 'Anonymous', // if reviewer is a user
+                    'reviewer_avatar' => $review->user && $review->user->media 
+                        ? asset('storage/' . $review->user->media->file_path) 
+                        : null,
+                    'rating' => $review->rating, // assuming rating field exists
+                    'comment' => $review->comment ?? 'no comment',
+                    'created_at' => $review->created_at->format('M d, Y'),
+                ];
+            })
+            ->toArray();
+
+            $ratings = $agent->reviews()->get('rating')->toArray();
+
+            
+        // dd($agent->reviews());
         // Return JSON for frontend
         return response()->json([
             'id' => $agent->id,
@@ -68,6 +109,9 @@ class AgentProfileConttroller extends Controller
             'experience' => $agent->years_of_experience,
             'image' => asset('storage/' . $agent->media->file_path),
             'properties' => $agent->user->properties->count(),
+            'recentProperties' => $recentProperties,
+            'recentReviews'=>$recentReviews,
+            'ratings'=>$ratings,
         ]);
     }
     /**
@@ -212,11 +256,54 @@ class AgentProfileConttroller extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function verify(Agent $agent)
+    {
+        // return response()->json(['POST' => $agent->user]);
+        try {
+            
+            if (! $agent->user) {
+                return response()->json([
+                    'message' => 'Agent has no associated user',
+                ], 422);
+            }
+
+            $agent->user->status = 'Verified';
+            $agent->user->save();
+
+            return response()->json([
+                'message' => 'Agent verified successfully',
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Verification failed',
+            ], 500);
+        }
+    }
+
+
+    public function suspend(Agent $agent)
+    {
+        $agentStatus = $agent->user->status;
+
+        if($agentStatus == 'Suspended')
+            $agent->user->update(['status' => 'Verified']);
+        else
+            $agent->user->update(['status' => 'Suspended']);
+
+        return response()->json([
+            'message' => 'Agent suspended successfully',
+            'status' => $agent->user->status
+        ]);
+    }
+
     public function destroy(Agent $agent)
     {
-        //
+        $agent->user->delete();
+        $agent->delete();
+
+        return response()->json([
+            'message' => 'Agent deleted successfully'
+        ]);
     }
 }

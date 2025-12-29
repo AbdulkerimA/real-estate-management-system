@@ -63,7 +63,7 @@
                         <div>
                             <p class="text-gray-400 text-sm">Rating</p>
                             <div class="flex items-center space-x-2">
-                                <div class="rating-stars">
+                                <div class="rating-stars text-amber-300">
                                     <span class="star">★</span>
                                     <span class="star">★</span>
                                     <span class="star">★</span>
@@ -82,12 +82,12 @@
 
                 <!-- Action Buttons -->
                 <div class="space-y-2">
-                    <button class="action-button w-full px-4 py-3 rounded-lg text-[#12181f] font-semibold" id="modalVerify">
+                    {{-- <button class="action-button w-full px-4 py-3 rounded-lg text-[#12181f] font-semibold" id="modalVerify">
                         Verify Agent
                     </button>
                     <button class="btn-suspend action-btn w-full px-4 py-3" id="modalSuspend">
                         Suspend Agent
-                    </button>
+                    </button> --}}
                 </div>
             </div>
 
@@ -127,27 +127,8 @@
                 <!-- Recent Reviews -->
                 <div class="dashboard-card rounded-xl p-4">
                     <h4 class="text-white font-semibold mb-4">Recent Reviews</h4>
-                    <div class="space-y-4">
-                        {{-- @foreach ($reviews as $review)
-                            <div class="border-b border-gray-600 pb-3">
-                                <div class="flex items-center justify-between mb-2">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                            AB
-                                        </div>
-                                        <span class="text-white font-medium text-sm">Abebe Bekele</span>
-                                    </div>
-                                    <div class="rating-stars">
-                                        <span class="star">★</span>
-                                        <span class="star">★</span>
-                                        <span class="star">★</span>
-                                        <span class="star">★</span>
-                                        <span class="star">★</span>
-                                    </div>
-                                </div>
-                                <p class="text-gray-300 text-sm">Excellent service! Sara helped me find the perfect apartment in Bole. Very professional and knowledgeable about the market.</p>
-                            </div>
-                        @endforeach --}}
+                    <div class="space-y-4 recent-reviews-container">
+                        <!-- Reviews will be injected here by JS -->
                     </div>
                 </div>
             </div>
