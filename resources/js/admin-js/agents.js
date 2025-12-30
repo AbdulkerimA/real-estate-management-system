@@ -76,7 +76,9 @@ async function openModal(agentId) {
         const recentPropertiesContainer = agentModal.querySelector('.dashboard-card .grid');
         recentPropertiesContainer.innerHTML = ''; // clear previous content
 
-        agent.recentProperties.forEach(property => {
+        console.log(Object.values(agent.recentProperties));
+        // return
+        Object.values(agent.recentProperties).forEach(property => {
             
             const div = document.createElement('div');
             div.className = 'property-card';

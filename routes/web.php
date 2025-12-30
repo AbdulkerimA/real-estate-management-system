@@ -66,7 +66,9 @@ Route::controller(AgentController::class)->group(function (){
 });
 
 Route::controller(AgentProfileConttroller::class)->group(function(){
-    Route::get('/dashboard/profile','show')->middleware('auth')->can('isAgent','App\Models\Agent');
+    Route::get('/dashboard/profile','show')
+        ->middleware('auth')->can('isAgent','App\Models\Agent')
+        ->name('agents.profile.edit');
 
     Route::PUT('/dashboard/profile','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 

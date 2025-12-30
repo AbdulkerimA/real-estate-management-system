@@ -71,7 +71,7 @@ class AgentProfileConttroller extends Controller
                     ? asset('storage/' . $property->getFirstImage())
                     : null,
             ];
-        });
+        })->toArray();
 
         // reviews
         $recentReviews = $agent->reviews()
@@ -160,7 +160,7 @@ class AgentProfileConttroller extends Controller
         
         // dd($user->settings);
         
-        return view('agents.profile.edit',[
+        return view('agents.profile.index',[
             'user' => $user,
             'properties'=> $properties
         ]);
