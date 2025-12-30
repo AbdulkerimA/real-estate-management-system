@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 // console.log(chartData);
 
 let horizontalData = chartData.map(item=>item.month_name);
-let verticalData = chartData.map(item=>item.count);
+let verticalData = chartData.map(item=>item.revenue);
 
 // console.log(months);
 // console.log(transctionCount);

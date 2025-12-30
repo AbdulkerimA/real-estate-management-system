@@ -177,6 +177,10 @@ Route::controller(TransactionController::class)->group(function () {
     Route::get('/admin/transactions','index')
         ->middleware('auth')
         ->name('admin.transactions.show');
+        
+    Route::post('/admin/checkouts/{checkout}/approve','approveCheckout');
+    Route::post('/admin/checkouts/{checkout}/reject', 'rejectCheckout');
+
 });
 
 Route::controller(AnalyticsController::class)->group(function () {

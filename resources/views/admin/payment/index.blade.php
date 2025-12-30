@@ -16,7 +16,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
-                </x-admin-dashboard.status-card>
+                </x-admin-dashboard.status-card> 
 
                 <!-- Pending Payments -->
                 <x-admin-dashboard.status-card 
@@ -25,7 +25,7 @@
                     title="Pending Payments"
                     >
                     @slot("subtitle")
-                        <p class="text-xs text-yellow-400 mt-1">23 transactions pending</p>
+                        <p class="text-xs text-yellow-400 mt-1">{{ $pendingTransactions }} transactions pending</p>
                     @endslot
                     <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -75,13 +75,34 @@
             <!-- Payout Requests Section -->
             <div class="dashboard-card rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-xl font-bold text-white">Agent Payout Requests</h3>
-                        <p class="text-gray-400 text-sm">Commission payouts awaiting approval</p>
+                    <div class="flex gap-4 items-center">
+                        <div class="">
+                            <h3 class="text-xl font-bold text-white">Agent Payout Requests</h3>
+                            <p class="text-gray-400 text-sm">Commission payouts awaiting approval</p>
+                        </div>
+                        <span class="bg-blue-400/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium hidden lg:block">
+                            {{ count($checkOuts) }} Requests
+                        </span>
                     </div>
-                    <span class="bg-blue-400/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                        5 Requests
-                    </span>
+
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <input
+                            type="text"
+                            id="payoutSearch"
+                            placeholder="Search agent..."
+                            class="px-4 py-2 rounded-lg bg-[#12181f] border border-gray-600 text-white w-72"
+                        >
+
+                        <select
+                            id="payoutStatus"
+                            class="px-4 py-2 rounded-lg bg-[#12181f] border border-gray-600 text-white"
+                        >
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="table-container">
@@ -90,41 +111,14 @@
                             <tr class="border-b border-gray-600">
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Agent</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Amount Requested</th>
-                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Commission From</th>
+                                {{-- <th class="text-left py-3 px-4 text-gray-400 font-medium">Commission From</th> --}}
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Date Requested</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                            @foreach ($checkOuts as $req)
-                               <tr class="table-row border-b border-gray-700">
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                                <img src="{{ asset('storage/'.$req->agent->media->file_path) }}" alt="{{ $req->agent->user->name }}">
-                                            </div>
-                                            <div>
-                                                <p class="text-white font-medium">{{ $req->agent->user->name }}</p>
-                                                <p class="text-gray-400 text-xs">Senior Agent</p>
-                                            </div>
-                                        </div>
-                                    </td> 
-                                    <td class="py-3 px-4 text-[#00ff88] font-semibold">{{ $req->requested_amount }}</td>
-                                    <td class="py-3 px-4 text-gray-300">3 Property Sales</td>
-                                    <td class="py-3 px-4 text-gray-300">{{ date('M d, Y', strtotime($req->created_at)) }}</td>
-                                    <td class="py-3 px-4"><span class="status-badge status-{{ $req->request_status }}">
-                                        {{ $req->request_status }}
-                                    </span></td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center space-x-2">
-                                            <button class="action-btn btn-approve" onclick="approvePayout('{{ $req->id }}')">Approve</button>
-                                            <button class="action-btn btn-reject" onclick="rejectPayout('{{ $req->id }}')">Reject</button>
-                                        </div>
-                                    </td>
-                                </tr> 
-                            @endforeach
+                        <tbody id="payoutTableBody">
+                            @include('admin.payment.partials.payouts-table')
                         </tbody>
                     </table>
                 </div>
@@ -137,6 +131,27 @@
                         <h3 class="text-xl font-bold text-white">Recent Transactions</h3>
                         <p class="text-gray-400 text-sm">Complete transaction history</p>
                     </div>
+                    <div class="flex flex-wrap gap-4 mb-6">
+                    <!-- Search -->
+                    <input
+                        type="text"
+                        id="transactionSearch"
+                        placeholder="Search buyer, agent, property..."
+                        class="px-4 py-2 rounded-lg bg-[#12181f] border border-gray-600 text-white w-72"
+                    >
+
+                    <!-- Status Filter -->
+                    <select
+                        id="statusFilter"
+                        class="px-4 py-2 rounded-lg bg-[#12181f] border border-gray-600 text-white"
+                    >
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Confirmed</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+
                 </div>
 
                 <div class="table-container">
@@ -149,48 +164,12 @@
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Property</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Amount</th>
                                 <th class="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
-                                <th class="text-left py-3 px-4 text-gray-400 font-medium">Actions</th>
+                                {{-- <th class="text-left py-3 px-4 text-gray-400 font-medium">Actions</th> --}}
                             </tr>
                         </thead>
                         <tbody id="transactionsTableBody">
                             
-                            @foreach ($transactions as $transaction)
-                                <tr class="table-row border-b border-gray-700">
-                                    <td class="py-3 px-4 text-gray-300">{{ date('M d, Y' , strtotime($transaction->created_at)) }}</td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center space-x-2">
-                                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                                <img src="{{ asset('storage/'.$transaction->buyer->id) }}" alt="customer profile pic">
-                                            </div>
-                                            <span class="text-white">{{ $transaction->buyer->name }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center space-x-2">
-                                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                                {{ $transaction->agent->name[0] }}
-                                                {{-- <img src="{{ asset('storage/'.$transaction->agnet->agentProfile->media->file_path) }}" alt="agent profile pic"> --}}
-                                            </div>
-                                            <span class="text-white">{{ $transaction->agent->name }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <div>
-                                            <p class="text-white text-sm">{{ $transaction->property->name }}</p>
-                                            <p class="text-gray-400 text-xs">{{ $transaction->property->address }}</p>
-                                        </div>
-                                    </td>
-                                    <td class="py-3 px-4 text-[#00ff88] font-semibold">{{ Number::format($transaction->property->price) }} ETB</td>
-                                    <td class="py-3 px-4"><span class="status-badge status-completed">{{ $transaction->status }}</span></td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center space-x-2">
-                                            <button class="action-btn btn-view" onclick="viewTransaction('{{ $transaction->id }}')">View</button>
-                                            <button class="action-btn btn-refund" onclick="refundTransaction('{{ $transaction->id }}')">Refund</button>
-                                        </div>
-                                    </td>
-                                </tr>
-    
-                            @endforeach
+                            @include('admin.payment.partials.transactions-table')
 
                         </tbody>
                     </table>
