@@ -137,15 +137,20 @@ class UserController extends Controller
         ->latest()
         ->take(6)
         ->get()
-        ->map(function ($property) {
+        ->map(function ($booking) {
+            $property = $booking->property;
+            if (! $property) {
+                return null;
+            }
+
             return [
                 'id'       => $property->id,
                 'title'    => $property->title,
                 'location' => $property->location,
                 'price'    => $property->price,
-                'image'    => $property->images->first()
-                                ? asset('storage/' . $property->images->first()->path)
-                                : null,
+                'image'    => $property->getFirstImage()
+                    ? asset('storage/' . $property->getFirstImage())
+                    : null,
             ];
         });
 
