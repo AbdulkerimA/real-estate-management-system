@@ -1,4 +1,12 @@
 
+document.querySelectorAll('.progress-fill').forEach(bar => {
+    const width = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(() => {
+        bar.style.width = width;
+    }, 100);
+});
+
 // Export functions
 function exportChart(chartType) {
     console.log('Exporting chart:', chartType);

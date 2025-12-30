@@ -2,7 +2,7 @@
     @vite(['resources/css/admin-style/analytics.css','resources/js/admin-js/analytics.js']) 
     <!-- Page Content -->
     <div class="p-6 space-y-6">
-        <!-- Key Metrics Cards -->
+        <!-- Key Metrics Cards --> 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-6">
             <!-- Total Properties -->
             <x-admin-dashboard.status-card 
@@ -231,43 +231,47 @@
                     <p class="text-gray-400 text-sm">Rankings based on sales volume and client satisfaction</p>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button class="export-button px-4 py-2 rounded text-[#12181f] text-sm font-medium" onclick="exportAgentReport()">
+                    {{-- <button class="export-button px-4 py-2 rounded text-[#12181f] text-sm font-medium" onclick="exportAgentReport()">
                         Export Report
-                    </button>
+                    </button> --}}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @php
-                    $i = 1; 
+                    $maxDeals = $topAgents->max('deals_closed') ?: 1;
+                    $i = 1;
                 @endphp
                 @foreach ($topAgents as $agent)
-                    <div class="agent-rank rounded-xl p-4">
+                    @php
+                        $progressWidth = ($agent->deals_closed / $maxDeals) * 100;
+                    @endphp
+                    <div class="agent-rank rounded-xl p-4 bg-[#1c252e]">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center space-x-3">
-                                <div class="rank-badge rank-1">{{ $i++ }}</div>
+                                <div class="rank-badge rank-{{ $i }}">{{ $i++ }}</div>
                                 <div>
-                                    <p class="text-white font-semibold">{{ $agent->agent_name}}</p>
-                                    <p class="text-gray-400 text-sm">Senior Agent</p>
+                                    <p class="text-white font-semibold">{{ $agent->agent_name }}</p>
+                                    <p class="text-gray-400 text-sm">Top Agent</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-[#00ff88] font-bold">₹1,250,000</p>
+                                {{-- {{ dd($agent->balance) }} --}}
+                                <p class="text-[#00ff88] font-bold">ETB {{ number_format($agent->balance?->current_balance) }}</p>
                                 <p class="text-gray-400 text-xs">{{ $agent->deals_closed }} sales</p>
                             </div>
                         </div>
                         <div class="space-y-2">
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-400">Client Satisfaction</span>
-                                <span class="text-[#00ff88]">4.9/5</span>
+                                <span class="text-gray-400">Performance</span>
+                                <span class="text-[#00ff88]">{{ round($progressWidth) }}%</span>
                             </div>
-                            <div class="progress-bar h-2">
-                                <div class="progress-fill" style="width: 98%"></div>
+                            <div class="progress-bar h-2 bg-gray-700 rounded">
+                                <div class="progress-fill bg-[#00ff88] h-2 rounded" style="width: {{ $progressWidth }}%"></div>
                             </div>
                         </div>
                     </div>
                 @endforeach
-                
             </div>
         </div>
 
@@ -281,53 +285,29 @@
                     </div>
                 </div>
                 <div class="space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-[#1c252e] rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                                JD
+                    @foreach ($mostActiveBuyers as $buyer)
+                        @php
+                            $initials = collect(explode(' ', $buyer->name))->map(fn($n) => strtoupper(substr($n,0,1)))->join('');
+                        @endphp
+                        <div class="flex items-center justify-between p-3 bg-[#1c252e] rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    {{-- {{ $initials }} --}}
+                                    <img src="{{ asset('storage/'.$buyer->media?->file_path) }}" 
+                                        alt="{{ $initials }}"
+                                        class="w-full h-full object-cover rounded-full">
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">{{ $buyer->name }}</p>
+                                    <p class="text-gray-400 text-sm">{{ $buyer->tier ?? 'Active Buyer' }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-white font-medium">John Doe</p>
-                                <p class="text-gray-400 text-sm">Premium Buyer</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">5 Purchases</p>
-                            <p class="text-gray-400 text-xs">28 Bookmarks</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between p-3 bg-[#1c252e] rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-                                SA
-                            </div>
-                            <div>
-                                <p class="text-white font-medium">Sarah Ahmed</p>
-                                <p class="text-gray-400 text-sm">Active Buyer</p>
+                            <div class="text-right">
+                                <p class="text-[#00ff88] font-bold">{{ $buyer->purchase_count }} Purchases</p>
+                                <p class="text-gray-400 text-xs">{{ $buyer->bookmarks_count ?? 0 }} Bookmarks</p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">3 Purchases</p>
-                            <p class="text-gray-400 text-xs">45 Bookmarks</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between p-3 bg-[#1c252e] rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
-                                MT
-                            </div>
-                            <div>
-                                <p class="text-white font-medium">Michael Thompson</p>
-                                <p class="text-gray-400 text-sm">Investor</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[#00ff88] font-bold">2 Purchases</p>
-                            <p class="text-gray-400 text-xs">67 Bookmarks</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
@@ -342,7 +322,11 @@
                     <canvas id="buyerChart"></canvas>
                 </div>
             </div> --}}
-            <x-admin-dashboard.charts.double-bar title="Buyer Engagement" subTitle="Bookmarks vs Purchases conversion"/> 
+            <x-admin-dashboard.charts.double-bar
+                title="Buyer Engagement"
+                subTitle="Bookmarks vs Purchases conversion"
+                :data="$buyerEngagement"
+            /> 
         </div>
 
         <!-- Detailed Reports Section -->
@@ -440,7 +424,7 @@
         </div> --}}
 
         <!-- Export Options -->
-        <div class="dashboard-card rounded-2xl p-6">
+        {{-- <div class="dashboard-card rounded-2xl p-6">
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h3 class="text-xl font-bold text-white">Export & Download Options</h3>
@@ -449,7 +433,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- pdf button --}}
                 <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('pdf')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -463,14 +446,14 @@
                     </svg>
                     <span>Export as Excel</span>
                 </button>
-                {{-- csv button --}}
-                {{-- <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('csv')">
+                <!-- csv button -->
+                <button class="export-button p-4 rounded-xl text-[#12181f] font-medium flex items-center justify-center space-x-2" onclick="exportData('csv')">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                     </svg>
                     <span>Export as CSV</span>
-                </button> --}}
+                </button>
             </div>
-        </div>
+        </div> --}}
     </div>
 </x-admin-dashboard.main-layout>

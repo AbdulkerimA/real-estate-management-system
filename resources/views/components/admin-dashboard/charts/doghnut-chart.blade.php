@@ -4,9 +4,11 @@
 @props(['data' => []])
 
 <script>
-    const dChartData = @json($data);
+    window.dChartData = @json($data);
 </script>
-
-<div class="chart-container">
-    <canvas id="doghnut"></canvas>
+{{-- {{ dd($data); }} --}}
+<div class="dashboard-card rounded-2xl p-6">
+    <div class="chart-container">
+        <canvas id="doghnut"></canvas>
+    </div>
 </div>

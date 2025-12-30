@@ -1,6 +1,10 @@
-@props(['title','subTitle'=>""])
+@props(['title','subTitle'=>"",'data'=>[]])
 
 @vite(['resources/js/admin-js/double-bar.js'])
+
+<script>
+    const buyerEngagementData = @json($data);
+</script>
 
 <div class="dashboard-card rounded-2xl p-6">
     <div class="flex items-center justify-between mb-6">

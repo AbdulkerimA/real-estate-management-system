@@ -9,7 +9,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
-class AnalyticsController extends Controller
+class AnalyticsController extends Controller 
 {
     public function index()
     {
@@ -20,6 +20,7 @@ class AnalyticsController extends Controller
         $monthlyTransactions = Transaction::select(
             DB::raw("strftime('%m', created_at) as month"),
             DB::raw('COUNT(*) as count'),
+            DB::raw('SUM(offer_amount) as revenue'),
         )
             ->whereRaw("strftime('%Y', created_at) = ?", date('Y'))
             ->groupBy('month')
@@ -47,12 +48,27 @@ class AnalyticsController extends Controller
             ->groupBy('address')
             ->get();
 
-        $topAgents = Agent::orderByDesc('deals_closed')->limit(3)->get(['user_id', 'deals_closed']);
+        $topAgents = Agent::with('balance')
+                    ->orderByDesc('deals_closed')
+                    ->limit(3)
+                    ->get();
+
         $topAgents->transform(function ($item){
             // dd($item->user->name);
             $item->agent_name = $item->user->name;
             return $item;
         });
+
+        // most active buyers
+        $mostActiveBuyers = User::where('role', 'customer')
+            ->where('status', 'Verified')
+            ->withCount(['transactions as purchase_count' => function ($q) {
+                $q->where('status', 'confirmed');
+            }])
+            ->withCount('bookings as bookmarks_count') // optional
+            ->orderByDesc('purchase_count')
+            ->limit(3)
+            ->get();
 
         $sumOfAllAgentsDeals = Agent::sum('deals_closed');
         $sumOfTopAgentsDeals = 0;
@@ -67,7 +83,44 @@ class AnalyticsController extends Controller
         $activeAgents = User::where(['role' => 'agent', 'status' => 'Verified'])->get('id');
         $activecustomers = User::where(['role' => 'customer', 'status' => 'Verified'])->get('id');
 
+        $buyerEngagement = DB::table('users')
+            ->join('book_marks', 'users.id', '=', 'book_marks.user_id')
+            ->select(
+                DB::raw("strftime('%m', book_marks.created_at) as month"),
+                DB::raw('COUNT(book_marks.id) as bookmarks')
+            )
+            ->where('users.role', 'customer')
+            ->whereRaw("strftime('%Y', book_marks.created_at) = ?", date('Y'))
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        /**
+         * Purchases per month
+         */
+        $purchases = Transaction::select(
+                DB::raw("strftime('%m', created_at) as month"),
+                DB::raw('COUNT(*) as purchases')
+            )
+            ->where('status', 'confirmed')
+            ->whereRaw("strftime('%Y', created_at) = ?", date('Y'))
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        /**
+         * Merge both into one clean structure
+         */
+        $buyerEngagementData = collect(range(1, 12))->map(function ($month) use ($buyerEngagement, $purchases) {
+            return [
+                'month'     => date('M', mktime(0, 0, 0, $month, 10)),
+                'bookmarks' => $buyerEngagement[$month]->bookmarks ?? 0,
+                'purchases' => $purchases[$month]->purchases ?? 0,
+            ];
+        });
+
         // dd($topAgents,$dealsClosedByOthers, $sumOfAllAgentsDeals, $monthlyTransactions, $propertiesByCatagory);
+        // dd($monthlyTransactions,$buyerEngagement,$purchases,);
 
         return view('admin.analytics.index', [
             'monthlyRevenue' => $monthlyTransactions,
@@ -79,6 +132,8 @@ class AnalyticsController extends Controller
             'customers' => count($activecustomers),
             'topAgents' => $topAgents,
             'dealsClosedByOthers' => $dealsClosedByOthers,
+            'mostActiveBuyers' => $mostActiveBuyers,
+            'buyerEngagement' => $buyerEngagementData,
         ]);
 
     }
