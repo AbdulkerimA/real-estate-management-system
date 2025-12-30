@@ -4,7 +4,11 @@
     <div class="p-6 space-y-6">
         <!-- Quick Stats -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <x-admin-dashboard.status-card themeColor="green-400" statusNum="1247" title="Total Buyers">
+            <x-admin-dashboard.status-card 
+                themeColor="green-400" 
+                statusNum="{{ number_format($totalCustomers) }}" 
+                title="Total Buyers"
+                >
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,7 +17,11 @@
                 </svg>
             </x-admin-dashboard.status-card>
 
-            <x-admin-dashboard.status-card themeColor="green" statusNum="1189" title="Active Buyers">
+            <x-admin-dashboard.status-card 
+                themeColor="green" 
+                statusNum="{{ number_format($verifiedCustomers) }}" 
+                title="Active Buyers"
+                >
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,7 +30,11 @@
                 </svg>
             </x-admin-dashboard.status-card>
 
-            <x-admin-dashboard.status-card themeColor="red" statusNum="58" title="Suspended Buyers">
+            <x-admin-dashboard.status-card 
+                themeColor="red" 
+                statusNum="{{ number_format($suspendedCustomers) }}" 
+                title="Suspended Buyers"
+                >
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +43,11 @@
                 </svg>
             </x-admin-dashboard.status-card>
 
-            <x-admin-dashboard.status-card themeColor="blue" statusNum="89" title="Recently Registered">
+            <x-admin-dashboard.status-card 
+                themeColor="blue" 
+                statusNum="{{ number_format($pendingCustomers) }}" 
+                title="Recently Registered"
+                >
                 @slot("subtitle")
                 @endslot
                 <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,39 +150,53 @@
                         </tr>
                     </thead>
                     <tbody id="buyersTableBody">
-                        @foreach ($users as $user)
+                        @foreach ($customers as $customer)
                              <tr class="table-row border-b border-gray-700" data-buyer-id="1">
                                 <td class="py-3 px-4">
                                     <input type="checkbox" class="checkbox-custom buyer-checkbox" value="1">
                                 </td>
                                 <td class="py-3 px-4">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                        JD
+                                    <div class="capitalize w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        {{ $customer->name[0] }}
                                     </div>
                                 </td>
                                 <td class="py-3 px-4">
                                     <div>
-                                        <p class="text-white font-medium">{{ $user->name }}</p>
-                                        <p class="text-gray-400 text-sm">Joined {{ date('M d' , strtotime($user->created_at)) }}</p>
+                                        <p class="text-white font-medium">{{ $customer->name }}</p>
+                                        <p class="text-gray-400 text-sm">Joined {{ date('M d' , strtotime($customer->created_at)) }}</p>
                                     </div>
                                 </td>
-                                <td class="py-3 px-4 text-white">{{ $user->email }}</td>
-                                <td class="py-3 px-4 text-white">{{ $user->phone }}</td>
+                                <td class="py-3 px-4 text-white">{{ $customer->email }}</td>
+                                <td class="py-3 px-4 text-white">{{ $customer->phone }}</td>
                                 <td class="py-3 px-4">
                                     <div class="text-center">
-                                        <p class="text-green-400 font-semibold">2</p>
-                                        <p class="text-gray-400 text-xs">Purchased</p>
-                                        <p class="text-blue-400 text-xs">5 Bookmarked</p>
+                                        {{-- <p class="text-green-400 font-semibold">{{$customer->bookings->count()}}</p>
+                                        <p class="text-gray-400 text-xs">Purchased</p> --}}
+                                        <p class="text-blue-400 text-xs">{{$customer->bookings->count()}} Bookmarked</p>
                                     </div>
                                 </td>
                                 <td class="py-3 px-4">
-                                    <span class="status-badge status-{{ $user->status }}">{{ $user->status }}</span>
+                                    <span class="status-badge status-{{ $customer->status }}">{{ $customer->status }}</span>
                                 </td>
                                 <td class="py-3 px-4">
                                     <div class="flex flex-wrap gap-2 space-x-2">
-                                        <button class="action-btn btn-view" onclick="viewBuyer({{ $user->id }})">View Profile</button>
-                                        <button class="action-btn btn-suspend" onclick="suspendBuyer({{ $user->id }})">Suspend</button>
-                                        <button class="action-btn btn-delete" onclick="deleteBuyer({{ $user->id }})">Delete</button>
+                                        <button class="action-btn btn-view" onclick="viewBuyer({{ $customer->id }})">View Profile</button>
+                                        @if ($customer->status == 'Suspended')
+                                            <button class="action-btn btn-verify" 
+                                                    onclick="suspendBuyer({{ $customer->id }})"
+                                                    >unsuspend
+                                            </button>
+                                        @else
+                                            <button class="action-btn btn-suspend" 
+                                                    onclick="suspendBuyer({{ $customer->id }})"
+                                                    >Suspend
+                                            </button>
+                                        @endif
+                                        <button class="action-btn btn-delete" 
+                                                onclick="deleteBuyer({{ $customer->id }})"
+                                                >
+                                                Delete
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -237,8 +267,8 @@
                                 <p class="text-white font-medium" id="modalJoinDate">December 2024</p>
                             </div>
                             <div>
-                                <p class="text-gray-400 text-sm">Properties Purchased</p>
-                                <p class="text-accent-green font-bold text-xl" id="modalPurchased">2</p>
+                                {{-- <p class="text-gray-400 text-sm">Properties Purchased</p>
+                                <p class="text-accent-green font-bold text-xl" id="modalPurchased">2</p> --}}
                             </div>
                             <div>
                                 <p class="text-gray-400 text-sm">Bookmarked Properties</p>
@@ -249,12 +279,12 @@
 
                     <!-- Action Buttons -->
                     <div class="space-y-2">
-                        <button class="btn-suspend action-btn w-full px-4 py-3" id="modalSuspend">
+                        {{-- <button class="btn-suspend action-btn w-full px-4 py-3" id="modalSuspend">
                             Suspend Account
                         </button>
                         <button class="btn-delete action-btn w-full px-4 py-3" id="modalDelete">
                             Delete Account
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
 
@@ -263,7 +293,7 @@
                     <!-- Purchase History -->
                     <div class="dashboard-card rounded-xl p-4">
                         <h4 class="text-white font-semibold mb-4">Purchase History</h4>
-                        <div class="space-y-3">
+                        <div class="space-y-3" id="modalPurchaseHistory">
                             <div class="purchase-item">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
@@ -309,9 +339,9 @@
                     </div>
 
                     <!-- Bookmarked Properties -->
-                    <div class="dashboard-card rounded-xl p-4">
+                    <div class="dashboard-card rounded-xl p-4" >
                         <h4 class="text-white font-semibold mb-4">Bookmarked Properties</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="modalBookmarkedProperties">
                             <div class="property-card">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
@@ -392,4 +422,6 @@
             </div>
         </div>
     </div>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-6 right-6 space-y-2 z-50"></div>
 </x-admin-dashboard.main-layout>

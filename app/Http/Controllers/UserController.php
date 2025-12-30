@@ -25,30 +25,30 @@ class UserController extends Controller
          return Excel::download(new UsersExport, 'users.xlsx');
     }
     // display agents for admin 
-    public function adminAgentsIndex(User $users){
+    public function adminAgentsIndex(User $users,){
 
-        $paginationNumber = request()->get('per_page') ?? 5;
-        
-        $numOfUsers = $users->all()->where('role','customer');
+        $perPage = request()->get('per_page', 10);
 
-        $pendingUsers = $users->all()->filter(function ($user){
-            return $user->status == 'pending';
-        });
-        $verifiedUsers = $users->all()->filter(function ($user){
-            return $user->status == 'verfied';
-        });
-        $suspendedUsers = $users->all()->filter(function ($user){
-            return $user->status == 'suspended';
-        });
+        // Base query (customers only)
+        $customersQuery = User::where('role', 'customer');
 
-        // dd($numOfUsers,$pendingUsers,$verifiedUsers,$suspendedUsers);
+        // Status counts (FAST & CORRECT)
+        $totalCustomers    = (clone $customersQuery)->count();
+        $verifiedCustomers = (clone $customersQuery)->where('status', 'Verified')->count();
+        $suspendedCustomers= (clone $customersQuery)->where('status', 'Suspended')->count();
+        $pendingCustomers  = (clone $customersQuery)->where('status', 'Pending')->count();
 
-        return view('admin.customers.index',[
-            'pendingUsers' => count($pendingUsers),
-            'verifiedUsers' => count($verifiedUsers),
-            'suspendedUsers' => count($suspendedUsers),
-            'numOfAllUsers' => count($numOfUsers),
-            'users' => $users->paginate($paginationNumber)->where('role','customer'), 
+        // Paginated customers for table
+        $customers = $customersQuery
+            ->latest()
+            ->paginate($perPage);
+
+        return view('admin.customers.index', [
+            'customers'          => $customers,
+            'totalCustomers'     => $totalCustomers,
+            'verifiedCustomers'  => $verifiedCustomers,
+            'suspendedCustomers' => $suspendedCustomers,
+            'pendingCustomers'   => $pendingCustomers,
         ]);
     }
 
@@ -59,7 +59,7 @@ class UserController extends Controller
         
 
         if (!$user) {
-            return response()->json(['error' => 'user not found'], 404);
+            return response()->json(['error' => 'user not found'], 404); 
         }
 
         // dd($user);
@@ -133,8 +133,55 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $bookmarkedProperties = $user->bookings()
+        ->latest()
+        ->take(6)
+        ->get()
+        ->map(function ($property) {
+            return [
+                'id'       => $property->id,
+                'title'    => $property->title,
+                'location' => $property->location,
+                'price'    => $property->price,
+                'image'    => $property->images->first()
+                                ? asset('storage/' . $property->images->first()->path)
+                                : null,
+            ];
+        });
+
+        $purchases = $user->transactions()
+            ->with('property.images')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($purchase) {
+                return [
+                    'id'       => $purchase->id,
+                    'title'    => $purchase->property->title,
+                    'location' => $purchase->property->location,
+                    'price'    => $purchase->amount,
+                    'date'     => $purchase->created_at->format('M d, Y'),
+                    'status'   => $purchase->status,
+                    'image'    => $purchase->property->getFirstImage()
+                                    ? asset('storage/' . $purchase->property->images->first()->path)
+                                    : null,
+                ];
+            });
+        // dd($bookmarkedProperties);
         //grap the user data 
         //open the profile page
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'status' => $user->status, // e.g., Active/Suspended
+            'email' => $user->email,
+            'phone' => $user->phone,
+            // 'location' => $user->location,
+            'joined_at' => $user->created_at,
+            'bookmarked_properties' => $user->bookings()->count(),
+            'bookmarked_properties' => $bookmarkedProperties,
+            'purchases' => $purchases,
+        ]);
     }
 
     /**
@@ -153,11 +200,40 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function suspend(User $user)
+    {
+        // return response()->json(['post'=>$user]);
+        if(!$user){
+            return response()->json(['message'=>'user not found']);
+        }
+
+        if($user->status == 'Suspended')
+            $user->update(['status' => 'Verified']);
+        else
+            $user->update(['status' => 'Suspended']);
+
+        return response()->json([
+            'message' => 'Buyer suspended successfully',
+            'status'  => 'suspended',
+        ]);
+    }
+
+    public function reactivate(User $user)
+    {
+        $user->update(['status' => 'verified']);
+
+        return response()->json([
+            'message' => 'Buyer reactivated successfully',
+            'status'  => 'verified',
+        ]);
+    }
+
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Buyer deleted successfully',
+        ]);
     }
 }

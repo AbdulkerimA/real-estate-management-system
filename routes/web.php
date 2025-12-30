@@ -41,6 +41,10 @@ Route::controller(UserController::class)->group(function (){
     Route::post('/signup','store');
 
     Route::get('/admin/customers','adminAgentsIndex');
+    Route::post('/admin/customers/{user}/suspend', 'suspend' );
+    Route::post('/admin/customers/{user}/reactivate', 'reactivate');
+    Route::delete('/admin/customers/{user}', 'destroy');
+    Route::get('/admin/customers/{user}', 'show');
 });
 
 Route::controller(SessionController::class)->group(function () {
