@@ -2,7 +2,7 @@
     @vite(['resources/css/admin-style/settings.css','resources/js/admin-js/settings.js'])
     
     @php
-        $user = Auth::user();
+        $user = Auth::user(); 
         // dd($user);
     @endphp
     

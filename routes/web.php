@@ -177,7 +177,7 @@ Route::controller(TransactionController::class)->group(function () {
     Route::get('/admin/transactions','index')
         ->middleware('auth')
         ->name('admin.transactions.show');
-        
+
     Route::post('/admin/checkouts/{checkout}/approve','approveCheckout');
     Route::post('/admin/checkouts/{checkout}/reject', 'rejectCheckout');
 
@@ -211,7 +211,9 @@ Route::get('/admin',[AdminDashboardController::class,'index'])
     ->middleware('auth')
     ->name('admin.dashboard');
 
-Route::view('/admin/settings','admin.settings');
+Route::controller(SettingController::class)->group(function(){
+    Route::get('/admin/settings','adminIndex')->middleware('auth')->name('admin.settings.index');
+});
 Route::view('/admin/profile','admin.profile.index');
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agent;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,19 @@ class SettingController extends Controller
         ]);
     }
 
+    public function adminIndex()
+    {
+        $user = Auth::user();
+
+        // Ensure settings exist
+        if (! $user->settings) {
+            Setting::create([
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return view('admin.settings', compact('user'));
+    }
     public function Update(Request $request){
 
         // return json_encode($request->all()); // for js requests debuging    
