@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AgentsExport;
 use App\Models\Agent;
+use App\Models\Balance;
 use App\Models\Document;
 use App\Models\Media;
 use App\Models\Property;
@@ -17,7 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class AgentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. 
      */
     public function index(Request $request)
     {
@@ -141,6 +142,9 @@ class AgentController extends Controller
             'years_of_experience' => $validated['experience'],
         ]);
 
+        $balance = Balance::create([
+           'agent_id' => $agent->id,
+        ]);
         Auth::login($user);
 
         return redirect('/dashboard');
