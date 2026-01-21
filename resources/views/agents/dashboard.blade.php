@@ -43,10 +43,10 @@
 
                 </x-agent-dashboard.status-card>
 
-                <!-- Messages -->
+                
                 <x-agent-dashboard.status-card 
                     themeColor="purple" 
-                    statusNum="{{ Number::format($totalCheckout) }}" 
+                    statusNum="{{ $totalCheckout }}" 
                     notifier="5 unread">
                     
                     <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
