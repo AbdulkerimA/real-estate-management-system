@@ -299,6 +299,7 @@ class AgentProfileConttroller extends Controller
 
     public function destroy(Agent $agent)
     {
+        // return response()->json(['agent'=>$agent]);
         $agent->user->delete();
         $agent->delete();
 
