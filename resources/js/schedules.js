@@ -19,75 +19,6 @@ let activeAppointmentId = null;
 let activeAppointment = null;
 
 
-// Sample appointment data
-// const appointments = [
-// {
-//     id: 1,
-//     property: "Modern Apartment in Bole",
-//     icon: "🏢",
-//     agent: "Sarah Johnson",
-//     phone: "+251 911 234 567",
-//     email: "sarah.j@propertyhub.com",
-//     date: "2024-01-15",
-//     time: "2:00 PM",
-//     status: "confirmed",
-//     price: "ETB 8,500,000",
-//     location: "Bole, Addis Ababa",
-// },
-// {
-//     id: 2,
-//     property: "Luxury Condo in Sarbet",
-//     icon: "🏙️",
-//     agent: "Michael Chen",
-//     phone: "+251 911 345 678",
-//     email: "michael.c@propertyhub.com",
-//     date: "2024-01-14",
-//     time: "10:00 AM",
-//     status: "pending",
-//     price: "ETB 12,000,000",
-//     location: "Sarbet, Addis Ababa",
-// },
-// {
-//     id: 3,
-//     property: "Family Villa in CMC",
-//     icon: "🏡",
-//     agent: "Emma Williams",
-//     phone: "+251 911 456 789",
-//     email: "emma.w@propertyhub.com",
-//     date: "2024-01-10",
-//     time: "3:30 PM",
-//     status: "completed",
-//     price: "ETB 15,500,000",
-//     location: "CMC, Addis Ababa",
-// },
-// {
-//     id: 4,
-//     property: "Studio Apartment in Kazanchis",
-//     icon: "🏠",
-//     agent: "David Brown",
-//     phone: "+251 911 567 890",
-//     email: "david.b@propertyhub.com",
-//     date: "2024-01-08",
-//     time: "11:00 AM",
-//     status: "cancelled",
-//     price: "ETB 4,200,000",
-//     location: "Kazanchis, Addis Ababa",
-// },
-// {
-//     id: 5,
-//     property: "Penthouse in Megenagna",
-//     icon: "🌆",
-//     agent: "Lisa Anderson",
-//     phone: "+251 911 678 901",
-//     email: "lisa.a@propertyhub.com",
-//     date: "2024-01-18",
-//     time: "4:00 PM",
-//     status: "confirmed",
-//     price: "ETB 22,000,000",
-//     location: "Megenagna, Addis Ababa",
-// },
-// ];
-
 console.log(appointments);
 let filteredAppointments = [...appointments];
 
@@ -142,7 +73,23 @@ container.innerHTML = filteredAppointments
         <button class="btn btn-secondary" onclick="reschedule(${apt.id})">Reschedule</button>
         <button class="btn btn-danger" onclick="cancelAppointment(${apt.id})">Cancel</button>
     `
-        : ""
+        : 
+        apt.status === "completed"
+        ? 
+        `
+            <button class="btn btn-primary" onclick="openPaymentModal(${apt.id})">
+                Pay
+            </button>
+            <button class="btn btn-danger" onclick="removeAppointment(${apt.id})">
+                Remove
+            </button>
+        `
+        :
+        `
+            <button class="btn btn-danger" onclick="removeAppointment(${apt.id})">
+                Remove
+            </button>
+        `
     }
     </div>
 </div>
@@ -185,6 +132,113 @@ function showDetails(id) {
     }
     document.getElementById("detailsModal").classList.add("active");
 }
+
+// payment modal logic
+let paymentAppointmentId = null;
+
+function openPaymentModal(id) {
+    const apt = appointments.find(a => a.id === id);
+    if (!apt) return;
+
+    paymentAppointmentId = id;
+
+    document.getElementById("payProperty").textContent = apt.property;
+
+    let raw = apt.price == null ? "" : String(apt.price).trim();
+    if (raw.indexOf(",") !== -1 && raw.indexOf(".") === -1) {
+        raw = raw.replace(/,/g, "."); // comma as decimal
+    } else {
+        raw = raw.replace(/,/g, ""); // remove thousand separators
+    }
+    const amount = Number(raw.replace(/[^\d.-]/g, "")) || 0;
+
+    document.getElementById("payAmount").textContent = new Intl.NumberFormat("en-ET", {
+        style: "currency",
+        currency: "ETB",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(amount);
+
+    document.getElementById("paymentModal").classList.add("active");
+}
+
+function closePaymentModal() {
+    document.getElementById("paymentModal").classList.remove("active");
+    paymentAppointmentId = null;
+}
+
+async function payNow() {
+    if (!paymentAppointmentId) return;
+
+    // console.log(paymentAppointmentId);
+    // return;
+
+    try {
+        const response = await fetch(
+            `/appointments/${paymentAppointmentId}/pay`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.log(error.message)
+            throw new Error(error.message || "Payment failed");
+        }
+
+        showToast("Payment completed successfully");
+        closePaymentModal();
+
+    } catch (error) {
+        console.log(error);
+        showToast(error.message, "danger");
+    }
+}
+
+
+// rmove an appointment 
+async function removeAppointment(id) {
+    // if (!confirm("Are you sure you want to permanently remove this appointment?")) {
+    //     return;
+    // }
+
+    // console.log(id);
+    // return;
+    try {
+        const response = await fetch(`/appointments/${id}`, {
+            method: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.log(error.message);
+            throw new Error(error.message || "Failed to remove appointment");
+        }
+
+        // Remove locally
+        const index = appointments.findIndex(a => a.id === id);
+        if (index !== -1) appointments.splice(index, 1);
+
+        filterAppointments(); // re-render safely
+        showToast("Appointment removed successfully");
+
+    } catch (error) {
+        showToast(error.message, "danger");
+    }
+}
+
 
 async function markAsCompleted() {
     if (!activeAppointmentId) return;
@@ -494,3 +548,7 @@ window.reschedule = reschedule;
 window.submitReschedule = submitReschedule;
 window.closeRescheduleModal = closeRescheduleModal;
 window.markAsCompleted = markAsCompleted;
+window.removeAppointment = removeAppointment;
+window.openPaymentModal = openPaymentModal;
+window.closePaymentModal = closePaymentModal;
+window.payNow = payNow;

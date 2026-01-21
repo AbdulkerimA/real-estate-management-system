@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Balance;
 use App\Models\Property;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,10 @@ class AppointmentController extends Controller
     public function index(){
         
         $user = Auth::user();
-        $appointmentsCollection = Appointment::with('property')->where('buyer_id',$user->id)->get();
+        $appointmentsCollection = Appointment::with('property')
+                    ->where('buyer_id',$user->id)
+                    ->orderByDesc('created_at')
+                    ->get();
 
         $appointments = [];
         foreach ($appointmentsCollection as $key => $value) {
@@ -312,11 +317,81 @@ class AppointmentController extends Controller
         ]);
     }
 
+    public function pay(Appointment $appointment)
+    {
+        // dd($appointment);
+        // Only buyer can pay
+        if ($appointment->buyer_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'unaothorized'
+            ], 403);
+        }
+
+        // Only completed appointments can be paid
+        if ($appointment->status !== 'completed') {
+            return response()->json([
+                'message' => 'Only completed appointments can be paid'
+            ], 422);
+        }
+
+        // Prevent duplicate payments
+        if (Transaction::where('property_id', $appointment->property_id)
+            ->where('buyer_id', Auth::id())
+            ->exists()) {
+            return response()->json([
+                'message' => 'This appointment is already paid'
+            ], 422);
+        }
+
+        Transaction::create([
+            'buyer_id'     => Auth::id(),
+            'agent_id'     => $appointment->property->agent_id,
+            'property_id'  => $appointment->property_id,
+            'offer_amount' => $appointment->property->price,
+            'status'       => 'confirmed',
+        ]);
+
+        $balance = Balance::where('agent_id',$appointment->property->agent_id)->first();
+        $property = Property::where('id',$appointment->property_id)->first();
+
+        $property?->update([
+            'status' => 'sold'
+        ]);
+
+        $newBalance = $balance?->current_balance + ($appointment->property->price * 0.05); //5% cut
+        
+        $balance?->update([
+            'current_balance' => $newBalance
+        ]);
+
+        return response()->json([
+            'message' => 'Payment successful'
+        ]);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Appointment $appointment)
+   public function destroy(Appointment $appointment)
     {
-        //
+        // Only buyer can delete
+        if ($appointment->buyer_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Only completed appointments can be deleted
+        if ($appointment->status !== 'completed' && $appointment->status !== 'cancelled') {
+            return response()->json([
+                'message' => 'Only completed appointments can be removed'
+            ], 422);
+        }
+
+        $appointment->delete();
+
+        return response()->json([
+            'message' => 'Appointment removed successfully'
+        ]);
     }
+
 }

@@ -143,6 +143,10 @@ Route::controller(AppointmentController::class)->group(function(){
                 ->middleware('auth')->name('appointments.reschedule');
     Route::patch('/appointments/{appointment}/complete', 'complete')
             ->middleware('auth')->name('appointments.complete');
+    Route::delete('/appointments/{appointment}', 'destroy')
+    ->middleware('auth');
+
+    Route::post('/appointments/{appointment}/pay', 'pay')->middleware('auth');
 
 
 

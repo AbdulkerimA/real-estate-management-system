@@ -90,7 +90,7 @@
         <!-- Empty State (hidden by default) -->
         <div class="empty-state" id="emptyState" style="display: none">
           <div class="empty-state-icon">📭</div>
-          <h2>No Appointments Found</h2>
+          <h2>No Appointments Found</h2> 
           <p id="empty-state-message">
             No appointments yet. Schedule your first property viewing!
           </p>
@@ -102,6 +102,30 @@
     </div>
     <!-- Footer -->
     <x-footer />
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Complete Payment</h2>
+          <button class="close-btn" onclick="closePaymentModal()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <p><strong>Property:</strong> <span id="payProperty"></span></p>
+          <p><strong>Amount:</strong> <span id="payAmount"></span></p>
+
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closePaymentModal()">
+              Cancel
+            </button>
+            <button class="btn btn-primary" onclick="payNow()">
+              Pay Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal" id="detailsModal">
