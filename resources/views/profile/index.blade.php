@@ -68,13 +68,13 @@
             <h3 class="section-title">Personal Information</h3>
             <form id="personalInfoForm">
                 <div class="form-grid">
-                    <input type="text" id="fullName" value="{{ $user->name }}" class="form-input" required>
+                    <input type="text" id="fullName" value="{{ $user->name }}" class="form-input" placeholder="fullname" required>
 
-                    <input type="email" id="email" value="{{ $user->email }}" class="form-input" required>
+                    <input type="email" id="email" value="{{ $user->email }}" class="form-input" placeholder="email" required>
 
-                    <input type="tel" id="phone" value="{{ $user->phone }}" class="form-input" required>
+                    <input type="tel" id="phone" value="{{ $user->phone }}" class="form-input" placeholder="phone" required>
 
-                    <input type="text" id="address" value="{{ $user->customer->address }}" class="form-input" required>
+                    <input type="text" id="address" value="{{ $user->customer->address }}" class="form-input" placeholder="address" required>
                 </div>
                 <button type="submit" class="btn btn-primary"> Save Changes </button>
             </form>
