@@ -47,7 +47,8 @@ class PropertyController extends Controller
 
     private function searchByLocation($location, $properties)
     {
-        $properties = $properties->where('location',$location);
+        $properties = $properties
+                    ->where('location',$location);
         return $properties;
     }
 
@@ -100,7 +101,7 @@ class PropertyController extends Controller
     public function search(Request $request) {
 
         // dd($request->post());
-        $propertiesBase = Property::with('details');
+        $propertiesBase = Property::with('details')->where('status','approved');
         $validated = $this->validateSearchRequests($request);
         $SearchFlag = true;
 
@@ -162,18 +163,18 @@ class PropertyController extends Controller
 
         switch ($validated['sortBy']) {
             case 'latest':
-                $properties = Property::latest()->paginate(10);
+                $properties = Property::latest()->where('status','approved')->paginate(10);
                 break;
             case 'priceHigh':
-                $properties = Property::orderBy('price','asc')->paginate(10);
+                $properties = Property::orderBy('price','asc')->where('status','approved')->paginate(10);
                 $sortedBy="Low to High";
                 break;
             case 'priceLow':
-                $properties = Property::orderByDesc('price')->paginate(10);
+                $properties = Property::orderByDesc('price')->where('status','approved')->paginate(10);
                 $sortedBy=" High to Low";
                 break;
             default:
-                $properties = Property::latest()->paginate(10);
+                $properties = Property::latest()->where('status','approved')->paginate(10);
                 break;
         }
 
