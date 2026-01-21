@@ -177,7 +177,7 @@
 
     <script>
         let weeklyReport = @json($weeklyReport);
-
+ 
         // Extract weeks and totals for Chart.js
         const weekLabels = weeklyReport.map(item => item.week);
         const weekTotals = weeklyReport.map(item => item.total);

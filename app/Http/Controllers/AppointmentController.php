@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Balance;
+use App\Models\Earning;
 use App\Models\Property;
 use App\Models\Transaction;
 use App\Models\User;
@@ -358,10 +359,18 @@ class AppointmentController extends Controller
             'status' => 'sold'
         ]);
 
-        $newBalance = $balance?->current_balance + ($appointment->property->price * 0.05); //5% cut
+        $commission = ($appointment->property->price * 0.05); //5% cut
+        $newBalance = $balance?->current_balance + $commission; 
         
         $balance?->update([
             'current_balance' => $newBalance
+        ]);
+
+        $earnings = Earning::create([
+            'agent_id' => $appointment->property->agent_id,
+            'property_id' => $appointment->property_id,
+            'total_earnings' => $appointment->property->price,
+            'commission' => $commission
         ]);
 
         return response()->json([

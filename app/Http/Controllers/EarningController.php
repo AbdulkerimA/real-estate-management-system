@@ -50,15 +50,18 @@ class EarningController extends Controller
         $thisMonthTotal = $currentMonthEarnings->sum('total_earnings');
 
 
-        $earningsByWeek = $agent->earnings->groupBy(function ($earning) {
-            // extract week number from created_at
-            $weekNumber = date('W', strtotime($earning->created_at));
-            // also include the year to avoid mixing weeks from different years
-            $year = date('Y', strtotime($earning->created_at));
-            return 'week ' . $weekNumber; // e.g., "2025-W42"
-        });
+        $currentYear = date('Y');
 
-        $weeklyReport = $earningsByWeek->map(function ($items,$weekLabel) {
+        $earningsByWeek = $agent->earnings
+            ->filter(fn($e) => date('Y', strtotime($e->created_at)) == $currentYear)
+            ->groupBy(function ($earning) {
+                $year = date('Y', strtotime($earning->created_at));
+                $week = date('W', strtotime($earning->created_at));
+                return $year . '-W' . $week; // e.g., "2026-W03"
+            })
+            ->sortKeys(); // ensures Chart.js sees ordered weeks
+
+        $weeklyReport = $earningsByWeek->map(function ($items, $weekLabel) {
             return [
                 'week' => $weekLabel,
                 'total' => $items->sum('total_earnings'),
@@ -70,7 +73,7 @@ class EarningController extends Controller
         // $transactions = Transaction::where('agent_id',$agent->user_id)->paginate(5);
         $earnings = Earning::where('agent_id',$agent->id)->paginate(5);
 
-        // dd($earnings->first()->property,$weeklyReport,$earningsByWeek,$agent,$checkoutReq);   
+        // dd($agent->earnings);  
 
         return view("agents.earning.index",[
             'agent' => $agent,
