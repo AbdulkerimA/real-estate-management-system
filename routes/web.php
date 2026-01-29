@@ -218,7 +218,8 @@ Route::get('/admin',[AdminDashboardController::class,'index'])
 Route::controller(SettingController::class)->group(function(){
     Route::get('/admin/settings','adminIndex')->middleware('auth')->name('admin.settings.index');
 });
-Route::view('/admin/profile','admin.profile.index');
+
+// Route::view('/admin/profile','admin.profile.index');
 
 
 
