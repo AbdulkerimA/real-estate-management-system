@@ -154,25 +154,27 @@ class UserController extends Controller
             ];
         });
 
+
         $purchases = $user->transactions()
-            ->with('property.images')
+            ->with('property.media')
             ->latest()
             ->take(5)
             ->get()
             ->map(function ($purchase) {
+                // dd($purchase->property?->getFirstImage());
                 return [
                     'id'       => $purchase->id,
                     'title'    => $purchase->property->title,
                     'location' => $purchase->property->location,
-                    'price'    => $purchase->amount,
+                    'price'    => $purchase->offer_amount,
                     'date'     => $purchase->created_at->format('M d, Y'),
                     'status'   => $purchase->status,
-                    'image'    => $purchase->property->getFirstImage()
-                                    ? asset('storage/' . $purchase->property->images->first()->path)
+                    'image'    => $purchase->property?->getFirstImage()
+                                    ? asset('storage/' . $purchase->property?->getFirstImage())
                                     : null,
                 ];
             });
-        // dd($bookmarkedProperties);
+        // dd($purchases);
         //grap the user data 
         //open the profile page
         return response()->json([
