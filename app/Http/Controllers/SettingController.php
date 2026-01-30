@@ -6,6 +6,7 @@ use App\Models\Agent;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingController extends Controller
 {
@@ -30,6 +31,7 @@ class SettingController extends Controller
 
         return view('admin.settings', compact('user'));
     }
+    // toggle updates
     public function Update(Request $request){
 
         // return json_encode($request->all()); // for js requests debuging    
@@ -84,6 +86,52 @@ class SettingController extends Controller
                 ]);
             }
         }
+    }
+
+    // update admin account info
+
+    public function updateAccount(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.Auth::id(),
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $user = Auth::user();
+        $user->update($request->only('name','email','phone'));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account updated successfully'
+        ]);
+    }
+
+    // update admin password
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Current password is incorrect'
+            ], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password updated successfully'
+        ]);
     }
 
     public function destroy(Request $request)

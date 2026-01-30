@@ -160,7 +160,7 @@ Route::controller(SettingController::class)->group(function () {
     Route::get('/dashboard/settings','index')->middleware(['auth'])->can('isAgent','App\Models\Agent');
 
     Route::put('/dashboard/settings','update')->middleware(['auth'])->can('isAgent','App\Models\Agent');
-    Route::delete('/dashboard/settings/delete','destroy')->middleware(['auth'])->can('isAgent','App\Models\Agent');
+    Route::delete('/dashboard/settings/delete','destroy')->middleware(['auth']);
 });
 
 Route::controller(MediaController::class)->group(function () {
@@ -217,6 +217,10 @@ Route::get('/admin',[AdminDashboardController::class,'index'])
 
 Route::controller(SettingController::class)->group(function(){
     Route::get('/admin/settings','adminIndex')->middleware('auth')->name('admin.settings.index');
+
+    Route::post('/admin/settings/account', [SettingController::class, 'updateAccount']);
+    Route::post('/admin/settings/password', [SettingController::class, 'updatePassword']);
+
 });
 
 // Route::view('/admin/profile','admin.profile.index');

@@ -7,69 +7,45 @@ function closePasswordModal() {
     document.getElementById('passwordModal').classList.add('hidden');
 }
 
-function changePassword() {
-    alert('Password updated successfully!');
-    closePasswordModal();
-}
-
-// Settings functions
-function saveAccountSettings() {
-    alert('Account settings saved successfully!');
-}
-
-function savePreferences() {
-    alert('Preferences saved successfully!');
-}
-
-function downloadLogs() {
-    alert('Downloading system logs...');
-}
-
-function backupDatabase() {
-    if (confirm('Are you sure you want to create a database backup?')) {
-        alert('Database backup initiated...');
-    }
-}
-
-function restoreDatabase() {
-    if (confirm('Are you sure you want to restore from backup? This will overwrite current data.')) {
-        alert('Database restore initiated...');
-    }
-}
-
-function clearCache() {
-    if (confirm('Are you sure you want to clear the system cache?')) {
-        alert('System cache cleared successfully!');
-    }
-}
-
-function copyApiKey(type) {
-    const keys = {
-        payment: 'CAPI_sk_test_1234567890abcdef1234567890abcdef',
-        sms: 'SMS_api_key_1234567890abcdef1234567890abcdef',
-        maps: 'GMAP_AIzaSyC1234567890abcdef1234567890abcdef'
-    };
-    
-    navigator.clipboard.writeText(keys[type]).then(() => {
-        alert(`${type.toUpperCase()} API key copied to clipboard!`);
+function changePassword(){
+    fetch('/admin/settings/password', {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+            current_password: document.getElementById('current_password').value,
+            new_password: document.getElementById('new_password').value,
+            new_password_confirmation: document.getElementById('new_password_confirmation').value
+        })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        if(data.success) closePasswordModal();
     });
 }
 
-// // working with input and confirm modals
+// Settings functions
+document.getElementById('accountSettingsForm').addEventListener('submit', function(e){
+    e.preventDefault();
 
-// const inputModal = document.getElementById('inputModal');
-// const confirmModal = document.getElementById('confirmModal');
+    let formData = new FormData(this);
 
-
-// function deactivatePlatform() {
-//     // inputModal.style.height = `${window.innerHeight}px`;
-//     inputModal.classList.add('active');
-// }
-
-// function deleteAccount() {
-//     // modal.style.height = `${window.innerHeight}px`;
-//     confirmModal.classList.add('active');
-// }
+    fetch('/admin/settings/account', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => console.error(err));
+});
 
 // making all functions global scoped 
 window.openPasswordModal = openPasswordModal;

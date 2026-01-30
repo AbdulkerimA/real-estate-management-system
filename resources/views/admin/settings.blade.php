@@ -9,7 +9,7 @@
     <!-- Page Content -->
     <div class="p-6 space-y-6">
         <!-- Account Settings -->
-        <div class="settings-card rounded-2xl p-6">
+        <div class="settings-card rounded-2xl p-6"> 
             <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-[#00ff88]/20 rounded-xl flex items-center justify-center mr-4">
                     <svg class="w-6 h-6 text-[#00ff88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,20 +22,36 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-gray-300 text-sm font-medium mb-2">Admin Name</label>
-                    <input type="text" value="John Administrator" class="form-input w-full px-4 py-3 rounded-lg text-white">
+            <form id="accountSettingsForm">
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">Admin Name</label>
+                        <input type="text" name="name" value="{{ $user->name }}" 
+                            class="form-input w-full px-4 py-3 rounded-lg text-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
+                        <input type="email" name="email" value="{{ $user->email }}" 
+                            class="form-input w-full px-4 py-3 rounded-lg text-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">Phone Number</label>
+                        <input type="tel" name="phone" value="{{ $user->phone }}" 
+                            class="form-input w-full px-4 py-3 rounded-lg text-white">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-gray-300 text-sm font-medium mb-2">Email Address</label>
-                    <input type="email" value="admin@propertyhub.com" class="form-input w-full px-4 py-3 rounded-lg text-white">
+
+                <div class="flex justify-end mt-6">
+                    <button type="submit" class="save-button px-6 py-3 rounded-lg text-[#12181f] font-medium">
+                        Save Changes
+                    </button>
                 </div>
-                <div>
-                    <label class="block text-gray-300 text-sm font-medium mb-2">Phone Number</label>
-                    <input type="tel" value="+251 911 123 456" class="form-input w-full px-4 py-3 rounded-lg text-white">
-                </div>
-            </div>
+            </form>
+
 
             <div class="section-divider"></div>
 
@@ -134,7 +150,7 @@
             <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-yellow-400/20 rounded-xl flex items-center justify-center mr-4">
                     <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM11 17H7l4 4v-4zM13 3h5l-5-5v5zM11 3H7l4-4v4z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l8 4v5c0 5.25-3.5 9.75-8 11-4.5-1.25-8-5.75-8-11V7l8-4z"/>
                     </svg>
                 </div>
                 <div>
@@ -144,47 +160,30 @@
             </div>
 
             <div class="space-y-4">
-                <x-agent-dashboard.preferences 
-                    title="System Alerts" 
-                    subtitle="Critical system notifications and updates" 
-                    action="/dashboard/settings"
-                    :status="$user->settings->email_notification" 
-                />
+                 <x-agent-dashboard.preferences 
+                        title="Email Notification" 
+                        subtitle="Receive updates via email" 
+                        action="/dashboard/settings"
+                        :status="$user->settings->email_notification" />
 
-                <x-agent-dashboard.preferences 
-                    title="Payment Notifications"
-                    subtitle="Transaction confirmations and payment alerts"
-                    action="/dashboard/settings"
-                    :status="$user->settings->payment_notifications" 
-                />
-
-                <x-agent-dashboard.preferences 
-                    title="Agent Verification Requests"
-                    subtitle="New agent registration approvals"
-                    action="/dashboard/settings"
-                    :status="$user->settings->agent_verification_requests" 
-                />
-
-                <x-agent-dashboard.preferences 
-                    title="Buyer Registrations"
-                    subtitle="New buyer account notifications"
-                    action="/dashboard/settings"
-                    :status="$user->settings->buyer_registrations" 
-                />
-
-                <x-agent-dashboard.preferences 
-                    title="Appointment Updates"
-                    subtitle="Property viewing and meeting notifications"
-                    action="/dashboard/settings"
-                    :status="$user->settings->appointment_updates" 
-                />
-
-                <x-agent-dashboard.preferences 
-                    title="Email Notifications"
-                    subtitle="Receive notifications via email"
-                    action="/dashboard/settings"
-                    :status="$user->settings->email_notification" 
-                />
+                    <x-agent-dashboard.preferences 
+                        title="SMS Notification" 
+                        subtitle="Receive updates via SMS"  
+                        action="/dashboard/settings"
+                        :status="$user->settings->sms_notification" />
+                    <x-agent-dashboard.preferences 
+                        title="Show Online Status" 
+                        subtitle="Let clients see when you're online" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->show_online_status"
+                         />
+                        
+                    <x-agent-dashboard.preferences 
+                        title="Allow Direct Message" 
+                        subtitle="Allow clients to send you direct messages" 
+                        status="checked" 
+                        action="/dashboard/settings" 
+                        :status="$user->settings->allow_direct_message"/>
 
             </div>
         </div>
@@ -248,7 +247,7 @@
         </div>
 
         <!-- System Controls -->
-        <div class="settings-card rounded-2xl p-6">
+        {{-- <div class="settings-card rounded-2xl p-6">
             <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-purple-400/20 rounded-xl flex items-center justify-center mr-4">
                     <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,7 +334,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Danger Zone -->
         <div class="danger-zone rounded-2xl p-6">
@@ -389,15 +388,15 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-gray-300 text-sm font-medium mb-2">Current Password</label>
-                    <input type="password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Enter current password">
+                    <input type="password" id="current_password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Enter current password">
                 </div>
                 <div>
                     <label class="block text-gray-300 text-sm font-medium mb-2">New Password</label>
-                    <input type="password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Enter new password">
+                    <input type="password" id="new_password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Enter new password">
                 </div>
                 <div>
                     <label class="block text-gray-300 text-sm font-medium mb-2">Confirm New Password</label>
-                    <input type="password" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Confirm new password">
+                    <input type="password" id="new_password_confirmation" class="form-input w-full px-4 py-3 rounded-lg text-white" placeholder="Confirm new password">
                 </div>
             </div>
 
