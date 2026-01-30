@@ -166,10 +166,10 @@
                                                     </button>
                                                 @endif
                                             @endif
-                                        <button class="action-btn btn-delete" 
+                                        {{-- <button class="action-btn btn-delete" 
                                                 onclick="deleteAgent({{ $agent->id}})">
                                                 Delete
-                                        </button>
+                                        </button> --}}
                                     </div>
                                 </td>
                             </tr>

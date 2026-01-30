@@ -259,13 +259,13 @@ async function deleteAgent(id) {
         const response = await fetch(`/admin/agents/${id}`, {
             method: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'X-CSRF-TOKEN': csrf(),
                 'Accept': 'application/json'
             }
         });
 
         if (!response.ok) {
-            console.log(response)
+            console.log(response.message)
             throw new Error('Failed to delete agent');
         }
 

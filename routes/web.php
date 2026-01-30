@@ -19,6 +19,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\Property;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
@@ -40,11 +41,13 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/signup','create');
     Route::post('/signup','store');
 
-    Route::get('/admin/customers','adminAgentsIndex');
+    Route::get('/admin/customers', 'adminAgentsIndex')
+    ->middleware(['auth', 'can:isAdmin']);
     Route::post('/admin/customers/{user}/suspend', 'suspend' );
     Route::post('/admin/customers/{user}/reactivate', 'reactivate');
     Route::delete('/admin/customers/{user}', 'destroy');
-    Route::get('/admin/customers/{user}', 'show');
+    Route::get('/admin/customers/{user}', 'show')
+    ->middleware(['auth', 'can:isAdmin']);
 });
 
 Route::controller(SessionController::class)->group(function () {
@@ -73,8 +76,10 @@ Route::controller(AgentProfileConttroller::class)->group(function(){
     Route::PUT('/dashboard/profile','update')->middleware('auth')->can('isAgent','App\Models\Agent');
 
     // display agents for admin page
-    Route::get('/admin/agents', 'adminAgentsIndex');
-    Route::get('/admin/agents/{agent}', 'getAgentInfo');
+    Route::get('/admin/agents', 'adminAgentsIndex')
+    ->middleware(['auth', 'can:isAdmin']);
+    Route::get('/admin/agents/{agent}', 'getAgentInfo')
+    ->middleware(['auth', 'can:isAdmin']);
     Route::post('/admin/agents/{agent}/verify','verify');
     Route::post('/admin/agents/{agent}/suspend','suspend');
     Route::delete('/admin/agents/{agent}','destroy');
@@ -93,8 +98,12 @@ Route::controller(PropertyController::class)->group(function (){
     Route::delete('/dashbord/property/delete/{property}','destroy')->middleware(['auth','can:create,App\Models\Property']);
 
     // admin page 
-    Route::get('/admin/properties','adminPropertyIndex')->middleware('auth')->name('admin.properties');
-    Route::get('/admin/properties/{property}','getPropertyInfo');
+    Route::get('/admin/properties','adminPropertyIndex')
+    ->middleware('auth')
+    ->name('admin.properties')
+    ->middleware(['auth', 'can:isAdmin']);
+    Route::get('/admin/properties/{property}','getPropertyInfo')
+    ->middleware(['auth', 'can:isAdmin']);
 });
 
 Route::prefix('admin/properties')->group(function () {
@@ -180,7 +189,8 @@ Route::controller(EarningController::class)->group(function (){
 Route::controller(TransactionController::class)->group(function () {
     Route::get('/admin/transactions','index')
         ->middleware('auth')
-        ->name('admin.transactions.show');
+        ->name('admin.transactions.show')
+    ->middleware(['auth', 'can:isAdmin']);
 
     Route::post('/admin/checkouts/{checkout}/approve','approveCheckout');
     Route::post('/admin/checkouts/{checkout}/reject', 'rejectCheckout');
@@ -188,8 +198,10 @@ Route::controller(TransactionController::class)->group(function () {
 });
 
 Route::controller(AnalyticsController::class)->group(function () {
-    Route::get('/admin/analytics','index');
-    Route::get('/admin/analytics/pdf','generatePdf');
+    Route::get('/admin/analytics','index')
+    ->middleware(['auth', 'can:isAdmin']);
+    Route::get('/admin/analytics/pdf','generatePdf')
+    ->middleware(['auth', 'can:isAdmin']);
 });
 
 Route::controller(AgentDashboardController::class)->group(function(){
@@ -213,11 +225,15 @@ Route::middleware('auth')->delete('/profile/delete', [SettingController::class, 
 // admin dashboard navigations
 Route::get('/admin',[AdminDashboardController::class,'index'])
     ->middleware('auth')
-    ->name('admin.dashboard');
+    ->name('admin.dashboard')
+    ->middleware(['auth', 'can:isAdmin']);
 
 Route::controller(SettingController::class)->group(function(){
-    Route::get('/admin/settings','adminIndex')->middleware('auth')->name('admin.settings.index');
-
+    Route::get('/admin/settings','adminIndex')
+    ->middleware('auth')
+    ->name('admin.settings.index')
+    ->middleware(['auth', 'can:isAdmin']);
+    
     Route::post('/admin/settings/account', [SettingController::class, 'updateAccount']);
     Route::post('/admin/settings/password', [SettingController::class, 'updatePassword']);
 

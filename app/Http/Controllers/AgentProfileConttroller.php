@@ -299,12 +299,25 @@ class AgentProfileConttroller extends Controller
 
     public function destroy(Agent $agent)
     {
-        // return response()->json(['agent'=>$agent]);
-        $agent->user->delete();
-        $agent->delete();
+        // dd($agent);
 
-        return response()->json([
-            'message' => 'Agent deleted successfully'
-        ]);
+         try {
+            if ($agent->user) {
+                $agent->user->delete();
+            }
+
+            $agent->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Agent deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
