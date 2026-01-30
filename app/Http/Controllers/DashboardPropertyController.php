@@ -54,8 +54,8 @@ class DashboardPropertyController extends Controller
             'description' => 'required|string',
 
             // Property Details
-            'bedrooms'    => 'nullable|integer|min:0|max:20',
-            'bathrooms'   => 'nullable|numeric|min:0|max:20',
+            'bedrooms'    => 'nullable|integer|min:0',
+            'bathrooms'   => 'nullable|numeric|min:0',
             'area'        => 'nullable|numeric|min:0',
             'yearBuilt'   => 'nullable|integer|min:1900|max:' . date('Y'),
 
@@ -64,14 +64,14 @@ class DashboardPropertyController extends Controller
             'amenities.*' => 'in:parking,balcony,pool,security,garden,gym',
 
             // Property Images (multiple)
-            'images'      => 'required|min:1',
-            'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
+            // 'images'      => 'required|min:1',
+            // 'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
 
             // Availability & Status
             // 'featured'    => 'nullable|boolean',
         ]);
 
-        // dd($validated['amenities']);
+        // dd($validated);
         
         $agent = Auth::user();
         $amenities = $validated['amenities'] ?? [];
@@ -162,8 +162,8 @@ class DashboardPropertyController extends Controller
             'description' => 'required|string',
 
             // Property Details
-            'bedrooms'    => 'nullable|integer|min:0|max:20',
-            'bathrooms'   => 'nullable|numeric|min:0|max:20',
+            'bedrooms'    => 'nullable|integer|min:0',
+            'bathrooms'   => 'nullable|numeric|min:0',
             'area'        => 'nullable|numeric|min:0',
             'yearBuilt'   => 'nullable|integer|min:1900|max:' . date('Y'),
 
@@ -171,15 +171,15 @@ class DashboardPropertyController extends Controller
             'amenities'   => 'nullable|array',
             'amenities.*' => 'in:parking,balcony,pool,security,garden,gym',
 
-            // Property Images (multiple)
-            'images'      => '',
-            'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
+            // // Property Images (multiple)
+            // 'images'      => '',
+            // 'images.*'    => 'image|mimes:jpg,jpeg,png,webp|max:5120', // 5MB max
 
             // Availability & Status
             // 'featured'    => 'nullable|boolean',
         ]);
 
-        // dd($validated['amenities']);
+        // dd($validated);
         
         // $agent = Auth::user();
         $amenities = $validated['amenities'] ?? [];

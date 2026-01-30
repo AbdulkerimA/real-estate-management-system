@@ -143,7 +143,7 @@ searchInput.addEventListener('input', function() {
 
 // Initialize Chart
 // console.log(monthlyEarnings);
-// let monthlyEarnings = []; // fix this 
+let monthlyEarnings = []; // fix this 
 const earned = monthlyEarnings?monthlyEarnings.map(item=>item.earned):[];
 const months = monthlyEarnings?monthlyEarnings.map(item=>item.month_name):[];
 
@@ -717,9 +717,9 @@ searchInput.addEventListener('input', () => {
     debounceTimer = setTimeout(fetchAppointments, 400);
 });
 
-apstatusFilter.addEventListener('change', fetchAppointments);
-apstartDate.addEventListener('change', fetchAppointments);
-apendDate.addEventListener('change', fetchAppointments);
+apstatusFilter?.addEventListener('change', fetchAppointments);
+apstartDate?.addEventListener('change', fetchAppointments);
+apendDate?.addEventListener('change', fetchAppointments);
 
 // Upcoming appointments interactions
 document.querySelectorAll('.appointment-card button').forEach(button => {
