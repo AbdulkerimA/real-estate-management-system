@@ -216,7 +216,7 @@
         </div>
 
         <!-- Map Section -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {{-- <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h2 class="text-3xl font-bold mb-6">Location</h2>
             <div class="detail-card rounded-2xl p-6">
                 <div class="mb-4">
@@ -247,7 +247,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Similar Properties -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
